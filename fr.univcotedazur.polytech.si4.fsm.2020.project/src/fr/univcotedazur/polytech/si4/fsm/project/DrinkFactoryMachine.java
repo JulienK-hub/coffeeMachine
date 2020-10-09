@@ -83,25 +83,25 @@ public class DrinkFactoryMachine extends JFrame {
 		contentPane.add(lblCoins);
 
 		JButton coffeeButton = new JButton("Coffee");
-		coffeeButton.setForeground(Color.WHITE);
+		coffeeButton.setForeground(Color.BLUE);
 		coffeeButton.setBackground(Color.DARK_GRAY);
 		coffeeButton.setBounds(12, 34, 96, 25);
 		contentPane.add(coffeeButton);
 
 		JButton expressoButton = new JButton("Expresso");
-		expressoButton.setForeground(Color.WHITE);
+		expressoButton.setForeground(Color.BLUE);
 		expressoButton.setBackground(Color.DARK_GRAY);
 		expressoButton.setBounds(12, 71, 96, 25);
 		contentPane.add(expressoButton);
 
 		JButton teaButton = new JButton("Tea");
-		teaButton.setForeground(Color.WHITE);
+		teaButton.setForeground(Color.BLUE);
 		teaButton.setBackground(Color.DARK_GRAY);
 		teaButton.setBounds(12, 108, 96, 25);
 		contentPane.add(teaButton);
 
 		JButton soupButton = new JButton("Soup");
-		soupButton.setForeground(Color.WHITE);
+		soupButton.setForeground(Color.BLUE);
 		soupButton.setBackground(Color.DARK_GRAY);
 		soupButton.setBounds(12, 145, 96, 25);
 		contentPane.add(soupButton);
@@ -162,7 +162,7 @@ public class DrinkFactoryMachine extends JFrame {
 		contentPane.add(temperatureSlider);
 
 		JButton icedTeaButton = new JButton("Iced Tea");
-		icedTeaButton.setForeground(Color.WHITE);
+		icedTeaButton.setForeground(Color.BLUE);
 		icedTeaButton.setBackground(Color.DARK_GRAY);
 		icedTeaButton.setBounds(12, 182, 96, 25);
 		contentPane.add(icedTeaButton);
@@ -195,17 +195,17 @@ public class DrinkFactoryMachine extends JFrame {
 		contentPane.add(panel);
 
 		JButton money50centsButton = new JButton("0.50 €");
-		money50centsButton.setForeground(Color.WHITE);
+		money50centsButton.setForeground(Color.BLUE);
 		money50centsButton.setBackground(Color.DARK_GRAY);
 		panel.add(money50centsButton);
 
 		JButton money25centsButton = new JButton("0.25 €");
-		money25centsButton.setForeground(Color.WHITE);
+		money25centsButton.setForeground(Color.BLUE);
 		money25centsButton.setBackground(Color.DARK_GRAY);
 		panel.add(money25centsButton);
 
 		JButton money10centsButton = new JButton("0.10 €");
-		money10centsButton.setForeground(Color.WHITE);
+		money10centsButton.setForeground(Color.BLUE);
 		money10centsButton.setBackground(Color.DARK_GRAY);
 		panel.add(money10centsButton);
 
@@ -215,7 +215,7 @@ public class DrinkFactoryMachine extends JFrame {
 		contentPane.add(panel_1);
 
 		JButton nfcBiiiipButton = new JButton("biiip");
-		nfcBiiiipButton.setForeground(Color.WHITE);
+		nfcBiiiipButton.setForeground(Color.BLUE);
 		nfcBiiiipButton.setBackground(Color.DARK_GRAY);
 		panel_1.add(nfcBiiiipButton);
 
@@ -230,7 +230,7 @@ public class DrinkFactoryMachine extends JFrame {
 		contentPane.add(separator);
 
 		JButton addCupButton = new JButton("Add cup");
-		addCupButton.setForeground(Color.WHITE);
+		addCupButton.setForeground(Color.BLUE);
 		addCupButton.setBackground(Color.DARK_GRAY);
 		addCupButton.setBounds(45, 336, 96, 25);
 		contentPane.add(addCupButton);
@@ -251,7 +251,7 @@ public class DrinkFactoryMachine extends JFrame {
 		contentPane.add(panel_2);
 
 		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setForeground(Color.WHITE);
+		cancelButton.setForeground(Color.BLUE);
 		cancelButton.setBackground(Color.DARK_GRAY);
 		panel_2.add(cancelButton);
 
