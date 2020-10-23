@@ -28,6 +28,7 @@ public class DrinkFactoryMachine extends JFrame {
 	/**
 	 * 
 	 */
+	private Thread t;
 	private static final long serialVersionUID = 2030629304432075314L;
 	private JPanel contentPane;
 	/**
@@ -55,6 +56,26 @@ public class DrinkFactoryMachine extends JFrame {
 	 * Create the frame.
 	 */
 	public DrinkFactoryMachine() {
+		
+		 Runnable r = new Runnable() {
+				
+				@Override
+				public void run() {
+					while(true) {
+						//theDFM.runCycle();
+						try {
+							Thread.sleep(200);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			};
+			t = new Thread(r);
+			t.start();
+	
 		setForeground(Color.WHITE);
 		setFont(new Font("Cantarell", Font.BOLD, 22));
 		setBackground(Color.DARK_GRAY);
@@ -270,4 +291,12 @@ public class DrinkFactoryMachine extends JFrame {
 		});
 
 	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO Auto-generated method stub
+		super.finalize();
+		t.stop();
+	}
+	
 }
