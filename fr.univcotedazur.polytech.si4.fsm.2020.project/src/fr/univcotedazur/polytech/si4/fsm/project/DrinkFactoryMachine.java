@@ -26,6 +26,8 @@ import javax.swing.Timer;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import drinks.*;
+
 import fr.univcotedazur.polytech.si4.fsm.project.coffeemachine.CoffeeMachineStatemachine;
 
 public class DrinkFactoryMachine extends JFrame {
@@ -39,6 +41,8 @@ public class DrinkFactoryMachine extends JFrame {
 	private int millis, secs, mins;
 	private Timer msTimer;
 	private CoffeeMachineStatemachine theFSM;
+	private double coinsEntered;
+	private Drink actualDrink;
 	/**
 	 * @wbp.nonvisual location=311,475
 	 */
@@ -69,6 +73,10 @@ public class DrinkFactoryMachine extends JFrame {
 		theFSM.setTimer(timer);
 		theFSM.init();
 		theFSM.enter();
+		Drink coffee = new Coffee();
+		Drink expresso = new Expresso();
+		Drink tea = new Tea();
+		
 		
 		 Runnable r = new Runnable() {
 				
@@ -310,30 +318,63 @@ public class DrinkFactoryMachine extends JFrame {
 			}
 		});
 		
-		money10centsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				theFSM.raiseAddCoin();
-			}
-		});
-		money25centsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				theFSM.raiseAddCoin();
-			}
-		});
-		money50centsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				theFSM.raiseAddCoin();
-			}
-		});
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				theFSM.raiseCancel();
 			}
 		});
+		
+		// Coins buttons
+		
+		money10centsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseAddCoin();
+				coinsEntered+=0.1;
+			}
+		});
+		money25centsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseAddCoin();
+				coinsEntered+=0.25;
+			}
+		});
+		money50centsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseAddCoin();
+				coinsEntered+=0.5;
+			}
+		});
+		
+		// Drinks buttons
+		
+		coffeeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseDrinkSelectionDone();
+				actualDrink = coffee;
+			}
+		});
+		expressoButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseDrinkSelectionDone();
+				actualDrink = expresso;
+			}
+		});
+		teaButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseDrinkSelectionDone();
+				actualDrink = tea;
+			}
+		});
+		
+		
+		
 		
 	
 		// init a msTimer which is ready to do an action every 7 ms
@@ -366,6 +407,11 @@ public class DrinkFactoryMachine extends JFrame {
 		// TODO Auto-generated method stub
 		super.finalize();
 		t.stop();
+	}
+
+	public void doCheckPayment() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -2,8 +2,13 @@ package fr.univcotedazur.polytech.si4.fsm.project;
 
 import fr.univcotedazur.polytech.si4.fsm.project.coffeemachine.ICoffeeMachineStatemachine.SCInterfaceListener;
 
-public class DrinFactoryMachineInterfaceImplementation implements SCInterfaceListener{
+public class DrinkFactoryMachineInterfaceImplementation implements SCInterfaceListener{
 
+	DrinkFactoryMachine theDFM;
+	public DrinkFactoryMachineInterfaceImplementation(DrinkFactoryMachine df) {
+		theDFM = df;
+	}
+	
 	@Override
 	public void onDoPrepareForNextOrderRaised() {
 		// TODO Auto-generated method stub
@@ -25,7 +30,7 @@ public class DrinFactoryMachineInterfaceImplementation implements SCInterfaceLis
 	@Override
 	public void onDoCheckPaymentRaised() {
 		// TODO Auto-generated method stub
-		
+		theDFM.doCheckPayment();
 	}
 
 	@Override
