@@ -3,6 +3,8 @@ package fr.univcotedazur.polytech.si4.fsm.project;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -34,8 +36,9 @@ public class DrinkFactoryMachine extends JFrame {
 	private Thread t;
 	private static final long serialVersionUID = 2030629304432075314L;
 	private JPanel contentPane;
-	protected Timer msTimer;
-	protected CoffeeMachineStatemachine theFSM;
+	private int millis, secs, mins;
+	private Timer msTimer;
+	private CoffeeMachineStatemachine theFSM;
 	/**
 	 * @wbp.nonvisual location=311,475
 	 */
@@ -300,8 +303,62 @@ public class DrinkFactoryMachine extends JFrame {
 			}
 		});
 		
+		nfcBiiiipButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseNFC();
+			}
+		});
+		
+		money10centsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseAddCoin();
+			}
+		});
+		money25centsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseAddCoin();
+			}
+		});
+		money50centsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseAddCoin();
+			}
+		});
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseCancel();
+			}
+		});
+		
+	
+		// init a msTimer which is ready to do an action every 7 ms
+		ActionListener doCountEvery7 = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				count(7);
+				//updateTimeValue(); pour la barre de chargement
+			}
+		};
+		msTimer = new Timer(7, doCountEvery7);
 		
 
+	}
+	
+	protected void count(int nbMillisec) {
+		millis += nbMillisec;
+		if (millis >= 1000) {
+			secs++;
+			millis = 1000 - millis;
+		}
+		if (secs >= 60) {
+			mins++;
+			secs = 60 - secs;
+		}
 	}
 	
 	@Override
