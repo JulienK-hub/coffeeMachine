@@ -1516,6 +1516,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			} else {
 				if (sCInterface.paymentChecked) {
 					exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment();
+					sCInterface.raiseDoStartPreparation();
+					
 					enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked_default();
 				} else {
 					if (sCInterface.addCoin) {

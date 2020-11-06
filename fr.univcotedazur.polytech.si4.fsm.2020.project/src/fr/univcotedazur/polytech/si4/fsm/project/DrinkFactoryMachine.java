@@ -361,25 +361,22 @@ public class DrinkFactoryMachine extends JFrame {
 		coffeeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.print("coffee");
 				actualDrink = coffee;
+				//System.out.println("a2");
 				theFSM.raiseDrinkSelectionDone();
-			
 			}
 		});
 		expressoButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.print("expresso");
 				actualDrink = expresso;
 				theFSM.raiseDrinkSelectionDone();
-
+				
 			}
 		});
 		teaButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.print("tea");
 				actualDrink = tea;
 				theFSM.raiseDrinkSelectionDone();
 				
@@ -421,7 +418,7 @@ public class DrinkFactoryMachine extends JFrame {
 	}
 	
 	void prepareCoffee(){
-		System.out.println("prepareCoffee");
+		messagesToUser.setText("Préparation du café étape 1" );
 		while (((Coffee) actualDrink).getTimeForStep1() > secs) {
 			try {
 				Thread.sleep(7);
@@ -429,8 +426,9 @@ public class DrinkFactoryMachine extends JFrame {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("gostep2");
+		
 		theFSM.raiseOkForCoffeeStep2();
+		messagesToUser.setText("Préparation du café étape 2" );
 		while (((Coffee) actualDrink).getTimeForStep2() > secs) {
 			try {
 				Thread.sleep(7);
@@ -438,8 +436,9 @@ public class DrinkFactoryMachine extends JFrame {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("gostep3");
+		
 		theFSM.raiseOkForCoffeeStep3();
+		messagesToUser.setText("<html>Préparation du café étape 3<html>" );
 		while (((Coffee) actualDrink).getTimeForStep3() > secs) {
 			try {
 				Thread.sleep(7);
@@ -447,7 +446,7 @@ public class DrinkFactoryMachine extends JFrame {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("finish");
+		messagesToUser.setText("Préparation du café terminée" );
 		theFSM.raiseReadyToDeliver();
 	}
 	
@@ -470,25 +469,23 @@ public class DrinkFactoryMachine extends JFrame {
 	
 	@Override
 	protected void finalize() throws Throwable {
-		// TODO Auto-generated method stub
 		super.finalize();
 		t.stop();
 	}
 
 	public void doCheckPayment() {
-		// TODO Auto-generated method stub
 		double leftToPay = actualDrink.getPrice()-coinsEntered;
-		
 		if(leftToPay > 0) {
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il manque " + leftToPay + "<html> €." );	
 			
 		} else if(leftToPay < 0) {
 			leftToPay=-leftToPay;
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il y a " + leftToPay + "<html> € de trop." );	
-
+			theFSM.raisePaymentChecked();
+			//System.out.println("a");
 		} else {
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
-
+			theFSM.raisePaymentChecked();
 		}
 			
 		
