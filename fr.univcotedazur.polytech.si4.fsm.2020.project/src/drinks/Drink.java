@@ -23,13 +23,22 @@ public class Drink {
 		this.name = name;
 	}
 
-	public int getTimeToMake() {
+	public double getTimeToMake() {
 		return timeToMake;
 	}
 
 	public void setTimeToMake(int timeToMake) {
 		this.timeToMake = timeToMake;
 	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	
 	
 	
 }

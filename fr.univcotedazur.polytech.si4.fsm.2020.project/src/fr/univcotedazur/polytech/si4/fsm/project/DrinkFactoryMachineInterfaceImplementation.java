@@ -35,7 +35,7 @@ public class DrinkFactoryMachineInterfaceImplementation implements SCInterfaceLi
 
 	@Override
 	public void onDoStartPreparationRaised() {
-		// TODO Auto-generated method stub
+		theDFM.doStartPreparation();
 		
 	}
 
@@ -47,7 +47,7 @@ public class DrinkFactoryMachineInterfaceImplementation implements SCInterfaceLi
 
 	@Override
 	public void onDoWaitForRecuperationRaised() {
-		// TODO Auto-generated method stub
+		theDFM.doWaitForRecuperation();
 		
 	}
 

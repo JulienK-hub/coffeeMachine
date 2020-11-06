@@ -73,9 +73,13 @@ public class DrinkFactoryMachine extends JFrame {
 		theFSM.setTimer(timer);
 		theFSM.init();
 		theFSM.enter();
+		theFSM.getSCInterface().getListeners().add(new DrinkFactoryMachineInterfaceImplementation(this));
 		Drink coffee = new Coffee();
 		Drink expresso = new Expresso();
 		Drink tea = new Tea();
+		millis = 0;
+		secs = 0;
+		mins = 0;
 		
 		
 		 Runnable r = new Runnable() {
@@ -83,7 +87,7 @@ public class DrinkFactoryMachine extends JFrame {
 				@Override
 				public void run() {
 					while(true) {
-						//theDFM.runCycle();
+						theFSM.runCycle();
 						try {
 							Thread.sleep(200);
 						} catch (InterruptedException e) {
@@ -315,6 +319,7 @@ public class DrinkFactoryMachine extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				theFSM.raiseNFC();
+				System.out.println("NFC");
 			}
 		});
 		
@@ -356,6 +361,7 @@ public class DrinkFactoryMachine extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				theFSM.raiseDrinkSelectionDone();
 				actualDrink = coffee;
+				System.out.println("coffee");
 			}
 		});
 		expressoButton.addActionListener(new ActionListener() {
@@ -389,6 +395,59 @@ public class DrinkFactoryMachine extends JFrame {
 		
 
 	}
+	public void doStartPreparation() {
+		System.out.println("start");
+		msTimer.restart();
+		msTimer.start();
+		switch (actualDrink.getName()) {
+		case "coffee":
+			theFSM.raiseCoffee();
+			prepareCoffee();
+			break;
+		case "expresso":
+			theFSM.raiseExpresso();
+			break;
+		case "tea":
+			theFSM.raiseTea();
+			break;
+		}
+	}
+	
+	void prepareCoffee(){
+		System.out.println("prepareCoffee");
+		while (((Coffee) actualDrink).getTimeForStep1() > secs) {
+			try {
+				Thread.sleep(7);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("gostep2");
+		theFSM.raiseOkForCoffeeStep2();
+		while (((Coffee) actualDrink).getTimeForStep2() > secs) {
+			try {
+				Thread.sleep(7);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("gostep3");
+		theFSM.raiseOkForCoffeeStep3();
+		while (((Coffee) actualDrink).getTimeForStep3() > secs) {
+			try {
+				Thread.sleep(7);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("finish");
+		theFSM.raiseReadyToDeliver();
+	}
+	
+	public void doWaitForRecuperation() {
+		System.out.println("ça marche");
+		
+	}
 	
 	protected void count(int nbMillisec) {
 		millis += nbMillisec;
@@ -413,5 +472,6 @@ public class DrinkFactoryMachine extends JFrame {
 		// TODO Auto-generated method stub
 		
 	}
+
 	
 }
