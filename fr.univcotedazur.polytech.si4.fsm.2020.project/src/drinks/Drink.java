@@ -15,6 +15,10 @@ public class Drink {
 	
 	
 	
+
+
+
+
 	public String getName() {
 		return name;
 	}
@@ -39,6 +43,15 @@ public class Drink {
 		this.price = price;
 	}
 	
+	
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
 	
 	
 }

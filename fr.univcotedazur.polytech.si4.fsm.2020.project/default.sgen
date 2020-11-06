@@ -11,7 +11,7 @@ GeneratorModel for yakindu::java {
 			InterfaceObserverSupport = true
 			RuntimeService = true
 			TimerService = true
-			inEventQueue = true
+			//inEventQueue = true
 			synchronized = true
 			runnable = false
 		}

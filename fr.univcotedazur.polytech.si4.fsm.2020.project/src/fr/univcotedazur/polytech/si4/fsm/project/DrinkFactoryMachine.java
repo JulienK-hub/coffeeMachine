@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigestSpi;
 import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
@@ -43,6 +44,7 @@ public class DrinkFactoryMachine extends JFrame {
 	private CoffeeMachineStatemachine theFSM;
 	private double coinsEntered;
 	private Drink actualDrink;
+	private JLabel messagesToUser ;
 	/**
 	 * @wbp.nonvisual location=311,475
 	 */
@@ -113,7 +115,7 @@ public class DrinkFactoryMachine extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel messagesToUser = new JLabel("<html>This is<br>place to communicate <br> with the user");
+		messagesToUser = new JLabel("<html>This is<br>place to communicate <br> with the user");
 		messagesToUser.setForeground(Color.WHITE);
 		messagesToUser.setHorizontalAlignment(SwingConstants.LEFT);
 		messagesToUser.setVerticalAlignment(SwingConstants.TOP);
@@ -359,23 +361,28 @@ public class DrinkFactoryMachine extends JFrame {
 		coffeeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				theFSM.raiseDrinkSelectionDone();
+				System.out.print("coffee");
 				actualDrink = coffee;
-				System.out.println("coffee");
+				theFSM.raiseDrinkSelectionDone();
+			
 			}
 		});
 		expressoButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				theFSM.raiseDrinkSelectionDone();
+				System.out.print("expresso");
 				actualDrink = expresso;
+				theFSM.raiseDrinkSelectionDone();
+
 			}
 		});
 		teaButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				theFSM.raiseDrinkSelectionDone();
+				System.out.print("tea");
 				actualDrink = tea;
+				theFSM.raiseDrinkSelectionDone();
+				
 			}
 		});
 		
@@ -470,6 +477,21 @@ public class DrinkFactoryMachine extends JFrame {
 
 	public void doCheckPayment() {
 		// TODO Auto-generated method stub
+		double leftToPay = actualDrink.getPrice()-coinsEntered;
+		
+		if(leftToPay > 0) {
+			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il manque " + leftToPay + "<html> €." );	
+			
+		} else if(leftToPay < 0) {
+			leftToPay=-leftToPay;
+			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il y a " + leftToPay + "<html> € de trop." );	
+
+		} else {
+			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
+
+		}
+			
+		
 		
 	}
 
