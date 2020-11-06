@@ -20,8 +20,11 @@ import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+
+import fr.univcotedazur.polytech.si4.fsm.project.coffeemachine.CoffeeMachineStatemachine;
 
 public class DrinkFactoryMachine extends JFrame {
 
@@ -31,6 +34,8 @@ public class DrinkFactoryMachine extends JFrame {
 	private Thread t;
 	private static final long serialVersionUID = 2030629304432075314L;
 	private JPanel contentPane;
+	protected Timer msTimer;
+	protected CoffeeMachineStatemachine theFSM;
 	/**
 	 * @wbp.nonvisual location=311,475
 	 */
@@ -56,6 +61,11 @@ public class DrinkFactoryMachine extends JFrame {
 	 * Create the frame.
 	 */
 	public DrinkFactoryMachine() {
+		theFSM = new CoffeeMachineStatemachine();
+		TimerService timer = new TimerService();
+		theFSM.setTimer(timer);
+		theFSM.init();
+		theFSM.enter();
 		
 		 Runnable r = new Runnable() {
 				
@@ -289,6 +299,8 @@ public class DrinkFactoryMachine extends JFrame {
 				labelForPictures.setIcon(new ImageIcon(myPicture));
 			}
 		});
+		
+		
 
 	}
 	
