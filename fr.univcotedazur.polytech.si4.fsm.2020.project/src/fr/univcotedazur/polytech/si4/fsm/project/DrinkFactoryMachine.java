@@ -11,7 +11,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigestSpi;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -30,6 +32,7 @@ import javax.swing.border.EmptyBorder;
 import drinks.*;
 
 import fr.univcotedazur.polytech.si4.fsm.project.coffeemachine.CoffeeMachineStatemachine;
+import preparationSteps.Step;
 
 public class DrinkFactoryMachine extends JFrame {
 
@@ -45,6 +48,7 @@ public class DrinkFactoryMachine extends JFrame {
 	private double coinsEntered;
 	private Drink actualDrink;
 	private JLabel messagesToUser ;
+	private int actualStepNumber;
 	/**
 	 * @wbp.nonvisual location=311,475
 	 */
@@ -77,11 +81,12 @@ public class DrinkFactoryMachine extends JFrame {
 		theFSM.enter();
 		theFSM.getSCInterface().getListeners().add(new DrinkFactoryMachineInterfaceImplementation(this));
 		Drink coffee = new Coffee();
-		Drink expresso = new Expresso();
-		Drink tea = new Tea();
+		/*Drink expresso = new Expresso();
+		Drink tea = new Tea();*/
 		millis = 0;
 		secs = 0;
 		mins = 0;
+		actualStepNumber = 1;
 		
 		
 		 Runnable r = new Runnable() {
@@ -369,7 +374,7 @@ public class DrinkFactoryMachine extends JFrame {
 		expressoButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				actualDrink = expresso;
+				//actualDrink = expresso;
 				theFSM.raiseDrinkSelectionDone();
 				
 			}
@@ -377,7 +382,7 @@ public class DrinkFactoryMachine extends JFrame {
 		teaButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				actualDrink = tea;
+				//actualDrink = tea;
 				theFSM.raiseDrinkSelectionDone();
 				
 			}
@@ -405,8 +410,7 @@ public class DrinkFactoryMachine extends JFrame {
 		msTimer.start();
 		switch (actualDrink.getName()) {
 		case "coffee":
-			theFSM.raiseCoffee();
-			prepareCoffee();
+			theFSM.setCoffee(true);
 			break;
 		case "expresso":
 			theFSM.raiseExpresso();
@@ -417,11 +421,11 @@ public class DrinkFactoryMachine extends JFrame {
 		}
 	}
 	
-	void prepareCoffee(){
+	/*void prepareCoffee(){
 		messagesToUser.setText("Préparation du café étape 1" );
 		while (((Coffee) actualDrink).getTimeForStep1() > secs) {
 			try {
-				Thread.sleep(7);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -431,7 +435,7 @@ public class DrinkFactoryMachine extends JFrame {
 		messagesToUser.setText("Préparation du café étape 2" );
 		while (((Coffee) actualDrink).getTimeForStep2() > secs) {
 			try {
-				Thread.sleep(7);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -441,18 +445,16 @@ public class DrinkFactoryMachine extends JFrame {
 		messagesToUser.setText("<html>Préparation du café étape 3<html>" );
 		while (((Coffee) actualDrink).getTimeForStep3() > secs) {
 			try {
-				Thread.sleep(7);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		messagesToUser.setText("Préparation du café terminée" );
-		theFSM.raiseReadyToDeliver();
-	}
+	}*/
 	
 	public void doWaitForRecuperation() {
-		System.out.println("ça marche");
-		
+		System.out.println("ça marche");	
 	}
 	
 	protected void count(int nbMillisec) {
@@ -473,7 +475,7 @@ public class DrinkFactoryMachine extends JFrame {
 		t.stop();
 	}
 
-	public void doCheckPayment() {
+	void doCheckPayment() {
 		double leftToPay = actualDrink.getPrice()-coinsEntered;
 		if(leftToPay > 0) {
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il manque " + leftToPay + "<html> €." );	
@@ -481,16 +483,84 @@ public class DrinkFactoryMachine extends JFrame {
 		} else if(leftToPay < 0) {
 			leftToPay=-leftToPay;
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il y a " + leftToPay + "<html> € de trop." );	
-			theFSM.raisePaymentChecked();
+			theFSM.setPaymentChecked(true);
 			//System.out.println("a");
 		} else {
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
-			theFSM.raisePaymentChecked();
+			theFSM.setPaymentChecked(true);
 		}
 			
 		
 		
 	}
 
+	void doNextPreparationStep() {
+		
+		if(actualStepNumber == actualDrink.getStepsList().length) { // cas où il n'y a plus d'étape à faire
+			theFSM.setReadyToDeliver(true);
+			System.out.println("oui3");
+		}
+		else {
+			msTimer.restart();
+			msTimer.start();
+			String currentSteps = "";
+			System.out.println("test");
+			for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) { //permet de savoir quelles étapes éffectuer pour les afficher
+				currentSteps += step.getName() + " ";
+			}
+			messagesToUser.setText("<html> Préparation étape "+ currentSteps);	
+			
+			doSteps(); //effectue les étapes en prenant le temps nécessaire
+			doRaiseRightInupt(); // envoie le bon input à la FSM pour dire que l'étape est terminée
+			
+			
+			msTimer.stop();
+			actualStepNumber++;
+			//doNextPreparationStep();
+			
+		}
+		
+		
+	}
+
+	private void doSteps() {
+		for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) {
+			while(step.getTimeToMake() > secs) {
+				try {
+					Thread.sleep(7);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+	
+	private void doRaiseRightInupt() {
+		switch(actualDrink.getName()) {
+		case "coffee":
+			switch(actualStepNumber) {
+				case 1:
+					theFSM.setOkForCoffeeStep2(true);
+					System.out.println("oui1");
+					break;
+				case 2:
+					theFSM.setOkForCoffeeStep3(true);
+					System.out.println("oui2");
+					break;
+				default:
+					break;
+			}
+			break;
+		case "expresso":
+			theFSM.raiseExpresso();
+			break;
+		case "tea":
+			theFSM.raiseTea();
+			break;
+			
+		}
+		
+	}
 	
 }

@@ -1,24 +1,32 @@
 package drinks;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import preparationSteps.Step;
+
 public class Drink {
 	
 	private String name;
 	private int timeToMake;
 	private double price;
+	private Step[][] stepsList;
 	
-	public Drink(String name, int timeToMake, double price) {
+	public Drink(String name, int timeToMake, double price,Step[][] stepsList) {
 		this.name = name;
 		this.timeToMake = timeToMake;
 		this.price = price;
+		this.stepsList = stepsList;
 	}
 
+	public Step[][] getStepsList() {
+		return stepsList;
+	}
 	
+	public void setStepsList(Step[][] stepsList) {
+		this.stepsList = stepsList;
+	}
 	
-	
-
-
-
-
 	public String getName() {
 		return name;
 	}

@@ -8,8 +8,6 @@ import java.util.List;
 public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine {
 	public interface SCInterface {
 	
-		public void raisePaymentChecked();
-		
 		public void raiseOrderDelivered();
 		
 		public void raiseSliderModified();
@@ -26,15 +24,9 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public void raiseNFC();
 		
-		public void raiseCoffee();
-		
 		public void raiseExpresso();
 		
 		public void raiseTea();
-		
-		public void raiseOkForCoffeeStep2();
-		
-		public void raiseOkForCoffeeStep3();
 		
 		public void raiseOkForExpressoStep2();
 		
@@ -47,8 +39,6 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		public void raiseOkForTeaStep4();
 		
 		public void raiseOkForTeaStep5();
-		
-		public void raiseReadyToDeliver();
 		
 		public boolean isRaisedDoPrepareForNextOrder();
 		
@@ -66,6 +56,28 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public boolean isRaisedNoActionFor45sec();
 		
+		public boolean isRaisedDoNextPreparationStep();
+		
+		public boolean getCoffee();
+		
+		public void setCoffee(boolean value);
+		
+		public boolean getOkForCoffeeStep2();
+		
+		public void setOkForCoffeeStep2(boolean value);
+		
+		public boolean getOkForCoffeeStep3();
+		
+		public void setOkForCoffeeStep3(boolean value);
+		
+		public boolean getReadyToDeliver();
+		
+		public void setReadyToDeliver(boolean value);
+		
+		public boolean getPaymentChecked();
+		
+		public void setPaymentChecked(boolean value);
+		
 	public List<SCInterfaceListener> getListeners();
 	}
 	
@@ -79,6 +91,7 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		public void onDoResetSlidersRaised();
 		public void onDoWaitForRecuperationRaised();
 		public void onNoActionFor45secRaised();
+		public void onDoNextPreparationStepRaised();
 		}
 	
 	public SCInterface getSCInterface();

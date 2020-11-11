@@ -13,15 +13,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		public List<SCInterfaceListener> getListeners() {
 			return listeners;
 		}
-		private boolean paymentChecked;
-		
-		
-		public void raisePaymentChecked() {
-			synchronized(CoffeeMachineStatemachine.this) {
-				paymentChecked = true;
-			}
-		}
-		
 		private boolean orderDelivered;
 		
 		
@@ -94,15 +85,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			}
 		}
 		
-		private boolean coffee;
-		
-		
-		public void raiseCoffee() {
-			synchronized(CoffeeMachineStatemachine.this) {
-				coffee = true;
-			}
-		}
-		
 		private boolean expresso;
 		
 		
@@ -118,24 +100,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		public void raiseTea() {
 			synchronized(CoffeeMachineStatemachine.this) {
 				tea = true;
-			}
-		}
-		
-		private boolean okForCoffeeStep2;
-		
-		
-		public void raiseOkForCoffeeStep2() {
-			synchronized(CoffeeMachineStatemachine.this) {
-				okForCoffeeStep2 = true;
-			}
-		}
-		
-		private boolean okForCoffeeStep3;
-		
-		
-		public void raiseOkForCoffeeStep3() {
-			synchronized(CoffeeMachineStatemachine.this) {
-				okForCoffeeStep3 = true;
 			}
 		}
 		
@@ -190,15 +154,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		public void raiseOkForTeaStep5() {
 			synchronized(CoffeeMachineStatemachine.this) {
 				okForTeaStep5 = true;
-			}
-		}
-		
-		private boolean readyToDeliver;
-		
-		
-		public void raiseReadyToDeliver() {
-			synchronized(CoffeeMachineStatemachine.this) {
-				readyToDeliver = true;
 			}
 		}
 		
@@ -346,8 +301,95 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			}
 		}
 		
+		private boolean doNextPreparationStep;
+		
+		
+		public boolean isRaisedDoNextPreparationStep() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return doNextPreparationStep;
+			}
+		}
+		
+		protected void raiseDoNextPreparationStep() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				doNextPreparationStep = true;
+				for (SCInterfaceListener listener : listeners) {
+					listener.onDoNextPreparationStepRaised();
+				}
+			}
+		}
+		
+		private boolean coffee;
+		
+		public synchronized boolean getCoffee() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return coffee;
+			}
+		}
+		
+		public void setCoffee(boolean value) {
+			synchronized(CoffeeMachineStatemachine.this) {
+				this.coffee = value;
+			}
+		}
+		
+		private boolean okForCoffeeStep2;
+		
+		public synchronized boolean getOkForCoffeeStep2() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return okForCoffeeStep2;
+			}
+		}
+		
+		public void setOkForCoffeeStep2(boolean value) {
+			synchronized(CoffeeMachineStatemachine.this) {
+				this.okForCoffeeStep2 = value;
+			}
+		}
+		
+		private boolean okForCoffeeStep3;
+		
+		public synchronized boolean getOkForCoffeeStep3() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return okForCoffeeStep3;
+			}
+		}
+		
+		public void setOkForCoffeeStep3(boolean value) {
+			synchronized(CoffeeMachineStatemachine.this) {
+				this.okForCoffeeStep3 = value;
+			}
+		}
+		
+		private boolean readyToDeliver;
+		
+		public synchronized boolean getReadyToDeliver() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return readyToDeliver;
+			}
+		}
+		
+		public void setReadyToDeliver(boolean value) {
+			synchronized(CoffeeMachineStatemachine.this) {
+				this.readyToDeliver = value;
+			}
+		}
+		
+		private boolean paymentChecked;
+		
+		public synchronized boolean getPaymentChecked() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return paymentChecked;
+			}
+		}
+		
+		public void setPaymentChecked(boolean value) {
+			synchronized(CoffeeMachineStatemachine.this) {
+				this.paymentChecked = value;
+			}
+		}
+		
 		protected void clearEvents() {
-			paymentChecked = false;
 			orderDelivered = false;
 			sliderModified = false;
 			removeCup = false;
@@ -356,18 +398,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			notEnough = false;
 			cancel = false;
 			nFC = false;
-			coffee = false;
 			expresso = false;
 			tea = false;
-			okForCoffeeStep2 = false;
-			okForCoffeeStep3 = false;
 			okForExpressoStep2 = false;
 			okForExpressoStep3 = false;
 			okForTeaStep2 = false;
 			okForTeaStep3 = false;
 			okForTeaStep4 = false;
 			okForTeaStep5 = false;
-			readyToDeliver = false;
 		}
 		protected void clearOutEvents() {
 		
@@ -379,6 +417,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		doResetSliders = false;
 		doWaitForRecuperation = false;
 		noActionFor45sec = false;
+		doNextPreparationStep = false;
 		}
 		
 	}
@@ -394,13 +433,12 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		order_part_Rdy_for_order_NoActionDetection_ActionDetected,
 		order_part_Rdy_for_order_SlidersGestion_SlidersDefault,
 		order_part_Rdy_for_order_SlidersGestion_SlidersCustomed,
-		order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion,
-		order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting,
-		order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC,
-		order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment,
-		order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked,
-		order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting,
-		order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected,
+		order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting,
+		order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected,
+		order_part_Rdy_for_order_PaymentGestion_PaymentWaiting,
+		order_part_Rdy_for_order_PaymentGestion_PaimentNFC,
+		order_part_Rdy_for_order_PaymentGestion_CheckPayment,
+		order_part_Rdy_for_order_PaymentGestion_paimentChecked,
 		order_part_Preparation,
 		order_part_Preparation_DrinkMaking_Initialization,
 		order_part_Preparation_DrinkMaking_PodPositionning___WaterHeating,
@@ -422,7 +460,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	private ITimer timer;
 	
-	private final boolean[] timeEvents = new boolean[1];
+	private final boolean[] timeEvents = new boolean[8];
 	
 	public CoffeeMachineStatemachine() {
 		sCInterface = new SCInterfaceImpl();
@@ -438,6 +476,15 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		}
 		clearEvents();
 		clearOutEvents();
+		sCInterface.setCoffee(false);
+		
+		sCInterface.setOkForCoffeeStep2(false);
+		
+		sCInterface.setOkForCoffeeStep3(false);
+		
+		sCInterface.setReadyToDeliver(false);
+		
+		sCInterface.setPaymentChecked(false);
 	}
 	
 	public synchronized void enter() {
@@ -471,23 +518,23 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			case order_part_Rdy_for_order_SlidersGestion_SlidersCustomed:
 				order_part_Rdy_for_order_SlidersGestion_SlidersCustomed_react(true);
 				break;
-			case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting:
-				order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting_react(true);
+			case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting:
+				order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_react(true);
 				break;
-			case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC:
-				order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC_react(true);
+			case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected:
+				order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected_react(true);
 				break;
-			case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment:
-				order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment_react(true);
+			case order_part_Rdy_for_order_PaymentGestion_PaymentWaiting:
+				order_part_Rdy_for_order_PaymentGestion_PaymentWaiting_react(true);
 				break;
-			case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked:
-				order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked_react(true);
+			case order_part_Rdy_for_order_PaymentGestion_PaimentNFC:
+				order_part_Rdy_for_order_PaymentGestion_PaimentNFC_react(true);
 				break;
-			case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting:
-				order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting_react(true);
+			case order_part_Rdy_for_order_PaymentGestion_CheckPayment:
+				order_part_Rdy_for_order_PaymentGestion_CheckPayment_react(true);
 				break;
-			case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected:
-				order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected_react(true);
+			case order_part_Rdy_for_order_PaymentGestion_paimentChecked:
+				order_part_Rdy_for_order_PaymentGestion_paimentChecked_react(true);
 				break;
 			case order_part_Preparation_DrinkMaking_Initialization:
 				order_part_Preparation_DrinkMaking_Initialization_react(true);
@@ -572,7 +619,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		switch (state) {
 		case order_part_Rdy_for_order:
 			return stateVector[0].ordinal() >= State.
-					order_part_Rdy_for_order.ordinal()&& stateVector[0].ordinal() <= State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected.ordinal();
+					order_part_Rdy_for_order.ordinal()&& stateVector[0].ordinal() <= State.order_part_Rdy_for_order_PaymentGestion_paimentChecked.ordinal();
 		case order_part_Rdy_for_order_NoActionDetection_NoActionDetected:
 			return stateVector[0] == State.order_part_Rdy_for_order_NoActionDetection_NoActionDetected;
 		case order_part_Rdy_for_order_NoActionDetection_ActionDetected:
@@ -581,21 +628,18 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			return stateVector[1] == State.order_part_Rdy_for_order_SlidersGestion_SlidersDefault;
 		case order_part_Rdy_for_order_SlidersGestion_SlidersCustomed:
 			return stateVector[1] == State.order_part_Rdy_for_order_SlidersGestion_SlidersCustomed;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion:
-			return stateVector[2].ordinal() >= State.
-					order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion.ordinal()&& stateVector[2].ordinal() <= State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected.ordinal();
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting:
-			return stateVector[2] == State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC:
-			return stateVector[2] == State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment:
-			return stateVector[2] == State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked:
-			return stateVector[2] == State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting:
-			return stateVector[3] == State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected:
-			return stateVector[3] == State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected;
+		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting:
+			return stateVector[2] == State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting;
+		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected:
+			return stateVector[2] == State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected;
+		case order_part_Rdy_for_order_PaymentGestion_PaymentWaiting:
+			return stateVector[3] == State.order_part_Rdy_for_order_PaymentGestion_PaymentWaiting;
+		case order_part_Rdy_for_order_PaymentGestion_PaimentNFC:
+			return stateVector[3] == State.order_part_Rdy_for_order_PaymentGestion_PaimentNFC;
+		case order_part_Rdy_for_order_PaymentGestion_CheckPayment:
+			return stateVector[3] == State.order_part_Rdy_for_order_PaymentGestion_CheckPayment;
+		case order_part_Rdy_for_order_PaymentGestion_paimentChecked:
+			return stateVector[3] == State.order_part_Rdy_for_order_PaymentGestion_paimentChecked;
 		case order_part_Preparation:
 			return stateVector[0].ordinal() >= State.
 					order_part_Preparation.ordinal()&& stateVector[0].ordinal() <= State.order_part_Preparation_DrinkMaking_SachetWithdrawal.ordinal();
@@ -654,10 +698,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		return sCInterface;
 	}
 	
-	public synchronized void raisePaymentChecked() {
-		sCInterface.raisePaymentChecked();
-	}
-	
 	public synchronized void raiseOrderDelivered() {
 		sCInterface.raiseOrderDelivered();
 	}
@@ -690,24 +730,12 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		sCInterface.raiseNFC();
 	}
 	
-	public synchronized void raiseCoffee() {
-		sCInterface.raiseCoffee();
-	}
-	
 	public synchronized void raiseExpresso() {
 		sCInterface.raiseExpresso();
 	}
 	
 	public synchronized void raiseTea() {
 		sCInterface.raiseTea();
-	}
-	
-	public synchronized void raiseOkForCoffeeStep2() {
-		sCInterface.raiseOkForCoffeeStep2();
-	}
-	
-	public synchronized void raiseOkForCoffeeStep3() {
-		sCInterface.raiseOkForCoffeeStep3();
 	}
 	
 	public synchronized void raiseOkForExpressoStep2() {
@@ -732,10 +760,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	public synchronized void raiseOkForTeaStep5() {
 		sCInterface.raiseOkForTeaStep5();
-	}
-	
-	public synchronized void raiseReadyToDeliver() {
-		sCInterface.raiseReadyToDeliver();
 	}
 	
 	public synchronized boolean isRaisedDoPrepareForNextOrder() {
@@ -770,10 +794,52 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		return sCInterface.isRaisedNoActionFor45sec();
 	}
 	
+	public synchronized boolean isRaisedDoNextPreparationStep() {
+		return sCInterface.isRaisedDoNextPreparationStep();
+	}
+	
+	public synchronized boolean getCoffee() {
+		return sCInterface.getCoffee();
+	}
+	
+	public synchronized void setCoffee(boolean value) {
+		sCInterface.setCoffee(value);
+	}
+	
+	public synchronized boolean getOkForCoffeeStep2() {
+		return sCInterface.getOkForCoffeeStep2();
+	}
+	
+	public synchronized void setOkForCoffeeStep2(boolean value) {
+		sCInterface.setOkForCoffeeStep2(value);
+	}
+	
+	public synchronized boolean getOkForCoffeeStep3() {
+		return sCInterface.getOkForCoffeeStep3();
+	}
+	
+	public synchronized void setOkForCoffeeStep3(boolean value) {
+		sCInterface.setOkForCoffeeStep3(value);
+	}
+	
+	public synchronized boolean getReadyToDeliver() {
+		return sCInterface.getReadyToDeliver();
+	}
+	
+	public synchronized void setReadyToDeliver(boolean value) {
+		sCInterface.setReadyToDeliver(value);
+	}
+	
+	public synchronized boolean getPaymentChecked() {
+		return sCInterface.getPaymentChecked();
+	}
+	
+	public synchronized void setPaymentChecked(boolean value) {
+		sCInterface.setPaymentChecked(value);
+	}
+	
 	private void effect_Order_part_Preparation_tr0() {
 		exitSequence_Order_part_Preparation();
-		sCInterface.raiseDoWaitForRecuperation();
-		
 		enterSequence_Order_part_waitingForRecuperation_default();
 		react();
 	}
@@ -783,16 +849,100 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		timer.setTimer(this, 0, (10 * 1000), false);
 	}
 	
+	/* Entry action for state 'CheckPayment'. */
+	private void entryAction_Order_part_Rdy_for_order_PaymentGestion_CheckPayment() {
+		timer.setTimer(this, 1, 200, true);
+		
+		sCInterface.raiseDoCheckPayment();
+	}
+	
+	/* Entry action for state 'Initialization'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_Initialization() {
+		timer.setTimer(this, 2, 200, true);
+	}
+	
+	/* Entry action for state 'PodPositionning & WaterHeating'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_PodPositionning___WaterHeating() {
+		timer.setTimer(this, 3, 200, true);
+		
+		sCInterface.raiseDoNextPreparationStep();
+	}
+	
+	/* Entry action for state 'WaitingForTemperature & CupPositionning'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_WaitingForTemperature___CupPositionning() {
+		timer.setTimer(this, 4, 200, true);
+		
+		sCInterface.raiseDoNextPreparationStep();
+	}
+	
+	/* Entry action for state 'SugarTheDrink & PooringWaterForSize'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForSize() {
+		timer.setTimer(this, 5, 200, true);
+		
+		sCInterface.raiseDoNextPreparationStep();
+	}
+	
+	/* Entry action for state 'SugarTheDrink & PooringWaterForTime'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForTime() {
+		timer.setTimer(this, 6, 200, true);
+	}
+	
+	/* Entry action for state 'SachetWithdrawal'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_SachetWithdrawal() {
+		timer.setTimer(this, 7, 200, true);
+	}
+	
+	/* Entry action for state 'waitingForRecuperation'. */
+	private void entryAction_Order_part_waitingForRecuperation() {
+		sCInterface.raiseDoWaitForRecuperation();
+	}
+	
 	/* Exit action for state 'ActionDetected'. */
 	private void exitAction_Order_part_Rdy_for_order_NoActionDetection_ActionDetected() {
 		timer.unsetTimer(this, 0);
+	}
+	
+	/* Exit action for state 'CheckPayment'. */
+	private void exitAction_Order_part_Rdy_for_order_PaymentGestion_CheckPayment() {
+		timer.unsetTimer(this, 1);
+	}
+	
+	/* Exit action for state 'Initialization'. */
+	private void exitAction_Order_part_Preparation_DrinkMaking_Initialization() {
+		timer.unsetTimer(this, 2);
+	}
+	
+	/* Exit action for state 'PodPositionning & WaterHeating'. */
+	private void exitAction_Order_part_Preparation_DrinkMaking_PodPositionning___WaterHeating() {
+		timer.unsetTimer(this, 3);
+	}
+	
+	/* Exit action for state 'WaitingForTemperature & CupPositionning'. */
+	private void exitAction_Order_part_Preparation_DrinkMaking_WaitingForTemperature___CupPositionning() {
+		timer.unsetTimer(this, 4);
+	}
+	
+	/* Exit action for state 'SugarTheDrink & PooringWaterForSize'. */
+	private void exitAction_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForSize() {
+		timer.unsetTimer(this, 5);
+	}
+	
+	/* Exit action for state 'SugarTheDrink & PooringWaterForTime'. */
+	private void exitAction_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForTime() {
+		timer.unsetTimer(this, 6);
+	}
+	
+	/* Exit action for state 'SachetWithdrawal'. */
+	private void exitAction_Order_part_Preparation_DrinkMaking_SachetWithdrawal() {
+		timer.unsetTimer(this, 7);
 	}
 	
 	/* 'default' enter sequence for state Rdy for order */
 	private void enterSequence_Order_part_Rdy_for_order_default() {
 		enterSequence_Order_part_Rdy_for_order_NoActionDetection_default();
 		enterSequence_Order_part_Rdy_for_order_SlidersGestion_default();
-		enterSequence_Order_part_Rdy_for_order_ExitCondition_default();
+		enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_default();
+		enterSequence_Order_part_Rdy_for_order_PaymentGestion_default();
 	}
 	
 	/* 'default' enter sequence for state NoActionDetected */
@@ -820,46 +970,41 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		stateVector[1] = State.order_part_Rdy_for_order_SlidersGestion_SlidersCustomed;
 	}
 	
-	/* 'default' enter sequence for state Drink&PaymentGestion */
-	private void enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_default() {
-		enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_default();
-		enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_default();
-	}
-	
-	/* 'default' enter sequence for state PaymentWaiting */
-	private void enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting_default() {
-		nextStateIndex = 2;
-		stateVector[2] = State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting;
-	}
-	
-	/* 'default' enter sequence for state PaimentNFC */
-	private void enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC_default() {
-		nextStateIndex = 2;
-		stateVector[2] = State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC;
-	}
-	
-	/* 'default' enter sequence for state CheckPayment */
-	private void enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment_default() {
-		nextStateIndex = 2;
-		stateVector[2] = State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment;
-	}
-	
-	/* 'default' enter sequence for state paimentChecked */
-	private void enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked_default() {
-		nextStateIndex = 2;
-		stateVector[2] = State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked;
-	}
-	
 	/* 'default' enter sequence for state DrinkSelectedWaiting */
-	private void enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting_default() {
-		nextStateIndex = 3;
-		stateVector[3] = State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting;
+	private void enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_default() {
+		nextStateIndex = 2;
+		stateVector[2] = State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting;
 	}
 	
 	/* 'default' enter sequence for state DrinkSelected */
-	private void enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected_default() {
+	private void enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected_default() {
+		nextStateIndex = 2;
+		stateVector[2] = State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected;
+	}
+	
+	/* 'default' enter sequence for state PaymentWaiting */
+	private void enterSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting_default() {
 		nextStateIndex = 3;
-		stateVector[3] = State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected;
+		stateVector[3] = State.order_part_Rdy_for_order_PaymentGestion_PaymentWaiting;
+	}
+	
+	/* 'default' enter sequence for state PaimentNFC */
+	private void enterSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC_default() {
+		nextStateIndex = 3;
+		stateVector[3] = State.order_part_Rdy_for_order_PaymentGestion_PaimentNFC;
+	}
+	
+	/* 'default' enter sequence for state CheckPayment */
+	private void enterSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment_default() {
+		entryAction_Order_part_Rdy_for_order_PaymentGestion_CheckPayment();
+		nextStateIndex = 3;
+		stateVector[3] = State.order_part_Rdy_for_order_PaymentGestion_CheckPayment;
+	}
+	
+	/* 'default' enter sequence for state paimentChecked */
+	private void enterSequence_Order_part_Rdy_for_order_PaymentGestion_paimentChecked_default() {
+		nextStateIndex = 3;
+		stateVector[3] = State.order_part_Rdy_for_order_PaymentGestion_paimentChecked;
 	}
 	
 	/* 'default' enter sequence for state Preparation */
@@ -869,12 +1014,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* 'default' enter sequence for state Initialization */
 	private void enterSequence_Order_part_Preparation_DrinkMaking_Initialization_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_Initialization();
 		nextStateIndex = 0;
 		stateVector[0] = State.order_part_Preparation_DrinkMaking_Initialization;
 	}
 	
 	/* 'default' enter sequence for state PodPositionning & WaterHeating */
 	private void enterSequence_Order_part_Preparation_DrinkMaking_PodPositionning___WaterHeating_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_PodPositionning___WaterHeating();
 		nextStateIndex = 0;
 		stateVector[0] = State.order_part_Preparation_DrinkMaking_PodPositionning___WaterHeating;
 	}
@@ -893,12 +1040,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* 'default' enter sequence for state WaitingForTemperature & CupPositionning */
 	private void enterSequence_Order_part_Preparation_DrinkMaking_WaitingForTemperature___CupPositionning_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_WaitingForTemperature___CupPositionning();
 		nextStateIndex = 0;
 		stateVector[0] = State.order_part_Preparation_DrinkMaking_WaitingForTemperature___CupPositionning;
 	}
 	
 	/* 'default' enter sequence for state SugarTheDrink & PooringWaterForSize */
 	private void enterSequence_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForSize_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForSize();
 		nextStateIndex = 0;
 		stateVector[0] = State.order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForSize;
 	}
@@ -911,6 +1060,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* 'default' enter sequence for state SugarTheDrink & PooringWaterForTime */
 	private void enterSequence_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForTime_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForTime();
 		nextStateIndex = 0;
 		stateVector[0] = State.order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForTime;
 	}
@@ -923,12 +1073,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* 'default' enter sequence for state SachetWithdrawal */
 	private void enterSequence_Order_part_Preparation_DrinkMaking_SachetWithdrawal_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_SachetWithdrawal();
 		nextStateIndex = 0;
 		stateVector[0] = State.order_part_Preparation_DrinkMaking_SachetWithdrawal;
 	}
 	
 	/* 'default' enter sequence for state waitingForRecuperation */
 	private void enterSequence_Order_part_waitingForRecuperation_default() {
+		entryAction_Order_part_waitingForRecuperation();
 		nextStateIndex = 0;
 		stateVector[0] = State.order_part_waitingForRecuperation;
 	}
@@ -948,19 +1100,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		react_Order_part_Rdy_for_order_SlidersGestion__entry_Default();
 	}
 	
-	/* 'default' enter sequence for region ExitCondition */
-	private void enterSequence_Order_part_Rdy_for_order_ExitCondition_default() {
-		react_Order_part_Rdy_for_order_ExitCondition__entry_Default();
+	/* 'default' enter sequence for region DrinkSelectionGestion */
+	private void enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_default() {
+		react_Order_part_Rdy_for_order_DrinkSelectionGestion__entry_Default();
 	}
 	
 	/* 'default' enter sequence for region PaymentGestion */
-	private void enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_default() {
-		react_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion__entry_Default();
-	}
-	
-	/* 'default' enter sequence for region DrinkSelectionGestion */
-	private void enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_default() {
-		react_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion__entry_Default();
+	private void enterSequence_Order_part_Rdy_for_order_PaymentGestion_default() {
+		react_Order_part_Rdy_for_order_PaymentGestion__entry_Default();
 	}
 	
 	/* 'default' enter sequence for region DrinkMaking */
@@ -972,7 +1119,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	private void exitSequence_Order_part_Rdy_for_order() {
 		exitSequence_Order_part_Rdy_for_order_NoActionDetection();
 		exitSequence_Order_part_Rdy_for_order_SlidersGestion();
-		exitSequence_Order_part_Rdy_for_order_ExitCondition();
+		exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion();
+		exitSequence_Order_part_Rdy_for_order_PaymentGestion();
 	}
 	
 	/* Default exit sequence for state NoActionDetected */
@@ -1001,44 +1149,40 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		stateVector[1] = State.$NullState$;
 	}
 	
-	/* Default exit sequence for state Drink&PaymentGestion */
-	private void exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion() {
-		exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion();
-		exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion();
+	/* Default exit sequence for state DrinkSelectedWaiting */
+	private void exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting() {
+		nextStateIndex = 2;
+		stateVector[2] = State.$NullState$;
+	}
+	
+	/* Default exit sequence for state DrinkSelected */
+	private void exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected() {
+		nextStateIndex = 2;
+		stateVector[2] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state PaymentWaiting */
-	private void exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting() {
-		nextStateIndex = 2;
-		stateVector[2] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state PaimentNFC */
-	private void exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC() {
-		nextStateIndex = 2;
-		stateVector[2] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state CheckPayment */
-	private void exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment() {
-		nextStateIndex = 2;
-		stateVector[2] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state paimentChecked */
-	private void exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked() {
-		nextStateIndex = 2;
-		stateVector[2] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state DrinkSelectedWaiting */
-	private void exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting() {
+	private void exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting() {
 		nextStateIndex = 3;
 		stateVector[3] = State.$NullState$;
 	}
 	
-	/* Default exit sequence for state DrinkSelected */
-	private void exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected() {
+	/* Default exit sequence for state PaimentNFC */
+	private void exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC() {
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
+	}
+	
+	/* Default exit sequence for state CheckPayment */
+	private void exitSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment() {
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
+		
+		exitAction_Order_part_Rdy_for_order_PaymentGestion_CheckPayment();
+	}
+	
+	/* Default exit sequence for state paimentChecked */
+	private void exitSequence_Order_part_Rdy_for_order_PaymentGestion_paimentChecked() {
 		nextStateIndex = 3;
 		stateVector[3] = State.$NullState$;
 	}
@@ -1052,12 +1196,16 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	private void exitSequence_Order_part_Preparation_DrinkMaking_Initialization() {
 		nextStateIndex = 0;
 		stateVector[0] = State.$NullState$;
+		
+		exitAction_Order_part_Preparation_DrinkMaking_Initialization();
 	}
 	
 	/* Default exit sequence for state PodPositionning & WaterHeating */
 	private void exitSequence_Order_part_Preparation_DrinkMaking_PodPositionning___WaterHeating() {
 		nextStateIndex = 0;
 		stateVector[0] = State.$NullState$;
+		
+		exitAction_Order_part_Preparation_DrinkMaking_PodPositionning___WaterHeating();
 	}
 	
 	/* Default exit sequence for state GrainMashing & WaterHeating */
@@ -1076,12 +1224,16 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	private void exitSequence_Order_part_Preparation_DrinkMaking_WaitingForTemperature___CupPositionning() {
 		nextStateIndex = 0;
 		stateVector[0] = State.$NullState$;
+		
+		exitAction_Order_part_Preparation_DrinkMaking_WaitingForTemperature___CupPositionning();
 	}
 	
 	/* Default exit sequence for state SugarTheDrink & PooringWaterForSize */
 	private void exitSequence_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForSize() {
 		nextStateIndex = 0;
 		stateVector[0] = State.$NullState$;
+		
+		exitAction_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForSize();
 	}
 	
 	/* Default exit sequence for state WaitingForTemperature & CupPositionning & GrainTamping */
@@ -1094,6 +1246,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	private void exitSequence_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForTime() {
 		nextStateIndex = 0;
 		stateVector[0] = State.$NullState$;
+		
+		exitAction_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForTime();
 	}
 	
 	/* Default exit sequence for state WaitingForInfusion */
@@ -1106,6 +1260,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	private void exitSequence_Order_part_Preparation_DrinkMaking_SachetWithdrawal() {
 		nextStateIndex = 0;
 		stateVector[0] = State.$NullState$;
+		
+		exitAction_Order_part_Preparation_DrinkMaking_SachetWithdrawal();
 	}
 	
 	/* Default exit sequence for state waitingForRecuperation */
@@ -1172,28 +1328,28 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		}
 		
 		switch (stateVector[2]) {
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting();
+		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting:
+			exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting();
 			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC();
-			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment();
-			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked();
+		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected:
+			exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected();
 			break;
 		default:
 			break;
 		}
 		
 		switch (stateVector[3]) {
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting();
+		case order_part_Rdy_for_order_PaymentGestion_PaymentWaiting:
+			exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting();
 			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected();
+		case order_part_Rdy_for_order_PaymentGestion_PaimentNFC:
+			exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC();
+			break;
+		case order_part_Rdy_for_order_PaymentGestion_CheckPayment:
+			exitSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment();
+			break;
+		case order_part_Rdy_for_order_PaymentGestion_paimentChecked:
+			exitSequence_Order_part_Rdy_for_order_PaymentGestion_paimentChecked();
 			break;
 		default:
 			break;
@@ -1228,31 +1384,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		}
 	}
 	
-	/* Default exit sequence for region ExitCondition */
-	private void exitSequence_Order_part_Rdy_for_order_ExitCondition() {
+	/* Default exit sequence for region DrinkSelectionGestion */
+	private void exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion() {
 		switch (stateVector[2]) {
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting();
+		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting:
+			exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting();
 			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC();
-			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment();
-			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked();
-			break;
-		default:
-			break;
-		}
-		
-		switch (stateVector[3]) {
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting();
-			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected();
+		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected:
+			exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected();
 			break;
 		default:
 			break;
@@ -1260,33 +1399,19 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	}
 	
 	/* Default exit sequence for region PaymentGestion */
-	private void exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion() {
-		switch (stateVector[2]) {
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting();
-			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC();
-			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment();
-			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked();
-			break;
-		default:
-			break;
-		}
-	}
-	
-	/* Default exit sequence for region DrinkSelectionGestion */
-	private void exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion() {
+	private void exitSequence_Order_part_Rdy_for_order_PaymentGestion() {
 		switch (stateVector[3]) {
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting();
+		case order_part_Rdy_for_order_PaymentGestion_PaymentWaiting:
+			exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting();
 			break;
-		case order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected:
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected();
+		case order_part_Rdy_for_order_PaymentGestion_PaimentNFC:
+			exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC();
+			break;
+		case order_part_Rdy_for_order_PaymentGestion_CheckPayment:
+			exitSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment();
+			break;
+		case order_part_Rdy_for_order_PaymentGestion_paimentChecked:
+			exitSequence_Order_part_Rdy_for_order_PaymentGestion_paimentChecked();
 			break;
 		default:
 			break;
@@ -1347,18 +1472,13 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	}
 	
 	/* Default react sequence for initial entry  */
-	private void react_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion__entry_Default() {
-		enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting_default();
+	private void react_Order_part_Rdy_for_order_DrinkSelectionGestion__entry_Default() {
+		enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_default();
 	}
 	
 	/* Default react sequence for initial entry  */
-	private void react_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion__entry_Default() {
-		enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting_default();
-	}
-	
-	/* Default react sequence for initial entry  */
-	private void react_Order_part_Rdy_for_order_ExitCondition__entry_Default() {
-		enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_default();
+	private void react_Order_part_Rdy_for_order_PaymentGestion__entry_Default() {
+		enterSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting_default();
 	}
 	
 	/* Default react sequence for initial entry  */
@@ -1372,12 +1492,10 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	}
 	
 	/* The reactions of state null. */
-	private void react_Order_part_Rdy_for_order_ExitCondition__sync0() {
-		exitSequence_Order_part_Rdy_for_order();
+	private void react_Order_part__sync0() {
 		sCInterface.raiseDoStartPreparation();
 		
 		enterSequence_Order_part_Preparation_default();
-		react();
 	}
 	
 	private boolean react() {
@@ -1461,11 +1579,58 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		return did_transition;
 	}
 	
-	private boolean order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_react(boolean try_transition) {
+	private boolean order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			did_transition = false;
+			if (sCInterface.drinkSelectionDone) {
+				exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting();
+				enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected_default();
+			} else {
+				did_transition = false;
+			}
+		}
+		return did_transition;
+	}
+	
+	private boolean order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected_react(boolean try_transition) {
+		boolean did_transition = try_transition;
+		
+		if (try_transition) {
+			if (sCInterface.noActionFor45sec) {
+				exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected();
+				sCInterface.raiseDoResetDrinkSelected();
+				
+				enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_default();
+			} else {
+				if (isStateActive(State.order_part_Rdy_for_order_PaymentGestion_paimentChecked)) {
+					exitSequence_Order_part_Rdy_for_order();
+					react_Order_part__sync0();
+				} else {
+					did_transition = false;
+				}
+			}
+		}
+		return did_transition;
+	}
+	
+	private boolean order_part_Rdy_for_order_PaymentGestion_PaymentWaiting_react(boolean try_transition) {
+		boolean did_transition = try_transition;
+		
+		if (try_transition) {
+			if (sCInterface.nFC) {
+				exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting();
+				enterSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC_default();
+				order_part_Rdy_for_order_react(false);
+			} else {
+				if (sCInterface.addCoin) {
+					exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting();
+					enterSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment_default();
+					order_part_Rdy_for_order_react(false);
+				} else {
+					did_transition = false;
+				}
+			}
 		}
 		if (did_transition==false) {
 			did_transition = order_part_Rdy_for_order_react(try_transition);
@@ -1473,127 +1638,73 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		return did_transition;
 	}
 	
-	private boolean order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting_react(boolean try_transition) {
+	private boolean order_part_Rdy_for_order_PaymentGestion_PaimentNFC_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.nFC) {
-				exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting();
-				enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC_default();
-			} else {
-				if (sCInterface.addCoin) {
-					exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting();
-					sCInterface.raiseDoCheckPayment();
-					
-					enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment_default();
-				} else {
-					did_transition = false;
-				}
-			}
+			exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC();
+			enterSequence_Order_part_Rdy_for_order_PaymentGestion_paimentChecked_default();
+			order_part_Rdy_for_order_react(false);
+		}
+		if (did_transition==false) {
+			did_transition = order_part_Rdy_for_order_react(try_transition);
 		}
 		return did_transition;
 	}
 	
-	private boolean order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaimentNFC();
-			enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked_default();
-		}
-		return did_transition;
-	}
-	
-	private boolean order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment_react(boolean try_transition) {
+	private boolean order_part_Rdy_for_order_PaymentGestion_CheckPayment_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
 			if ((sCInterface.noActionFor45sec || sCInterface.cancel)) {
-				exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment();
+				exitSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment();
 				sCInterface.raiseDoResetPayment();
 				
-				enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting_default();
+				enterSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting_default();
+				order_part_Rdy_for_order_react(false);
 			} else {
-				if (sCInterface.paymentChecked) {
-					exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment();
-					sCInterface.raiseDoStartPreparation();
-					
-					enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked_default();
+				if (((timeEvents[1]) && (sCInterface.getPaymentChecked()))) {
+					exitSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment();
+					enterSequence_Order_part_Rdy_for_order_PaymentGestion_paimentChecked_default();
+					order_part_Rdy_for_order_react(false);
 				} else {
 					if (sCInterface.addCoin) {
-						exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment();
-						sCInterface.raiseDoCheckPayment();
-						
-						enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_CheckPayment_default();
+						exitSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment();
+						enterSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment_default();
+						order_part_Rdy_for_order_react(false);
 					} else {
 						did_transition = false;
 					}
 				}
 			}
 		}
-		return did_transition;
-	}
-	
-	private boolean order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if (isStateActive(State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected)) {
-				exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion();
-				react_Order_part_Rdy_for_order_ExitCondition__sync0();
-			} else {
-				if ((sCInterface.noActionFor45sec || sCInterface.cancel)) {
-					exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked();
-					sCInterface.raiseDoResetPayment();
-					
-					enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_PaymentWaiting_default();
-				} else {
-					did_transition = false;
-				}
-			}
-		}
-		return did_transition;
-	}
-	
-	private boolean order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if (sCInterface.drinkSelectionDone) {
-				exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting();
-				enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected_default();
-				order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_react(false);
-			} else {
-				did_transition = false;
-			}
-		}
 		if (did_transition==false) {
-			did_transition = order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_react(try_transition);
+			did_transition = order_part_Rdy_for_order_react(try_transition);
 		}
 		return did_transition;
 	}
 	
-	private boolean order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected_react(boolean try_transition) {
+	private boolean order_part_Rdy_for_order_PaymentGestion_paimentChecked_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.noActionFor45sec) {
-				exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelected();
-				sCInterface.raiseDoResetDrinkSelected();
+			if ((sCInterface.noActionFor45sec || sCInterface.cancel)) {
+				exitSequence_Order_part_Rdy_for_order_PaymentGestion_paimentChecked();
+				sCInterface.raiseDoResetPayment();
 				
-				enterSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_DrinkSelectionGestion_DrinkSelectedWaiting_default();
-				order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_react(false);
+				enterSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting_default();
+				order_part_Rdy_for_order_react(false);
 			} else {
-				if (isStateActive(State.order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_PaymentGestion_paimentChecked)) {
-					exitSequence_Order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion();
-					react_Order_part_Rdy_for_order_ExitCondition__sync0();
+				if (isStateActive(State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected)) {
+					exitSequence_Order_part_Rdy_for_order();
+					react_Order_part__sync0();
 				} else {
 					did_transition = false;
 				}
 			}
 		}
 		if (did_transition==false) {
-			did_transition = order_part_Rdy_for_order_ExitCondition_Drink_PaymentGestion_react(try_transition);
+			did_transition = order_part_Rdy_for_order_react(try_transition);
 		}
 		return did_transition;
 	}
@@ -1614,7 +1725,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.coffee) {
+			if (((timeEvents[2]) && (sCInterface.getCoffee()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Initialization();
 				enterSequence_Order_part_Preparation_DrinkMaking_PodPositionning___WaterHeating_default();
 				order_part_Preparation_react(false);
@@ -1644,7 +1755,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.okForCoffeeStep2) {
+			if (((timeEvents[3]) && (sCInterface.getOkForCoffeeStep2()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_PodPositionning___WaterHeating();
 				enterSequence_Order_part_Preparation_DrinkMaking_WaitingForTemperature___CupPositionning_default();
 				order_part_Preparation_react(false);
@@ -1698,7 +1809,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.okForCoffeeStep3) {
+			if (((timeEvents[4]) && (sCInterface.getOkForCoffeeStep3()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_WaitingForTemperature___CupPositionning();
 				enterSequence_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForSize_default();
 				order_part_Preparation_react(false);
@@ -1722,7 +1833,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.readyToDeliver) {
+			if (((timeEvents[5]) && (sCInterface.getReadyToDeliver()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForSize();
 				react_Order_part_Preparation_DrinkMaking__exit_Default();
 			} else {
@@ -1763,7 +1874,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.readyToDeliver) {
+			if (((timeEvents[6]) && (sCInterface.getReadyToDeliver()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_SugarTheDrink___PooringWaterForTime();
 				react_Order_part_Preparation_DrinkMaking__exit_Default();
 			} else {
@@ -1798,7 +1909,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.readyToDeliver) {
+			if (((timeEvents[7]) && (sCInterface.getReadyToDeliver()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_SachetWithdrawal();
 				react_Order_part_Preparation_DrinkMaking__exit_Default();
 			} else {
