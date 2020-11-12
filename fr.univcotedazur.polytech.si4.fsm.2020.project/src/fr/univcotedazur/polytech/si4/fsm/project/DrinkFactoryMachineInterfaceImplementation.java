@@ -34,12 +34,6 @@ public class DrinkFactoryMachineInterfaceImplementation implements SCInterfaceLi
 	}
 
 	@Override
-	public void onDoStartPreparationRaised() {
-		theDFM.doStartPreparation();
-		
-	}
-
-	@Override
 	public void onDoResetSlidersRaised() {
 		// TODO Auto-generated method stub
 		

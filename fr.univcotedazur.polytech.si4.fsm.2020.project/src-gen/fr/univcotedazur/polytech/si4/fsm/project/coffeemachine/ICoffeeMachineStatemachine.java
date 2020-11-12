@@ -48,8 +48,6 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public boolean isRaisedDoCheckPayment();
 		
-		public boolean isRaisedDoStartPreparation();
-		
 		public boolean isRaisedDoResetSliders();
 		
 		public boolean isRaisedDoWaitForRecuperation();
@@ -58,9 +56,9 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public boolean isRaisedDoNextPreparationStep();
 		
-		public boolean getCoffee();
+		public boolean getOkForCoffeeStep1();
 		
-		public void setCoffee(boolean value);
+		public void setOkForCoffeeStep1(boolean value);
 		
 		public boolean getOkForCoffeeStep2();
 		
@@ -73,6 +71,34 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		public boolean getReadyToDeliver();
 		
 		public void setReadyToDeliver(boolean value);
+		
+		public long getWftTime();
+		
+		public void setWftTime(long value);
+		
+		public long getCpTime();
+		
+		public void setCpTime(long value);
+		
+		public long getStdTime();
+		
+		public void setStdTime(long value);
+		
+		public long getPwfsTime();
+		
+		public void setPwfsTime(long value);
+		
+		public long getPwftTime();
+		
+		public void setPwftTime(long value);
+		
+		public long getPpTime();
+		
+		public void setPpTime(long value);
+		
+		public long getWhTime();
+		
+		public void setWhTime(long value);
 		
 		public boolean getPaymentChecked();
 		
@@ -87,7 +113,6 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		public void onDoResetDrinkSelectedRaised();
 		public void onDoResetPaymentRaised();
 		public void onDoCheckPaymentRaised();
-		public void onDoStartPreparationRaised();
 		public void onDoResetSlidersRaised();
 		public void onDoWaitForRecuperationRaised();
 		public void onNoActionFor45secRaised();

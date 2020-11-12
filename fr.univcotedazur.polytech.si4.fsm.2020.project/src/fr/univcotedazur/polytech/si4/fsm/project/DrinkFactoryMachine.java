@@ -404,57 +404,10 @@ public class DrinkFactoryMachine extends JFrame {
 		
 
 	}
-	public void doStartPreparation() {
-		System.out.println("start");
-		msTimer.restart();
-		msTimer.start();
-		switch (actualDrink.getName()) {
-		case "coffee":
-			theFSM.setCoffee(true);
-			break;
-		case "expresso":
-			theFSM.raiseExpresso();
-			break;
-		case "tea":
-			theFSM.raiseTea();
-			break;
-		}
-	}
-	
-	/*void prepareCoffee(){
-		messagesToUser.setText("Préparation du café étape 1" );
-		while (((Coffee) actualDrink).getTimeForStep1() > secs) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		theFSM.raiseOkForCoffeeStep2();
-		messagesToUser.setText("Préparation du café étape 2" );
-		while (((Coffee) actualDrink).getTimeForStep2() > secs) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		theFSM.raiseOkForCoffeeStep3();
-		messagesToUser.setText("<html>Préparation du café étape 3<html>" );
-		while (((Coffee) actualDrink).getTimeForStep3() > secs) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		messagesToUser.setText("Préparation du café terminée" );
-	}*/
 	
 	public void doWaitForRecuperation() {
-		System.out.println("ça marche");	
+		System.out.println("ça marche");
+		messagesToUser.setText("<html> Récupérez votre goblet svp");	
 	}
 	
 	protected void count(int nbMillisec) {
@@ -496,9 +449,9 @@ public class DrinkFactoryMachine extends JFrame {
 
 	void doNextPreparationStep() {
 		
-		if(actualStepNumber == actualDrink.getStepsList().length) { // cas où il n'y a plus d'étape à faire
+		if(actualStepNumber > actualDrink.getStepsList().length) { // cas où il n'y a plus d'étape à faire
 			theFSM.setReadyToDeliver(true);
-			System.out.println("oui3");
+			System.out.println("oui4");
 		}
 		else {
 			msTimer.restart();
@@ -510,43 +463,59 @@ public class DrinkFactoryMachine extends JFrame {
 			}
 			messagesToUser.setText("<html> Préparation étape "+ currentSteps);	
 			
-			doSteps(); //effectue les étapes en prenant le temps nécessaire
-			doRaiseRightInupt(); // envoie le bon input à la FSM pour dire que l'étape est terminée
+			setFSMTimers(); // met les temps des timers des taches de la FSM
 			
+			sayRdyForNextStep(); // dit à la FSM qu'on est prêt pour la prochaine étape
 			
-			msTimer.stop();
 			actualStepNumber++;
-			//doNextPreparationStep();
 			
 		}
 		
 		
 	}
 
-	private void doSteps() {
+	private void setFSMTimers() {
 		for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) {
-			while(step.getTimeToMake() > secs) {
-				try {
-					Thread.sleep(7);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			switch(step.getName()) {
+			case "CupPositionning":
+				theFSM.setCpTime(step.getTimeToMake());
+				break;
+			case "PodPositionning":
+				theFSM.setPpTime(step.getTimeToMake());
+				break;
+			case "PooringWaterForSize":
+				theFSM.setPwfsTime(step.getTimeToMake());
+				break;
+			case "SugarTheDrink":
+				theFSM.setStdTime(step.getTimeToMake());
+				break;
+			case "WaitingForTemperature":
+				theFSM.setWftTime(step.getTimeToMake());
+				break;
+			case "WaterHeating":
+				theFSM.setWhTime(step.getTimeToMake());
+				break;
 			}
+			
 		}
 		
 	}
 	
-	private void doRaiseRightInupt() {
+	private void sayRdyForNextStep() {
 		switch(actualDrink.getName()) {
 		case "coffee":
 			switch(actualStepNumber) {
 				case 1:
-					theFSM.setOkForCoffeeStep2(true);
+					theFSM.setOkForCoffeeStep1(true);
 					System.out.println("oui1");
 					break;
 				case 2:
-					theFSM.setOkForCoffeeStep3(true);
+					theFSM.setOkForCoffeeStep2(true);
 					System.out.println("oui2");
+					break;
+				case 3:
+					theFSM.setOkForCoffeeStep3(true);
+					System.out.println("oui3");
 					break;
 				default:
 					break;
