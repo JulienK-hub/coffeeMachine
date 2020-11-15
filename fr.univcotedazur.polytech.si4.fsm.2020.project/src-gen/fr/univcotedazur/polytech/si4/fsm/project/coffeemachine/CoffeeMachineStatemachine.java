@@ -612,8 +612,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		order_part_Rdy_for_order,
 		order_part_Rdy_for_order_NoActionDetection_NoActionDetected,
 		order_part_Rdy_for_order_NoActionDetection_ActionDetected,
-		order_part_Rdy_for_order_SlidersGestion_SlidersDefault,
-		order_part_Rdy_for_order_SlidersGestion_SlidersCustomed,
+		order_part_Rdy_for_order_ss_SlidersDefault,
+		order_part_Rdy_for_order_ss_SlidersCustomed,
 		order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting,
 		order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected,
 		order_part_Rdy_for_order_PaymentGestion_PaymentWaiting,
@@ -753,11 +753,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			case order_part_Rdy_for_order_NoActionDetection_ActionDetected:
 				order_part_Rdy_for_order_NoActionDetection_ActionDetected_react(true);
 				break;
-			case order_part_Rdy_for_order_SlidersGestion_SlidersDefault:
-				order_part_Rdy_for_order_SlidersGestion_SlidersDefault_react(true);
+			case order_part_Rdy_for_order_ss_SlidersDefault:
+				order_part_Rdy_for_order_ss_SlidersDefault_react(true);
 				break;
-			case order_part_Rdy_for_order_SlidersGestion_SlidersCustomed:
-				order_part_Rdy_for_order_SlidersGestion_SlidersCustomed_react(true);
+			case order_part_Rdy_for_order_ss_SlidersCustomed:
+				order_part_Rdy_for_order_ss_SlidersCustomed_react(true);
 				break;
 			case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting:
 				order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_react(true);
@@ -910,10 +910,10 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			return stateVector[0] == State.order_part_Rdy_for_order_NoActionDetection_NoActionDetected;
 		case order_part_Rdy_for_order_NoActionDetection_ActionDetected:
 			return stateVector[0] == State.order_part_Rdy_for_order_NoActionDetection_ActionDetected;
-		case order_part_Rdy_for_order_SlidersGestion_SlidersDefault:
-			return stateVector[1] == State.order_part_Rdy_for_order_SlidersGestion_SlidersDefault;
-		case order_part_Rdy_for_order_SlidersGestion_SlidersCustomed:
-			return stateVector[1] == State.order_part_Rdy_for_order_SlidersGestion_SlidersCustomed;
+		case order_part_Rdy_for_order_ss_SlidersDefault:
+			return stateVector[1] == State.order_part_Rdy_for_order_ss_SlidersDefault;
+		case order_part_Rdy_for_order_ss_SlidersCustomed:
+			return stateVector[1] == State.order_part_Rdy_for_order_ss_SlidersCustomed;
 		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting:
 			return stateVector[2] == State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting;
 		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected:
@@ -1304,6 +1304,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		timer.setTimer(this, 0, (10 * 1000), false);
 	}
 	
+	/* Entry action for state 'DrinkSelected'. */
+	private void entryAction_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected() {
+		sCInterface.raiseDoCheckPayment();
+	}
+	
 	/* Entry action for state 'CheckPayment'. */
 	private void entryAction_Order_part_Rdy_for_order_PaymentGestion_CheckPayment() {
 		timer.setTimer(this, 1, 200, true);
@@ -1499,7 +1504,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	/* 'default' enter sequence for state Rdy for order */
 	private void enterSequence_Order_part_Rdy_for_order_default() {
 		enterSequence_Order_part_Rdy_for_order_NoActionDetection_default();
-		enterSequence_Order_part_Rdy_for_order_SlidersGestion_default();
+		enterSequence_Order_part_Rdy_for_order_ss_default();
 		enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_default();
 		enterSequence_Order_part_Rdy_for_order_PaymentGestion_default();
 	}
@@ -1518,15 +1523,15 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	}
 	
 	/* 'default' enter sequence for state SlidersDefault */
-	private void enterSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersDefault_default() {
+	private void enterSequence_Order_part_Rdy_for_order_ss_SlidersDefault_default() {
 		nextStateIndex = 1;
-		stateVector[1] = State.order_part_Rdy_for_order_SlidersGestion_SlidersDefault;
+		stateVector[1] = State.order_part_Rdy_for_order_ss_SlidersDefault;
 	}
 	
 	/* 'default' enter sequence for state SlidersCustomed */
-	private void enterSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersCustomed_default() {
+	private void enterSequence_Order_part_Rdy_for_order_ss_SlidersCustomed_default() {
 		nextStateIndex = 1;
-		stateVector[1] = State.order_part_Rdy_for_order_SlidersGestion_SlidersCustomed;
+		stateVector[1] = State.order_part_Rdy_for_order_ss_SlidersCustomed;
 	}
 	
 	/* 'default' enter sequence for state DrinkSelectedWaiting */
@@ -1537,6 +1542,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* 'default' enter sequence for state DrinkSelected */
 	private void enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected_default() {
+		entryAction_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected();
 		nextStateIndex = 2;
 		stateVector[2] = State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected;
 	}
@@ -1789,9 +1795,9 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		react_Order_part_Rdy_for_order_NoActionDetection__entry_Default();
 	}
 	
-	/* 'default' enter sequence for region SlidersGestion */
-	private void enterSequence_Order_part_Rdy_for_order_SlidersGestion_default() {
-		react_Order_part_Rdy_for_order_SlidersGestion__entry_Default();
+	/* 'default' enter sequence for region ss */
+	private void enterSequence_Order_part_Rdy_for_order_ss_default() {
+		react_Order_part_Rdy_for_order_ss__entry_Default();
 	}
 	
 	/* 'default' enter sequence for region DrinkSelectionGestion */
@@ -1872,7 +1878,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	/* Default exit sequence for state Rdy for order */
 	private void exitSequence_Order_part_Rdy_for_order() {
 		exitSequence_Order_part_Rdy_for_order_NoActionDetection();
-		exitSequence_Order_part_Rdy_for_order_SlidersGestion();
+		exitSequence_Order_part_Rdy_for_order_ss();
 		exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion();
 		exitSequence_Order_part_Rdy_for_order_PaymentGestion();
 	}
@@ -1892,13 +1898,13 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	}
 	
 	/* Default exit sequence for state SlidersDefault */
-	private void exitSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersDefault() {
+	private void exitSequence_Order_part_Rdy_for_order_ss_SlidersDefault() {
 		nextStateIndex = 1;
 		stateVector[1] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state SlidersCustomed */
-	private void exitSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersCustomed() {
+	private void exitSequence_Order_part_Rdy_for_order_ss_SlidersCustomed() {
 		nextStateIndex = 1;
 		stateVector[1] = State.$NullState$;
 	}
@@ -2210,11 +2216,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		}
 		
 		switch (stateVector[1]) {
-		case order_part_Rdy_for_order_SlidersGestion_SlidersDefault:
-			exitSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersDefault();
+		case order_part_Rdy_for_order_ss_SlidersDefault:
+			exitSequence_Order_part_Rdy_for_order_ss_SlidersDefault();
 			break;
-		case order_part_Rdy_for_order_SlidersGestion_SlidersCustomed:
-			exitSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersCustomed();
+		case order_part_Rdy_for_order_ss_SlidersCustomed:
+			exitSequence_Order_part_Rdy_for_order_ss_SlidersCustomed();
 			break;
 		case order_part_Preparation_DrinkMaking_Step2_r2_CupPositionningDone:
 			exitSequence_Order_part_Preparation_DrinkMaking_Step2_r2_CupPositionningDone();
@@ -2305,14 +2311,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		}
 	}
 	
-	/* Default exit sequence for region SlidersGestion */
-	private void exitSequence_Order_part_Rdy_for_order_SlidersGestion() {
+	/* Default exit sequence for region ss */
+	private void exitSequence_Order_part_Rdy_for_order_ss() {
 		switch (stateVector[1]) {
-		case order_part_Rdy_for_order_SlidersGestion_SlidersDefault:
-			exitSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersDefault();
+		case order_part_Rdy_for_order_ss_SlidersDefault:
+			exitSequence_Order_part_Rdy_for_order_ss_SlidersDefault();
 			break;
-		case order_part_Rdy_for_order_SlidersGestion_SlidersCustomed:
-			exitSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersCustomed();
+		case order_part_Rdy_for_order_ss_SlidersCustomed:
+			exitSequence_Order_part_Rdy_for_order_ss_SlidersCustomed();
 			break;
 		default:
 			break;
@@ -2630,8 +2636,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	}
 	
 	/* Default react sequence for initial entry  */
-	private void react_Order_part_Rdy_for_order_SlidersGestion__entry_Default() {
-		enterSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersDefault_default();
+	private void react_Order_part_Rdy_for_order_ss__entry_Default() {
+		enterSequence_Order_part_Rdy_for_order_ss_SlidersDefault_default();
 	}
 	
 	/* Default react sequence for initial entry  */
@@ -2815,13 +2821,13 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		return did_transition;
 	}
 	
-	private boolean order_part_Rdy_for_order_SlidersGestion_SlidersDefault_react(boolean try_transition) {
+	private boolean order_part_Rdy_for_order_ss_SlidersDefault_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
 			if (sCInterface.sliderModified) {
-				exitSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersDefault();
-				enterSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersCustomed_default();
+				exitSequence_Order_part_Rdy_for_order_ss_SlidersDefault();
+				enterSequence_Order_part_Rdy_for_order_ss_SlidersCustomed_default();
 			} else {
 				did_transition = false;
 			}
@@ -2829,15 +2835,15 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		return did_transition;
 	}
 	
-	private boolean order_part_Rdy_for_order_SlidersGestion_SlidersCustomed_react(boolean try_transition) {
+	private boolean order_part_Rdy_for_order_ss_SlidersCustomed_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
 			if (sCInterface.noActionFor45sec) {
-				exitSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersCustomed();
+				exitSequence_Order_part_Rdy_for_order_ss_SlidersCustomed();
 				sCInterface.raiseDoResetSliders();
 				
-				enterSequence_Order_part_Rdy_for_order_SlidersGestion_SlidersDefault_default();
+				enterSequence_Order_part_Rdy_for_order_ss_SlidersDefault_default();
 			} else {
 				did_transition = false;
 			}
