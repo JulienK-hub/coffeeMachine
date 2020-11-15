@@ -1,10 +1,19 @@
 package drinks;
 
-public class Tea /*extends Drink */{
+import preparationSteps.*;
 
-	/*public Tea() {
-		super("tea", 20, 0.4);
-		// TODO Auto-generated constructor stub
-	}*/
 
+public class Tea extends Drink {
+
+	public Tea() {
+		super("tea", 40, 0.4, null);
+		Step[][] steps = {
+				{new SachetPositionning(),new WaterHeating()},
+				{new CupPositionning(),new WaitingForTemperature()},
+				{new PooringWaterForSize(), new SugarTheDrink()},
+				{new WaitingForInfusion()},
+				{new SachetWithDrawal()}
+		};
+		this.setStepsList(steps);
+	}
 }

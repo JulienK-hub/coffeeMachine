@@ -1,6 +1,7 @@
 package drinks;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 
 import preparationSteps.*;
@@ -8,7 +9,7 @@ import preparationSteps.*;
 public class Coffee extends Drink{
 	
 	public Coffee() {
-		super("coffee", 15, 0.35, null);
+		super("coffee", 20, 0.35, null);
 		Step[][] steps = {
 				{new PodPositionning(),new WaterHeating()},
 				{new CupPositionning(),new WaitingForTemperature()},

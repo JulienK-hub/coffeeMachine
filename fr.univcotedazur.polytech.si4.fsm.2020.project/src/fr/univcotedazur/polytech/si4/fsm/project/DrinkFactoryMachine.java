@@ -429,18 +429,20 @@ public class DrinkFactoryMachine extends JFrame {
 	}
 
 	void doCheckPayment() {
-		double leftToPay = actualDrink.getPrice()-coinsEntered;
-		if(leftToPay > 0) {
-			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il manque " + leftToPay + "<html> €." );	
+		if(actualDrink.getName() == "coffee" || actualDrink.getName() == "expresso" || actualDrink.getName() == "tea") {
+			double leftToPay = actualDrink.getPrice()-coinsEntered;
+			if(leftToPay > 0) {
+				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il manque " + leftToPay + "<html> €." );	
 			
-		} else if(leftToPay < 0) {
-			leftToPay=-leftToPay;
-			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il y a " + leftToPay + "<html> € de trop." );	
-			theFSM.setPaymentChecked(true);
-			//System.out.println("a");
-		} else {
-			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
-			theFSM.setPaymentChecked(true);
+			} else if(leftToPay < 0) {
+				leftToPay=-leftToPay;
+				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il y a " + leftToPay + "<html> € de trop." );	
+				theFSM.setPaymentChecked(true);
+				//System.out.println("a");
+			} else {
+				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
+				theFSM.setPaymentChecked(true);
+			}
 		}
 			
 		
