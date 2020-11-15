@@ -24,22 +24,6 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public void raiseNFC();
 		
-		public void raiseExpresso();
-		
-		public void raiseTea();
-		
-		public void raiseOkForExpressoStep2();
-		
-		public void raiseOkForExpressoStep3();
-		
-		public void raiseOkForTeaStep2();
-		
-		public void raiseOkForTeaStep3();
-		
-		public void raiseOkForTeaStep4();
-		
-		public void raiseOkForTeaStep5();
-		
 		public boolean isRaisedDoPrepareForNextOrder();
 		
 		public boolean isRaisedDoResetDrinkSelected();
@@ -55,6 +39,38 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		public boolean isRaisedNoActionFor45sec();
 		
 		public boolean isRaisedDoNextPreparationStep();
+		
+		public boolean getOkForExpressoStep1();
+		
+		public void setOkForExpressoStep1(boolean value);
+		
+		public boolean getOkForExpressoStep2();
+		
+		public void setOkForExpressoStep2(boolean value);
+		
+		public boolean getOkForExpressoStep3();
+		
+		public void setOkForExpressoStep3(boolean value);
+		
+		public boolean getOkForTeaStep1();
+		
+		public void setOkForTeaStep1(boolean value);
+		
+		public boolean getOkForTeaStep2();
+		
+		public void setOkForTeaStep2(boolean value);
+		
+		public boolean getOkForTeaStep3();
+		
+		public void setOkForTeaStep3(boolean value);
+		
+		public boolean getOkForTeaStep4();
+		
+		public void setOkForTeaStep4(boolean value);
+		
+		public boolean getOkForTeaStep5();
+		
+		public void setOkForTeaStep5(boolean value);
 		
 		public boolean getOkForCoffeeStep1();
 		
@@ -99,6 +115,26 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		public long getWhTime();
 		
 		public void setWhTime(long value);
+		
+		public long getGmTime();
+		
+		public void setGmTime(long value);
+		
+		public long getSpTime();
+		
+		public void setSpTime(long value);
+		
+		public long getGtTime();
+		
+		public void setGtTime(long value);
+		
+		public long getWfiTime();
+		
+		public void setWfiTime(long value);
+		
+		public long getSwdTime();
+		
+		public void setSwdTime(long value);
 		
 		public boolean getPaymentChecked();
 		
