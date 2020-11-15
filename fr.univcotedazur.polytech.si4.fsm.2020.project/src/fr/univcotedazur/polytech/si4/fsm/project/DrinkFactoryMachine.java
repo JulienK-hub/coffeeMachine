@@ -46,7 +46,8 @@ public class DrinkFactoryMachine extends JFrame {
 	private Timer msTimer;
 	private CoffeeMachineStatemachine theFSM;
 	private double coinsEntered;
-	private Drink actualDrink;
+	private Step[][] steps;
+	private Drink actualDrink = new Drink("nothingYet",0,0,steps);
 	private JLabel messagesToUser ;
 	private int actualStepNumber;
 	/**
@@ -54,7 +55,7 @@ public class DrinkFactoryMachine extends JFrame {
 	 */
 	private final ImageIcon imageIcon = new ImageIcon();
 
-	/**
+	/*
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
@@ -81,8 +82,8 @@ public class DrinkFactoryMachine extends JFrame {
 		theFSM.enter();
 		theFSM.getSCInterface().getListeners().add(new DrinkFactoryMachineInterfaceImplementation(this));
 		Drink coffee = new Coffee();
-		/*Drink expresso = new Expresso();
-		Drink tea = new Tea();*/
+		Drink expresso = new Expresso();
+		Drink tea = new Tea();
 		millis = 0;
 		secs = 0;
 		mins = 0;
@@ -374,7 +375,7 @@ public class DrinkFactoryMachine extends JFrame {
 		expressoButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//actualDrink = expresso;
+				actualDrink = expresso;
 				theFSM.raiseDrinkSelectionDone();
 				
 			}
@@ -382,7 +383,7 @@ public class DrinkFactoryMachine extends JFrame {
 		teaButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//actualDrink = tea;
+				actualDrink = tea;
 				theFSM.raiseDrinkSelectionDone();
 				
 			}
