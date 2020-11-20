@@ -47,9 +47,9 @@ public class DrinkFactoryMachine extends JFrame {
 	private CoffeeMachineStatemachine theFSM;
 	private double coinsEntered;
 	private Step[][] steps;
-	private Drink actualDrink = new Drink("nothingYet",0,0,steps);
-	private JLabel messagesToUser ;
+	private Drink actualDrink; 
 	private int actualStepNumber;
+	private JLabel messagesToUser;
 	/**
 	 * @wbp.nonvisual location=311,475
 	 */
@@ -429,21 +429,21 @@ public class DrinkFactoryMachine extends JFrame {
 		t.stop();
 	}
 
-	void doCheckPayment() {
-		if(actualDrink.getName() == "coffee" || actualDrink.getName() == "expresso" || actualDrink.getName() == "tea") {
+	void doCheckPayment() { // methode appelée dès que l'on met des pieces ou selectionne une boisson
+		if(actualDrink != null) { // si on a choisi la boisson et que l'on met des pieces
 			double leftToPay = actualDrink.getPrice()-coinsEntered;
 			if(leftToPay > 0) {
 				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il manque " + leftToPay + "<html> €." );	
-			
 			} else if(leftToPay < 0) {
 				leftToPay=-leftToPay;
-				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il y a " + leftToPay + "<html> € de trop." );	
+				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> veuillez récuperer les " + leftToPay + "<html> € de trop." );	
 				theFSM.setPaymentChecked(true);
-				//System.out.println("a");
 			} else {
 				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
 				theFSM.setPaymentChecked(true);
 			}
+		} else { // si la boisson n'est pas encore choisie, mais que l'on met d'abord des pièces
+			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €.");
 		}
 			
 		
@@ -454,14 +454,14 @@ public class DrinkFactoryMachine extends JFrame {
 		
 		if(actualStepNumber > actualDrink.getStepsList().length) { // cas où il n'y a plus d'étape à faire
 			theFSM.setReadyToDeliver(true);
-			System.out.println("oui4");
+			System.out.println("pret à etre livré");
 		}
 		else {
 			msTimer.restart();
 			msTimer.start();
 			String currentSteps = "";
 			System.out.println("test");
-			for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) { //permet de savoir quelles étapes éffectuer pour les afficher
+			for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) { //permet de savoir quelles étapes effectuer pour les afficher
 				currentSteps += step.getName() + " ";
 			}
 			messagesToUser.setText("<html> Préparation étape "+ currentSteps);	
@@ -489,6 +489,9 @@ public class DrinkFactoryMachine extends JFrame {
 			case "PooringWaterForSize":
 				theFSM.setPwfsTime(step.getTimeToMake());
 				break;
+			case "PooringWaterForTime":
+				theFSM.setPwftTime(step.getTimeToMake());
+				break;
 			case "SugarTheDrink":
 				theFSM.setStdTime(step.getTimeToMake());
 				break;
@@ -498,8 +501,23 @@ public class DrinkFactoryMachine extends JFrame {
 			case "WaterHeating":
 				theFSM.setWhTime(step.getTimeToMake());
 				break;
+			case "WaitingForInfusion":
+				theFSM.setWfiTime(step.getTimeToMake());
+				break;
+			case "SachetWithDrawal":
+				theFSM.setSwdTime(step.getTimeToMake());
+				break;
+			case "GrainMashing":
+				theFSM.setGmTime(step.getTimeToMake());
+				break;
+			case "SachetPositionning":
+				theFSM.setSpTime(step.getTimeToMake());
+				break;
+			case "GrainTamping":
+				theFSM.setGtTime(step.getTimeToMake());
+				break;
 			}
-			
+
 		}
 		
 	}
@@ -510,29 +528,70 @@ public class DrinkFactoryMachine extends JFrame {
 			switch(actualStepNumber) {
 				case 1:
 					theFSM.setOkForCoffeeStep1(true);
-					System.out.println("oui1");
+					System.out.println("ok for coffee step 1");
 					break;
 				case 2:
 					theFSM.setOkForCoffeeStep2(true);
-					System.out.println("oui2");
+					System.out.println("ok for coffee step 2");
 					break;
 				case 3:
 					theFSM.setOkForCoffeeStep3(true);
-					System.out.println("oui3");
+					System.out.println("ok for coffee step 3");
 					break;
 				default:
 					break;
 			}
 			break;
+			
 		case "expresso":
-			theFSM.raiseExpresso();
+			switch(actualStepNumber) {
+				case 1:
+					theFSM.setOkForExpressoStep1(true);
+					System.out.println("ok for expresso step 1");
+					break;
+				case 2:
+					theFSM.setOkForExpressoStep2(true);
+					System.out.println("ok for expresso step 2");
+					break;
+				case 3:
+					theFSM.setOkForExpressoStep3(true);
+					System.out.println("ok for expresso step 3");
+					break;
+				default:
+					break;
+			}
 			break;
+		
 		case "tea":
-			theFSM.raiseTea();
+			switch(actualStepNumber) {
+				case 1:
+					theFSM.setOkForTeaStep1(true);
+					System.out.println("ok for tea step 1");
+					break;
+				case 2:
+					theFSM.setOkForTeaStep2(true);
+					System.out.println("ok for tea step 2");
+					break;
+				case 3:
+					theFSM.setOkForTeaStep3(true);
+					System.out.println("ok for tea step 3");
+					break;
+				case 4:
+					theFSM.setOkForTeaStep4(true);
+					System.out.println("ok for tea step 4");
+					break;
+				case 5:
+					theFSM.setOkForTeaStep5(true);
+					System.out.println("ok for tea step 5");
+					break;
+				default:
+					break;
+			}
 			break;
 			
+		default:
+			break;
 		}
-		
 	}
 	
 }

@@ -709,7 +709,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		
 		sCInterface.setPwfsTime(3);
 		
-		sCInterface.setPwftTime(0);
+		sCInterface.setPwftTime(3);
 		
 		sCInterface.setPpTime(1);
 		
@@ -1320,7 +1320,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	private void entryAction_Order_part_Preparation_DrinkMaking_Initialization() {
 		timer.setTimer(this, 2, 200, true);
 		
-		timer.setTimer(this, 3, 200, false);
+		timer.setTimer(this, 3, 200, true);
 		
 		timer.setTimer(this, 4, 200, true);
 		
@@ -2879,7 +2879,12 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 					exitSequence_Order_part_Rdy_for_order();
 					react_Order_part__sync0();
 				} else {
-					did_transition = false;
+					if (sCInterface.drinkSelectionDone) {
+						exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected();
+						enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected_default();
+					} else {
+						did_transition = false;
+					}
 				}
 			}
 		}

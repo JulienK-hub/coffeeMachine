@@ -15,5 +15,7 @@ GeneratorModel for yakindu::java {
 			synchronized = true
 			runnable = false
 		}
+	
 	}
+
 }
