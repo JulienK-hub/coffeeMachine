@@ -1382,6 +1382,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		timer.setTimer(this, 12, (sCInterface.getWhTime() * 1000), false);
 	}
 	
+	/* Entry action for state 'SachetPositionningDone'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionningDone() {
+		sCInterface.raiseDoNextPreparationStep();
+	}
+	
 	/* Entry action for state 'SachetPositionning'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionning() {
 		timer.setTimer(this, 13, (sCInterface.getSpTime() * 1000), false);
@@ -1715,6 +1720,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* 'default' enter sequence for state SachetPositionningDone */
 	private void enterSequence_Order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionningDone_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionningDone();
 		nextStateIndex = 2;
 		stateVector[2] = State.order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionningDone;
 	}

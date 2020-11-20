@@ -185,7 +185,7 @@
               </vertices>
             </regions>
             <regions xmi:id="_Mh_woCUfEeu0H5VBgYy2Qg" name="r3">
-              <vertices xsi:type="sgraph:State" xmi:id="_NNrK4CUfEeu0H5VBgYy2Qg" name="SachetPositionningDone" incomingTransitions="_njaTECUgEeu0H5VBgYy2Qg">
+              <vertices xsi:type="sgraph:State" xmi:id="_NNrK4CUfEeu0H5VBgYy2Qg" specification="entry/raise doNextPreparationStep&#x9;" name="SachetPositionningDone" incomingTransitions="_njaTECUgEeu0H5VBgYy2Qg">
                 <outgoingTransitions xmi:id="_m4lEgCZsEeunGa3z34V7Vg" specification="" target="_enCFEyZsEeunGa3z34V7Vg"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_dPGxvSUgEeu0H5VBgYy2Qg" name="SachetPositionning" incomingTransitions="_mPqzQCUgEeu0H5VBgYy2Qg">
@@ -1124,7 +1124,7 @@
                             <styles xsi:type="notation:ShapeStyle" xmi:id="_32welyZsEeunGa3z34V7Vg"/>
                             <layoutConstraint xsi:type="notation:Location" xmi:id="_32wemCZsEeunGa3z34V7Vg"/>
                           </children>
-                          <children xsi:type="notation:Compartment" xmi:id="_32wemSZsEeunGa3z34V7Vg" type="StateTextCompartment" collapsed="true">
+                          <children xsi:type="notation:Compartment" xmi:id="_32wemSZsEeunGa3z34V7Vg" type="StateTextCompartment">
                             <children xsi:type="notation:Shape" xmi:id="_32wemiZsEeunGa3z34V7Vg" type="StateTextCompartmentExpression" fontName="Verdana" lineColor="4210752">
                               <layoutConstraint xsi:type="notation:Bounds" xmi:id="_32wemyZsEeunGa3z34V7Vg"/>
                             </children>
