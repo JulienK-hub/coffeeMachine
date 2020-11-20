@@ -42,6 +42,7 @@ public class DrinkFactoryMachine extends JFrame {
 	private Thread t;
 	private static final long serialVersionUID = 2030629304432075314L;
 	private JPanel contentPane;
+	private JProgressBar progressBar;
 	private int millis, secs, mins;
 	private Timer msTimer;
 	private CoffeeMachineStatemachine theFSM;
@@ -49,6 +50,7 @@ public class DrinkFactoryMachine extends JFrame {
 	private Step[][] steps;
 	private Drink actualDrink; 
 	private int actualStepNumber;
+	private int msVariable = 0;
 	private JLabel messagesToUser;
 	/**
 	 * @wbp.nonvisual location=311,475
@@ -160,9 +162,9 @@ public class DrinkFactoryMachine extends JFrame {
 		soupButton.setBounds(12, 145, 96, 25);
 		contentPane.add(soupButton);
 
-		JProgressBar progressBar = new JProgressBar();
+		progressBar = new JProgressBar();
 		progressBar.setStringPainted(true);
-		progressBar.setValue(10);
+		progressBar.setValue(0);
 		progressBar.setForeground(Color.LIGHT_GRAY);
 		progressBar.setBackground(Color.DARK_GRAY);
 		progressBar.setBounds(12, 254, 622, 26);
@@ -398,7 +400,8 @@ public class DrinkFactoryMachine extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				count(7);
-				//updateTimeValue(); pour la barre de chargement
+
+				updateProgressBar(); // pour la barre de chargement
 			}
 		};
 		msTimer = new Timer(7, doCountEvery7);
@@ -406,6 +409,16 @@ public class DrinkFactoryMachine extends JFrame {
 
 	}
 	
+	protected void updateProgressBar() {
+		int  msFor1percent = (int) (actualDrink.getTimeToMake() * 1000 / 100);
+		msVariable += 7;
+		if (msVariable >= msFor1percent) {
+			progressBar.setValue(progressBar.getValue()+ 1);
+			msVariable = 0;
+		}
+		
+	}
+
 	public void doWaitForRecuperation() {
 		System.out.println("ça marche");
 		messagesToUser.setText("<html> Récupérez votre goblet svp");	
@@ -455,10 +468,11 @@ public class DrinkFactoryMachine extends JFrame {
 		if(actualStepNumber > actualDrink.getStepsList().length) { // cas où il n'y a plus d'étape à faire
 			theFSM.setReadyToDeliver(true);
 			System.out.println("pret à etre livré");
+			msTimer.stop();
+			msTimer.restart();
 		}
 		else {
-			msTimer.restart();
-			msTimer.start();
+				
 			String currentSteps = "";
 			System.out.println("test");
 			for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) { //permet de savoir quelles étapes effectuer pour les afficher
@@ -527,6 +541,7 @@ public class DrinkFactoryMachine extends JFrame {
 		case "coffee":
 			switch(actualStepNumber) {
 				case 1:
+					msTimer.start();
 					theFSM.setOkForCoffeeStep1(true);
 					System.out.println("ok for coffee step 1");
 					break;
