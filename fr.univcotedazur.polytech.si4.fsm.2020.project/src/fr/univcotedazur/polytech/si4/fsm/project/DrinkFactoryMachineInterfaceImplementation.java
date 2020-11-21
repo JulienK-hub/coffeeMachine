@@ -11,31 +11,30 @@ public class DrinkFactoryMachineInterfaceImplementation implements SCInterfaceLi
 	
 	@Override
 	public void onDoPrepareForNextOrderRaised() {
-		// TODO Auto-generated method stub
+		theDFM.doPrepareForNextOrderRaised();
 		
 	}
 
 	@Override
 	public void onDoResetDrinkSelectedRaised() {
-		// TODO Auto-generated method stub
+		theDFM.doResetDrinkSelected();
 		
 	}
 
 	@Override
 	public void onDoResetPaymentRaised() {
-		// TODO Auto-generated method stub
+		theDFM.doResetPayment();
 		
 	}
 
 	@Override
 	public void onDoCheckPaymentRaised() {
-		// TODO Auto-generated method stub
 		theDFM.doCheckPayment();
 	}
 
 	@Override
 	public void onDoResetSlidersRaised() {
-		// TODO Auto-generated method stub
+		theDFM.doResetSliders();
 		
 	}
 

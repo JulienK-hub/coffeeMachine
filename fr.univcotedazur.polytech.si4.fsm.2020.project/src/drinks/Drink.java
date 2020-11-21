@@ -50,4 +50,8 @@ public class Drink {
 	public void setPrice(double price) {
 		this.price = price;
 	}
+
+	public Drink getCopy() {
+		return new Drink(name,timeToMake,price,stepsList);
+	}
 }

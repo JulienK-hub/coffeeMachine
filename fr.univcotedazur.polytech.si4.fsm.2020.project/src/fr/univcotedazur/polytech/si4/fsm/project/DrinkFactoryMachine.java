@@ -43,15 +43,16 @@ public class DrinkFactoryMachine extends JFrame {
 	private static final long serialVersionUID = 2030629304432075314L;
 	private JPanel contentPane;
 	private JProgressBar progressBar;
-	private int millis, secs, mins;
+	private int millis/*, secs, mins*/;
 	private Timer msTimer;
 	private CoffeeMachineStatemachine theFSM;
 	private double coinsEntered;
 	private Step[][] steps;
 	private Drink actualDrink; 
 	private int actualStepNumber;
-	private int msVariable = 0;
+	//private int msVariable = 0;
 	private JLabel messagesToUser;
+	private JLabel labelForPictures;
 	/**
 	 * @wbp.nonvisual location=311,475
 	 */
@@ -87,8 +88,8 @@ public class DrinkFactoryMachine extends JFrame {
 		Drink expresso = new Expresso();
 		Drink tea = new Tea();
 		millis = 0;
-		secs = 0;
-		mins = 0;
+		/*secs = 0;
+		mins = 0;*/
 		actualStepNumber = 1;
 		
 		
@@ -123,7 +124,7 @@ public class DrinkFactoryMachine extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		messagesToUser = new JLabel("<html>This is<br>place to communicate <br> with the user");
+		messagesToUser = new JLabel("<html>Hello <br>you can choose <br> your drink !");
 		messagesToUser.setForeground(Color.WHITE);
 		messagesToUser.setHorizontalAlignment(SwingConstants.LEFT);
 		messagesToUser.setVerticalAlignment(SwingConstants.TOP);
@@ -285,7 +286,7 @@ public class DrinkFactoryMachine extends JFrame {
 		separator.setBounds(12, 292, 622, 15);
 		contentPane.add(separator);
 
-		JButton addCupButton = new JButton("Add cup");
+		JButton addCupButton = new JButton("Remove cup");
 		addCupButton.setForeground(Color.BLUE);
 		addCupButton.setBackground(Color.DARK_GRAY);
 		addCupButton.setBounds(45, 336, 96, 25);
@@ -297,7 +298,7 @@ public class DrinkFactoryMachine extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		JLabel labelForPictures = new JLabel(new ImageIcon(myPicture));
+		labelForPictures = new JLabel(new ImageIcon(myPicture));
 		labelForPictures.setBounds(175, 319, 286, 260);
 		contentPane.add(labelForPictures);
 
@@ -315,13 +316,7 @@ public class DrinkFactoryMachine extends JFrame {
 		addCupButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				BufferedImage myPicture = null;
-				try {
-					myPicture = ImageIO.read(new File("./picts/ownCup.jpg"));
-				} catch (IOException ee) {
-					ee.printStackTrace();
-				}
-				labelForPictures.setIcon(new ImageIcon(myPicture));
+				theFSM.raiseRemoveCup();
 			}
 		});
 		
@@ -411,29 +406,37 @@ public class DrinkFactoryMachine extends JFrame {
 	
 	protected void updateProgressBar() {
 		int  msFor1percent = (int) (actualDrink.getTimeToMake() * 1000 / 100);
-		msVariable += 7;
-		if (msVariable >= msFor1percent) {
+		if (millis >= msFor1percent) {
 			progressBar.setValue(progressBar.getValue()+ 1);
-			msVariable = 0;
+			millis = 0;
 		}
 		
 	}
 
 	public void doWaitForRecuperation() {
-		System.out.println("ça marche");
-		messagesToUser.setText("<html> Récupérez votre goblet svp");	
+		msTimer.stop();
+		BufferedImage myPicture = null;
+		try {
+			myPicture = ImageIO.read(new File("./picts/ownCup.jpg"));
+		} catch (IOException ee) {
+			ee.printStackTrace();
+		}
+		labelForPictures.setIcon(new ImageIcon(myPicture));
+		double leftToPay = coinsEntered- actualDrink.getPrice();
+		messagesToUser.setText("<html> Récupérez votre goblet svp<br> et n'oubliez pas vos <br> " + leftToPay + " pièces");
+		
 	}
 	
 	protected void count(int nbMillisec) {
 		millis += nbMillisec;
-		if (millis >= 1000) {
+		/*if (millis >= 1000) {
 			secs++;
 			millis = 1000 - millis;
 		}
 		if (secs >= 60) {
 			mins++;
 			secs = 60 - secs;
-		}
+		}*/
 	}
 	
 	@Override
@@ -447,13 +450,17 @@ public class DrinkFactoryMachine extends JFrame {
 			double leftToPay = actualDrink.getPrice()-coinsEntered;
 			if(leftToPay > 0) {
 				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il manque " + leftToPay + "<html> €." );	
+			
 			} else if(leftToPay < 0) {
 				leftToPay=-leftToPay;
 				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> veuillez récuperer les " + leftToPay + "<html> € de trop." );	
 				theFSM.setPaymentChecked(true);
+				actualDrink = actualDrink.getCopy(); //donne une copie afin de pouvoir y modifier les données sans crainte pour les commandes suivantes
+			
 			} else {
 				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
 				theFSM.setPaymentChecked(true);
+				actualDrink = actualDrink.getCopy(); //donne une copie afin de pouvoir y modifier les données sans crainte pour les commandes suivantes
 			}
 		} else { // si la boisson n'est pas encore choisie, mais que l'on met d'abord des pièces
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €.");
@@ -468,13 +475,11 @@ public class DrinkFactoryMachine extends JFrame {
 		if(actualStepNumber > actualDrink.getStepsList().length) { // cas où il n'y a plus d'étape à faire
 			theFSM.setReadyToDeliver(true);
 			System.out.println("pret à etre livré");
-			msTimer.stop();
-			msTimer.restart();
+			
 		}
 		else {
 				
 			String currentSteps = "";
-			System.out.println("test");
 			for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) { //permet de savoir quelles étapes effectuer pour les afficher
 				currentSteps += step.getName() + " ";
 			}
@@ -561,6 +566,7 @@ public class DrinkFactoryMachine extends JFrame {
 		case "expresso":
 			switch(actualStepNumber) {
 				case 1:
+					msTimer.start();
 					theFSM.setOkForExpressoStep1(true);
 					System.out.println("ok for expresso step 1");
 					break;
@@ -580,6 +586,7 @@ public class DrinkFactoryMachine extends JFrame {
 		case "tea":
 			switch(actualStepNumber) {
 				case 1:
+					msTimer.start();
 					theFSM.setOkForTeaStep1(true);
 					System.out.println("ok for tea step 1");
 					break;
@@ -607,6 +614,63 @@ public class DrinkFactoryMachine extends JFrame {
 		default:
 			break;
 		}
+	}
+
+	public void doPrepareForNextOrderRaised() {
+		BufferedImage myPicture = null;
+		try {
+			myPicture = ImageIO.read(new File("./picts/vide2.jpg"));
+		} catch (IOException ee) {
+			ee.printStackTrace();
+		}
+		labelForPictures.setIcon(new ImageIcon(myPicture));
+		messagesToUser.setText("<html>Hello <br>you can choose <br> your drink !");
+		
+		progressBar.setValue(0);
+		millis= 0;
+		actualStepNumber = 1;
+		
+		resetFSMbooleans();
+		doResetDrinkSelected();
+		doResetPayment();
+		doResetSliders();
+	}
+
+	private void resetFSMbooleans() {
+		switch(actualDrink.getName()) {
+		case "coffee":
+			theFSM.setOkForCoffeeStep1(false);
+			theFSM.setOkForCoffeeStep2(false);
+			theFSM.setOkForCoffeeStep3(false);
+			break;
+		case "expresso":
+			theFSM.setOkForExpressoStep1(false);
+			theFSM.setOkForExpressoStep2(false);
+			theFSM.setOkForExpressoStep3(false);
+			break;
+		case "tea":
+			theFSM.setOkForTeaStep1(false);
+			theFSM.setOkForTeaStep2(false);
+			theFSM.setOkForTeaStep3(false);
+			theFSM.setOkForTeaStep4(false);
+			theFSM.setOkForTeaStep5(false);
+			break;
+		}
+		theFSM.setPaymentChecked(false);
+		theFSM.setReadyToDeliver(false);
+	}
+
+	public void doResetDrinkSelected() {
+		actualDrink = null;
+	}
+
+	public void doResetPayment() {
+		coinsEntered = 0;
+	}
+
+	public void doResetSliders() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
