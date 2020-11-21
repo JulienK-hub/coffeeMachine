@@ -2,7 +2,7 @@ package preparationSteps;
 
 public class Step {
 	private String name;
-	private int timeToMake; //en secondes
+	private int timeToMake; //en millisecondes
 	
 	public Step(String name, int timeToMake){
 		this.name = name;

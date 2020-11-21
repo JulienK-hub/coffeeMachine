@@ -3,7 +3,7 @@ package preparationSteps;
 public class PodPositionning extends Step{
 
 	public PodPositionning() {
-		super("PodPositionning",1);
+		super("PodPositionning",1000);
 	}
 
 }

@@ -703,25 +703,25 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		
 		sCInterface.setWftTime(10000);
 		
-		sCInterface.setCpTime(5000);
+		sCInterface.setCpTime(1000);
 		
-		sCInterface.setStdTime(2000);
+		sCInterface.setStdTime(500);
 		
-		sCInterface.setPwfsTime(3000);
+		sCInterface.setPwfsTime(5000);
 		
 		sCInterface.setPwftTime(3000);
 		
 		sCInterface.setPpTime(1000);
 		
-		sCInterface.setWhTime(3000);
+		sCInterface.setWhTime(15000);
 		
-		sCInterface.setGmTime(3000);
+		sCInterface.setGmTime(6000);
 		
 		sCInterface.setSpTime(1000);
 		
-		sCInterface.setGtTime(1000);
+		sCInterface.setGtTime(4000);
 		
-		sCInterface.setWfiTime(5000);
+		sCInterface.setWfiTime(15000);
 		
 		sCInterface.setSwdTime(2000);
 		

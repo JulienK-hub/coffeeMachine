@@ -2,6 +2,6 @@ package preparationSteps;
 
 public class WaitingForInfusion extends Step {
 	public WaitingForInfusion () {
-		super("WaitingForInfusion",1);
+		super("WaitingForInfusion",15000);
 	}
 }

@@ -408,7 +408,7 @@ public class DrinkFactoryMachine extends JFrame {
 	}
 	
 	protected void updateProgressBar() {
-		int  msFor1percent = (int) (actualDrink.getTimeToMake() * 1000 / 100);
+		int  msFor1percent = (int) (actualDrink.getTimeToMake() / 100);
 		if (millis >= msFor1percent) {
 			progressBar.setValue(progressBar.getValue()+ 1);
 			millis = 0;
