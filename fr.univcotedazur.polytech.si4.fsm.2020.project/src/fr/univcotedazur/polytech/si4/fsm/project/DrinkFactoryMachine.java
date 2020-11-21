@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.MessageDigestSpi;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -53,6 +55,7 @@ public class DrinkFactoryMachine extends JFrame {
 	//private int msVariable = 0;
 	private JLabel messagesToUser;
 	private JLabel labelForPictures;
+	private double leftToPay;
 	/**
 	 * @wbp.nonvisual location=311,475
 	 */
@@ -341,21 +344,21 @@ public class DrinkFactoryMachine extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				theFSM.raiseAddCoin();
-				coinsEntered+=0.1;
+				coinsEntered = round(coinsEntered + 0.1, 2);
 			}
 		});
 		money25centsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				theFSM.raiseAddCoin();
-				coinsEntered+=0.25;
+				coinsEntered = round(coinsEntered + 0.25, 2);
 			}
 		});
 		money50centsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				theFSM.raiseAddCoin();
-				coinsEntered+=0.5;
+				coinsEntered = round(coinsEntered + 0.5, 2);
 			}
 		});
 		
@@ -422,7 +425,7 @@ public class DrinkFactoryMachine extends JFrame {
 			ee.printStackTrace();
 		}
 		labelForPictures.setIcon(new ImageIcon(myPicture));
-		double leftToPay = coinsEntered- actualDrink.getPrice();
+		
 		messagesToUser.setText("<html> Récupérez votre goblet svp<br> et n'oubliez pas vos <br> " + leftToPay + " pièces");
 		
 	}
@@ -447,7 +450,7 @@ public class DrinkFactoryMachine extends JFrame {
 
 	void doCheckPayment() { // methode appelée dès que l'on met des pieces ou selectionne une boisson
 		if(actualDrink != null) { // si on a choisi la boisson et que l'on met des pieces
-			double leftToPay = actualDrink.getPrice()-coinsEntered;
+			leftToPay = round(actualDrink.getPrice()-coinsEntered, 2);
 			if(leftToPay > 0) {
 				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il manque " + leftToPay + "<html> €." );	
 			
@@ -634,6 +637,7 @@ public class DrinkFactoryMachine extends JFrame {
 		doResetDrinkSelected();
 		doResetPayment();
 		doResetSliders();
+		
 	}
 
 	private void resetFSMbooleans() {
@@ -666,11 +670,22 @@ public class DrinkFactoryMachine extends JFrame {
 
 	public void doResetPayment() {
 		coinsEntered = 0;
+		leftToPay = 0;
 	}
 
 	public void doResetSliders() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+
+	
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = BigDecimal.valueOf(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
 	}
 	
 }
