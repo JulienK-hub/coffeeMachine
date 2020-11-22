@@ -21,6 +21,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -32,7 +33,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import drinks.*;
-
+import fr.univcotedazur.polytech.si4.fsm.project.NFC.Nfc;
 import fr.univcotedazur.polytech.si4.fsm.project.coffeemachine.CoffeeMachineStatemachine;
 import preparationSteps.Step;
 
@@ -45,21 +46,23 @@ public class DrinkFactoryMachine extends JFrame {
 	private static final long serialVersionUID = 2030629304432075314L;
 	private JPanel contentPane;
 	private JProgressBar progressBar;
-	private int millis/*, secs, mins*/;
+	private JLabel messagesToUser;
+	private JLabel labelForPictures;
+	private final ImageIcon imageIcon = new ImageIcon();
+	private JTextField nfcId;
+
+	private int millis;
 	private Timer msTimer;
 	private CoffeeMachineStatemachine theFSM;
 	private double coinsEntered;
-	private Step[][] steps;
 	private Drink actualDrink; 
 	private int actualStepNumber;
-	//private int msVariable = 0;
-	private JLabel messagesToUser;
-	private JLabel labelForPictures;
 	private double leftToPay;
+	private Nfc nfcData;
+	
 	/**
 	 * @wbp.nonvisual location=311,475
 	 */
-	private final ImageIcon imageIcon = new ImageIcon();
 
 	/*
 	 * Launch the application.
@@ -93,6 +96,7 @@ public class DrinkFactoryMachine extends JFrame {
 		millis = 0;
 		/*secs = 0;
 		mins = 0;*/
+		nfcData = new Nfc();
 		actualStepNumber = 1;
 		
 		
@@ -271,14 +275,17 @@ public class DrinkFactoryMachine extends JFrame {
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.DARK_GRAY);
-		panel_1.setBounds(538, 154, 96, 40);
+		panel_1.setBounds(538, 154, 96, 60);
 		contentPane.add(panel_1);
 
 		JButton nfcBiiiipButton = new JButton("biiip");
 		nfcBiiiipButton.setForeground(Color.BLUE);
 		nfcBiiiipButton.setBackground(Color.DARK_GRAY);
 		panel_1.add(nfcBiiiipButton);
-
+		
+		nfcId = new JTextField(9);
+		panel_1.add(nfcId);
+		
 		JLabel lblNfc = new JLabel("NFC");
 		lblNfc.setForeground(Color.WHITE);
 		lblNfc.setHorizontalAlignment(SwingConstants.CENTER);
@@ -326,8 +333,23 @@ public class DrinkFactoryMachine extends JFrame {
 		nfcBiiiipButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				theFSM.raiseNFC();
-				System.out.println("NFC");
+				
+				if(actualDrink == null) {
+					messagesToUser.setText("<html> Sélectionnez d'abord<br> votre boisson <br> ");
+				}
+				else if (nfcId.getText().length()==0){
+					messagesToUser.setText("<html> Vous n'avez pas <br> présenté votre carte <br> ");
+				}
+					
+				else {
+					coinsEntered += actualDrink.getPrice();
+					doCheckPayment();
+				    nfcData.add1(Integer.parseInt(nfcId.getText()));
+					theFSM.raiseNFC();
+					System.out.println("Données nfc: "+ nfcData.toString());
+					nfcId.setText("");
+				}
+				
 			}
 		});
 		
@@ -671,6 +693,7 @@ public class DrinkFactoryMachine extends JFrame {
 	public void doResetPayment() {
 		coinsEntered = 0;
 		leftToPay = 0;
+		nfcId.setText("");
 	}
 
 	public void doResetSliders() {
