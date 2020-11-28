@@ -40,6 +40,8 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public boolean isRaisedDoNextPreparationStep();
 		
+		public boolean isRaisedDoPrintNextStep();
+		
 		public boolean getOkForExpressoStep1();
 		
 		public void setOkForExpressoStep1(boolean value);
@@ -153,6 +155,7 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		public void onDoWaitForRecuperationRaised();
 		public void onNoActionFor45secRaised();
 		public void onDoNextPreparationStepRaised();
+		public void onDoPrintNextStepRaised();
 		}
 	
 	public SCInterface getSCInterface();

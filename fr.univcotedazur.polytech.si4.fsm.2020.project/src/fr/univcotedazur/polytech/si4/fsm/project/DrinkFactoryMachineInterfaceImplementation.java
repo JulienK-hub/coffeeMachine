@@ -56,4 +56,10 @@ public class DrinkFactoryMachineInterfaceImplementation implements SCInterfaceLi
 		
 	}
 
+	@Override
+	public void onDoPrintNextStepRaised() {
+		theDFM.doPrintNextStep();
+		
+	}
+
 }

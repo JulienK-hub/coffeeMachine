@@ -97,7 +97,7 @@ public class DrinkFactoryMachine extends JFrame {
 		/*secs = 0;
 		mins = 0;*/
 		nfcData = new Nfc();
-		actualStepNumber = 1;
+		actualStepNumber = 0;
 		
 		
 		 Runnable r = new Runnable() {
@@ -496,29 +496,30 @@ public class DrinkFactoryMachine extends JFrame {
 	}
 
 	void doNextPreparationStep() {
-		
+		actualStepNumber++;
 		if(actualStepNumber > actualDrink.getStepsList().length) { // cas où il n'y a plus d'étape à faire
 			theFSM.setReadyToDeliver(true);
 			System.out.println("pret à etre livré");
 			
 		}
 		else {
-				
-			String currentSteps = "";
-			for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) { //permet de savoir quelles étapes effectuer pour les afficher
-				currentSteps += step.getName() + " ";
-			}
-			messagesToUser.setText("<html> Préparation étape "+ currentSteps);	
-			
 			setFSMTimers(); // met les temps des timers des taches de la FSM
 			
 			sayRdyForNextStep(); // dit à la FSM qu'on est prêt pour la prochaine étape
 			
-			actualStepNumber++;
+				
+		}
+	}
+	
+	void doPrintNextStep() {
+		String currentSteps = "";
+		for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) { //permet de savoir quelles étapes effectuer pour les afficher
+			currentSteps += step.getName() + " ";
 			
 		}
+		messagesToUser.setText("<html> Préparation étape "+ currentSteps);	
 		
-		
+		System.out.println("step " + actualStepNumber + " done");
 	}
 
 	private void setFSMTimers() {
@@ -653,7 +654,7 @@ public class DrinkFactoryMachine extends JFrame {
 		
 		progressBar.setValue(0);
 		millis= 0;
-		actualStepNumber = 1;
+		actualStepNumber = 0;
 		
 		resetFSMbooleans();
 		doResetDrinkSelected();
