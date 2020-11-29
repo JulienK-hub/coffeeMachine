@@ -519,7 +519,7 @@ public class DrinkFactoryMachine extends JFrame {
 		}
 		messagesToUser.setText("<html> Préparation étape "+ currentSteps);	
 		
-		System.out.println("step " + actualStepNumber + " done");
+		//System.out.println("step " + actualStepNumber + " done");
 	}
 
 	private void setFSMTimers() {

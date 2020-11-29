@@ -3337,7 +3337,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if ((sCInterface.getOkForCoffeeStep2() && isStateActive(State.order_part_Preparation_DrinkMaking_Step1_r2_WaterHeatingDone))) {
+			if (isStateActive(State.order_part_Preparation_DrinkMaking_Step1_r2_WaterHeatingDone)) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step1();
 				react_Order_part_Preparation_DrinkMaking__sync2();
 			} else {
@@ -3365,7 +3365,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if ((isStateActive(State.order_part_Preparation_DrinkMaking_Step1_r1_PodPositionningDone) && sCInterface.getOkForCoffeeStep2())) {
+			if (isStateActive(State.order_part_Preparation_DrinkMaking_Step1_r1_PodPositionningDone)) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step1();
 				react_Order_part_Preparation_DrinkMaking__sync2();
 			} else {
@@ -3389,7 +3389,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[13]) && (sCInterface.getOkForCoffeeStep1()))) {
+			if (((timeEvents[13]) && (((sCInterface.getOkForCoffeeStep1() || sCInterface.getOkForTeaStep1()) || sCInterface.getOkForExpressoStep1())))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step1_r2_WaterHeating();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step1_r2_WaterHeatingDone_default();
 			} else {
