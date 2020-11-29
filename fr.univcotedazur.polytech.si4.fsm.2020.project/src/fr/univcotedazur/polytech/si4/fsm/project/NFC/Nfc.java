@@ -2,40 +2,60 @@ package fr.univcotedazur.polytech.si4.fsm.project.NFC;
 
 import java.util.HashMap;
 
+import javax.swing.JTextField;
+
 public class Nfc {
-	private HashMap<Integer, Integer> nfcData;
+	private HashMap<Integer, NfcInfos> nfcData;
 	
 	public Nfc() {
-		nfcData = new HashMap<Integer,Integer>();
+		nfcData = new HashMap<Integer,NfcInfos>();
 	}
 
-	public HashMap<Integer, Integer> getNfcData() {
+	public HashMap<Integer, NfcInfos> getNfcData() {
 		return nfcData;
 	}
 
 	public int getValue(int key) {
-		return (int) nfcData.get(key);
+		return nfcData.get(key).getScanNumber();
 	}
 	
-	public void add1(int nfcId) {
-		int key = 0; 					// cryptage de la carte banquaire: 
-		while(nfcId > 0) {				// on additionne les chiffres de celle-ci pour 
-			key = key + nfcId % 10;		// avoir la clef à enregistrer
-			nfcId = nfcId /10;			//
-		}
+	public void add1(int nfcId, double price) {
+		int key = getKey(nfcId);
 		if(nfcData.get(key)!= null) {
-			nfcData.replace(key, getValue(key) +1);
+			nfcData.get(key).incrementScanNumber();
+			nfcData.get(key).addAPurchase(price);
 		}
 		else {
-			nfcData.put(key, 1);
+			nfcData.put(key, new NfcInfos(1, price));
 		}
 		
+	}
+	
+	public int getKey(int id) { // algorithme de cryptage de la carte banquaire
+		int key = 0; 			// 
+		while(id > 0) {			// 
+			key = key + id % 10;// on additionne les chiffres de celle-ci pour
+			id = id /10;		// avoir la clef à enregistrer exmple 123 donnera 6
+		}
+		return key;
+	}
+	
+
+	public int getScanNumber(int nfcId) {
+		return nfcData.get(getKey(nfcId)).getScanNumber();
+	}
+
+	public double getAveragePurchase(int nfcId) {
+		return nfcData.get(getKey(nfcId)).getAveragePurchase() ;
 	}
 	
 	@Override
 	public String toString() {
-		
 		return nfcData.toString();
 	}
-	
+
+	public void resetCount(int nfcId) {
+		nfcData.get(getKey(nfcId)).resetCount();
+		
+	}
 }

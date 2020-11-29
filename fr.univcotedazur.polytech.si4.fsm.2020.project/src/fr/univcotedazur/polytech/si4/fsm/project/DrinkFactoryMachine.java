@@ -49,7 +49,7 @@ public class DrinkFactoryMachine extends JFrame {
 	private JLabel messagesToUser;
 	private JLabel labelForPictures;
 	private final ImageIcon imageIcon = new ImageIcon();
-	private JTextField nfcId;
+	private JTextField JTextNfcId;
 
 	private int millis;
 	private Timer msTimer;
@@ -59,6 +59,7 @@ public class DrinkFactoryMachine extends JFrame {
 	private int actualStepNumber;
 	private double leftToPay;
 	private Nfc nfcData;
+	private int numberForFreeDrink;
 	
 	/**
 	 * @wbp.nonvisual location=311,475
@@ -98,7 +99,7 @@ public class DrinkFactoryMachine extends JFrame {
 		mins = 0;*/
 		nfcData = new Nfc();
 		actualStepNumber = 0;
-		
+		numberForFreeDrink = 11;
 		
 		 Runnable r = new Runnable() {
 				
@@ -283,8 +284,8 @@ public class DrinkFactoryMachine extends JFrame {
 		nfcBiiiipButton.setBackground(Color.DARK_GRAY);
 		panel_1.add(nfcBiiiipButton);
 		
-		nfcId = new JTextField(9);
-		panel_1.add(nfcId);
+		JTextNfcId = new JTextField(9);
+		panel_1.add(JTextNfcId);
 		
 		JLabel lblNfc = new JLabel("NFC");
 		lblNfc.setForeground(Color.WHITE);
@@ -337,17 +338,26 @@ public class DrinkFactoryMachine extends JFrame {
 				if(actualDrink == null) {
 					messagesToUser.setText("<html> Sélectionnez d'abord<br> votre boisson <br> ");
 				}
-				else if (nfcId.getText().length()==0){
+				else if (JTextNfcId.getText().length()==0){
 					messagesToUser.setText("<html> Vous n'avez pas <br> présenté votre carte <br> ");
 				}
 					
 				else {
-					coinsEntered += actualDrink.getPrice();
-					doCheckPayment();
-				    nfcData.add1(Integer.parseInt(nfcId.getText()));
-					theFSM.raiseNFC();
+					int nfcId = Integer.parseInt(JTextNfcId.getText());
+					nfcData.add1(nfcId, actualDrink.getPrice());
 					System.out.println("Données nfc: "+ nfcData.toString());
-					nfcId.setText("");
+					if(nfcData.getScanNumber(nfcId) >= numberForFreeDrink && actualDrink.getPrice() <= nfcData.getAveragePurchase(nfcId)) {
+						messagesToUser.setText("<html> C'est votre 11ieme achat ! " + "<html> <br> celui-ci vous est offert ! <br> et n'oubliez pas vos pièces <br> si vous en avez rentré" );
+						nfcData.resetCount(nfcId);
+						theFSM.setPaymentChecked(true);
+						actualDrink = actualDrink.getCopy();
+					}
+					else {
+						coinsEntered += actualDrink.getPrice();
+						doCheckPayment();
+					}
+					theFSM.raiseNFC();
+					JTextNfcId.setText("");
 				}
 				
 			}
@@ -694,7 +704,7 @@ public class DrinkFactoryMachine extends JFrame {
 	public void doResetPayment() {
 		coinsEntered = 0;
 		leftToPay = 0;
-		nfcId.setText("");
+		JTextNfcId.setText("");
 	}
 
 	public void doResetSliders() {
