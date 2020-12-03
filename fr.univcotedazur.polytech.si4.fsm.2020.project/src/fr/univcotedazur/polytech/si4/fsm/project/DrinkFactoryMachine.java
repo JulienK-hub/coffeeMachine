@@ -51,14 +51,13 @@ public class DrinkFactoryMachine extends JFrame {
 	private static final long serialVersionUID = 2030629304432075314L;
 	private JPanel contentPane;
 	private JProgressBar progressBar;
-	private JLabel messagesToUser;
-	private JLabel labelForPictures;
+	private JLabel messagesToUser, labelForPictures, lblSugar;
 	private final ImageIcon imageIcon = new ImageIcon();
-	private JTextField JTextNfcId;
+	private JTextField nfcTextField;
 	private JSlider temperatureSlider,sizeSlider,sugarSlider;
 	private ArrayList<JButton> drinkButtons;
 	private ArrayList<JCheckBox> optionCheckBoxes;
-	JButton coffeeButton, expressoButton, teaButton;
+	JButton coffeeButton, expressoButton, teaButton,soupButton, icedTeaButton,  money50centsButton, money25centsButton, money10centsButton, cancelButton, nfcBiiiipButton, addCupButton;
 	JCheckBox milkBox, mapleSyrupBox, vanillaIceCreamBox;
 	
 
@@ -146,7 +145,7 @@ public class DrinkFactoryMachine extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		messagesToUser = new JLabel("<html>Hello <br>you can choose <br> your drink !");
+		messagesToUser = new JLabel("<html>Bonjour <br>veuillez choisir <br>une boisson !");
 		messagesToUser.setForeground(Color.WHITE);
 		messagesToUser.setHorizontalAlignment(SwingConstants.LEFT);
 		messagesToUser.setVerticalAlignment(SwingConstants.TOP);
@@ -188,7 +187,7 @@ public class DrinkFactoryMachine extends JFrame {
 		}
 		contentPane.add(teaButton);
 
-		JButton soupButton = new JButton("Soup");
+		soupButton = new JButton("Soup");
 		soupButton.setForeground(Color.WHITE);
 		soupButton.setBackground(Color.DARK_GRAY);
 		soupButton.setBounds(12, 145, 96, 25);
@@ -201,7 +200,6 @@ public class DrinkFactoryMachine extends JFrame {
 		progressBar.setBackground(Color.DARK_GRAY);
 		progressBar.setBounds(12, 254, 622, 26);
 		contentPane.add(progressBar);
-		
 		
 		
 
@@ -252,7 +250,7 @@ public class DrinkFactoryMachine extends JFrame {
 
 		contentPane.add(temperatureSlider);
 
-		JButton icedTeaButton = new JButton("Iced Tea");
+		icedTeaButton = new JButton("Iced Tea");
 		icedTeaButton.setForeground(Color.WHITE);
 		icedTeaButton.setBackground(Color.DARK_GRAY);
 		icedTeaButton.setBounds(12, 182, 96, 25);
@@ -280,11 +278,11 @@ public class DrinkFactoryMachine extends JFrame {
 		contentPane.add(vanillaIceCreamBox);
 		
 
-		JLabel lblSugar = new JLabel("Sugar");
+		lblSugar = new JLabel("Sugar");
 		lblSugar.setForeground(Color.WHITE);
 		lblSugar.setBackground(Color.DARK_GRAY);
 		lblSugar.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSugar.setBounds(380, 34, 44, 15);
+		lblSugar.setBounds(340, 34, 90, 15);
 		contentPane.add(lblSugar);
 
 		JLabel lblSize = new JLabel("Size");
@@ -307,17 +305,17 @@ public class DrinkFactoryMachine extends JFrame {
 		panel.setBounds(538, 25, 96, 97);
 		contentPane.add(panel);
 
-		JButton money50centsButton = new JButton("0.50 €");
+		money50centsButton = new JButton("0.50 €");
 		money50centsButton.setForeground(Color.WHITE);
 		money50centsButton.setBackground(Color.DARK_GRAY);
 		panel.add(money50centsButton);
 
-		JButton money25centsButton = new JButton("0.25 €");
+		money25centsButton = new JButton("0.25 €");
 		money25centsButton.setForeground(Color.WHITE);
 		money25centsButton.setBackground(Color.DARK_GRAY);
 		panel.add(money25centsButton);
 
-		JButton money10centsButton = new JButton("0.10 €");
+		money10centsButton = new JButton("0.10 €");
 		money10centsButton.setForeground(Color.WHITE);
 		money10centsButton.setBackground(Color.DARK_GRAY);
 		panel.add(money10centsButton);
@@ -327,13 +325,13 @@ public class DrinkFactoryMachine extends JFrame {
 		panel_1.setBounds(538, 154, 96, 60);
 		contentPane.add(panel_1);
 
-		JButton nfcBiiiipButton = new JButton("biiip");
+		nfcBiiiipButton = new JButton("biiip");
 		nfcBiiiipButton.setForeground(Color.WHITE);
 		nfcBiiiipButton.setBackground(Color.DARK_GRAY);
 		panel_1.add(nfcBiiiipButton);
 		
-		JTextNfcId = new JTextField(9);
-		panel_1.add(JTextNfcId);
+		nfcTextField = new JTextField(9);
+		panel_1.add(nfcTextField);
 		
 		JLabel lblNfc = new JLabel("NFC");
 		lblNfc.setForeground(Color.WHITE);
@@ -345,7 +343,7 @@ public class DrinkFactoryMachine extends JFrame {
 		separator.setBounds(12, 292, 622, 15);
 		contentPane.add(separator);
 
-		JButton addCupButton = new JButton("Remove cup");
+		addCupButton = new JButton("Remove cup");
 		addCupButton.setForeground(Color.WHITE);
 		addCupButton.setBackground(Color.DARK_GRAY);
 		addCupButton.setBounds(45, 336, 96, 25);
@@ -366,7 +364,7 @@ public class DrinkFactoryMachine extends JFrame {
 		panel_2.setBounds(538, 217, 96, 33);
 		contentPane.add(panel_2);
 
-		JButton cancelButton = new JButton("Cancel");
+		cancelButton = new JButton("Cancel");
 		cancelButton.setForeground(Color.WHITE);
 		cancelButton.setBackground(Color.DARK_GRAY);
 		panel_2.add(cancelButton);
@@ -401,12 +399,12 @@ public class DrinkFactoryMachine extends JFrame {
 				if(actualDrink == null) {
 					messagesToUser.setText("<html> Sélectionnez d'abord<br> votre boisson <br> ");
 				}
-				else if (JTextNfcId.getText().length()==0){
+				else if (nfcTextField.getText().length()==0){
 					messagesToUser.setText("<html> Vous n'avez pas <br> présenté votre carte <br> ");
 				}
 					
 				else {
-					int nfcId = Integer.parseInt(JTextNfcId.getText());
+					int nfcId = Integer.parseInt(nfcTextField.getText());
 					nfcData.add1(nfcId, actualDrink.getPrice());
 					System.out.println("Données nfc: "+ nfcData.toString());
 					if(nfcData.getScanNumber(nfcId) >= numberForFreeDrink && actualDrink.getPrice() <= nfcData.getAveragePurchase(nfcId)) {
@@ -420,7 +418,7 @@ public class DrinkFactoryMachine extends JFrame {
 						doCheckPayment();
 					}
 					theFSM.raiseNFC();
-					JTextNfcId.setText("");
+					nfcTextField.setText("");
 				}
 				
 			}
@@ -475,7 +473,9 @@ public class DrinkFactoryMachine extends JFrame {
 					mapleSyrupBox.setEnabled(true);
 					vanillaIceCreamBox.setEnabled(true);
 
-					if (checkStockForCoffee()) {
+					calculatePrice();
+					
+					if (coffeePodLeft() && enoughSugar()) {
 						theFSM.raiseDrinkSelectionDone();
 					}
 				}
@@ -494,7 +494,10 @@ public class DrinkFactoryMachine extends JFrame {
 					mapleSyrupBox.setEnabled(true);
 					vanillaIceCreamBox.setEnabled(true);
 
-					if (checkStockForExpresso()) {
+					calculatePrice();
+
+
+					if (expressoGrainDoseLeft() && enoughSugar()) {
 						theFSM.raiseDrinkSelectionDone();
 					}
 				
@@ -512,9 +515,12 @@ public class DrinkFactoryMachine extends JFrame {
 
 					milkBox.setEnabled(true);
 					mapleSyrupBox.setEnabled(true);
+					vanillaIceCreamBox.setSelected(false);
 					vanillaIceCreamBox.setEnabled(false);
+					
+					calculatePrice();
 				
-					if (checkStockForTea()) {
+					if (teaSachetLeft() && enoughSugar()) {
 						theFSM.raiseDrinkSelectionDone();
 					}
 				}
@@ -527,7 +533,6 @@ public class DrinkFactoryMachine extends JFrame {
 		milkBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//actualDrink = actualDrink.getCopy();
 				if(milkBox.isSelected()) {
 					actualDrink.setPrice(actualDrink.getPrice() + 0.1);
 				} else {
@@ -540,7 +545,6 @@ public class DrinkFactoryMachine extends JFrame {
 		mapleSyrupBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//actualDrink = actualDrink.getCopy();
 				if(mapleSyrupBox.isSelected()) {
 					actualDrink.setPrice(actualDrink.getPrice() + 0.1);
 				} else {
@@ -553,7 +557,6 @@ public class DrinkFactoryMachine extends JFrame {
 		vanillaIceCreamBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//actualDrink = actualDrink.getCopy();
 				if(vanillaIceCreamBox.isSelected()) {
 					actualDrink.setPrice(actualDrink.getPrice() + 0.6);
 				} else {
@@ -563,21 +566,15 @@ public class DrinkFactoryMachine extends JFrame {
 			}
 		});
 		
-		
-		
-	
 		// init a msTimer which is ready to do an action every 7 ms
 		ActionListener doCountEvery7 = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				count(7);
-
 				updateProgressBar(); // pour la barre de chargement
 			}
 		};
 		msTimer = new Timer(7, doCountEvery7);
-		
-
 	}
 	
 	protected void updateProgressBar() {
@@ -586,10 +583,43 @@ public class DrinkFactoryMachine extends JFrame {
 			progressBar.setValue(progressBar.getValue()+ 1);
 			millis = 0;
 		}
-		
 	}
+	
+	protected void calculatePrice() {
+		actualDrink = actualDrink.getCopy();
+		if(milkBox.isSelected()) 
+			actualDrink.setPrice(actualDrink.getPrice() + 0.1);
+		if(mapleSyrupBox.isSelected()) 
+			actualDrink.setPrice(actualDrink.getPrice() + 0.1);
+		if(vanillaIceCreamBox.isSelected()) 
+			actualDrink.setPrice(actualDrink.getPrice() + 0.6);
+	}
+	
+	protected void enableUserToTakeHisDrink() {
+		addCupButton.setEnabled(true);
+	}
+	
+	protected void blockTheUI() {
+		coffeeButton.setEnabled(false);
+		expressoButton.setEnabled(false);
+		teaButton.setEnabled(false);
+		milkBox.setEnabled(false);
+		mapleSyrupBox.setEnabled(false);
+		vanillaIceCreamBox.setEnabled(false);
+		sugarSlider.setEnabled(false);
+		sizeSlider.setEnabled(false);
+		temperatureSlider.setEnabled(false);
+		money50centsButton.setEnabled(false);
+		money25centsButton.setEnabled(false);
+		money10centsButton.setEnabled(false);
+		nfcBiiiipButton.setEnabled(false);
+		cancelButton.setEnabled(false);
+		nfcTextField.setEnabled(false);
+		addCupButton.setEnabled(false);
+	}
+	
 
-	public void doWaitForRecuperation() {
+	protected void doWaitForRecuperation() {
 		msTimer.stop();
 		BufferedImage myPicture = null;
 		try {
@@ -598,9 +628,8 @@ public class DrinkFactoryMachine extends JFrame {
 			ee.printStackTrace();
 		}
 		labelForPictures.setIcon(new ImageIcon(myPicture));
-		
 		messagesToUser.setText("<html> Récupérez votre goblet svp<br> et n'oubliez pas vos <br> " + leftToPay + " €");
-		
+		addCupButton.setEnabled(true);
 	}
 	
 	protected void count(int nbMillisec) {
@@ -621,73 +650,59 @@ public class DrinkFactoryMachine extends JFrame {
 		t.stop();
 	}
 
-	void doCheckPayment() { // methode appelée dès que l'on met des pieces ou selectionne une boisson
+	protected void doCheckPayment() { // methode appelée dès que l'on met des pieces ou selectionne une boisson
 		if(actualDrink != null) { // si on a choisi la boisson et que l'on met des pieces
 			leftToPay = round(actualDrink.getPrice()-coinsEntered, 2);
 			if(leftToPay > 0) {
 				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il manque " + leftToPay + "<html> €." );	
-			
-			} else if(leftToPay < 0) {
-				leftToPay=-leftToPay;
-				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> veuillez récuperer les " + leftToPay + "<html> € de trop." );	
-				theFSM.setPaymentChecked(true);
-				actualDrink = actualDrink.getCopy(); //donne une copie afin de pouvoir y modifier les données sans crainte pour les commandes suivantes
-				adaptDrinkToSliders();
-				consumeIngredientsFromStock();
-				updateButtons();
-				
 			} else {
-				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
+				if (leftToPay < 0 ) {
+					leftToPay=-leftToPay;
+					messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> veuillez récuperer les " + leftToPay + "<html> € de trop." );	
+				} else {
+					messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
+				}
 				theFSM.setPaymentChecked(true);
 				actualDrink = actualDrink.getCopy(); //donne une copie afin de pouvoir y modifier les données sans crainte pour les commandes suivantes
 				adaptDrinkToSliders();
 				consumeIngredientsFromStock();
-				updateButtons();
-				theFSM.setPaymentChecked(true);
+				blockTheUI();
 			}
 		} else { // si la boisson n'est pas encore choisie, mais que l'on met d'abord des pièces
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €.");
 		}
-			
 	}
 	
-	boolean checkStockForCoffee() {
-		String messageOutOfStock = "";
+	protected boolean coffeePodLeft() {
 		if(stock.getIngredients().get(Ingredient.COOFFEEPOD) == 0) {
-			messageOutOfStock += "Désolé, plus de dosette de café";
-			messagesToUser.setText(messageOutOfStock);
 			return false;
 		}
-		
-		//pour le slider sucre
-		//if((sugarSlider.getValue() != 0) && (stock.getSugars() < sugarSlider.getValue())) {
-		//	messageOutOfStock += 
-		//}
 		return true;
 	}
 	
-	boolean checkStockForExpresso() {
-		String messageOutOfStock = "";
+	protected boolean expressoGrainDoseLeft() {
 		if(stock.getIngredients().get(Ingredient.EXPRESSOGRAINDOSE) == 0) {
-			messageOutOfStock += "Désolé, plus de grain pour expresso";
-			messagesToUser.setText(messageOutOfStock);
 			return false;
 		}
 		return true;
 	}
 	
-	boolean checkStockForTea() {
-		String messageOutOfStock = "";
+	protected boolean teaSachetLeft() {
 		if(stock.getIngredients().get(Ingredient.TEASACHET) == 0) {
-			messageOutOfStock += "Désolé, plus de sachet de thé";
-			messagesToUser.setText(messageOutOfStock);
 			return false;
 		}
 		return true;
 	}
 	
+	protected boolean enoughSugar() {
+		if(stock.getIngredients().get(Ingredient.SUGAR) >= sugarSlider.getValue()) {
+			return true;
+		}
+		return false;
+	}
 	
-	void consumeIngredientsFromStock() {
+	
+	protected void consumeIngredientsFromStock() {
 		switch(actualDrink.getName()) {
 			case "coffee": 
 				stock.consumeIngredient(Ingredient.COOFFEEPOD, 1);
@@ -696,30 +711,51 @@ public class DrinkFactoryMachine extends JFrame {
 			case "tea":
 				stock.consumeIngredient(Ingredient.TEASACHET, 1);
 		}
+		stock.consumeIngredient(Ingredient.SUGAR, sugarSlider.getValue());
 	}
 	
-	void updateButtons() {
-		switch(actualDrink.getName()) {
-			case "coffee": 
-				if(stock.getIngredients().get(Ingredient.COOFFEEPOD) == 0) {
-					coffeeButton.setEnabled(false);
-				}
+	protected void disableButtonsForUndoableDrinks() {
+		if(stock.getIngredients().get(Ingredient.COOFFEEPOD) == 0) 
+			coffeeButton.setEnabled(false);
+		if(stock.getIngredients().get(Ingredient.EXPRESSOGRAINDOSE) == 0) 
+			expressoButton.setEnabled(false);
+		if(stock.getIngredients().get(Ingredient.TEASACHET) == 0) 
+			teaButton.setEnabled(false);
+	}
+	
+	protected void disableCheckBoxesForUndoableOptions() {
+		if(stock.getIngredients().get(Ingredient.MILKDOSE) == 0) 
+			coffeeButton.setEnabled(false);
+		if(stock.getIngredients().get(Ingredient.MAPLESYRUPDOSE) == 0) 
+			expressoButton.setEnabled(false);
+		if(stock.getIngredients().get(Ingredient.VANILLAICECREAMDOSE) == 0) 
+			teaButton.setEnabled(false);
+	}
+	
+	protected void updatePossibleValuesForSugarSlider() {
+		switch(stock.getIngredients().get(Ingredient.SUGAR)) {
+			case 0 : 
+				sugarSlider.setValue(0);
+				sugarSlider.setMaximum(0);
+				lblSugar.setText("Sugar (0 left)");
 				break;
-			case "expresso":
-				if(stock.getIngredients().get(Ingredient.EXPRESSOGRAINDOSE) == 0) {
-					expressoButton.setEnabled(false);
-				}
+			case 1 :
+				sugarSlider.setMaximum(1);
+				lblSugar.setText("Sugar (1 left)");
 				break;
-			case "tea":
-				if(stock.getIngredients().get(Ingredient.TEASACHET) == 0) {
-					teaButton.setEnabled(false);
-				}
+			case 2 :
+				sugarSlider.setMaximum(2);
+				lblSugar.setText("Sugar (2 left)");
+				break;
+			case 3: 
+				sugarSlider.setMaximum(3);
+				lblSugar.setText("Sugar (3 left)");
 				break;
 		}
 	}
 	
 
-	private void adaptDrinkToSliders() {
+	protected void adaptDrinkToSliders() {
 		Step waterHeating = actualDrink.getStep("WaterHeating");
 		Step waitingForTemperature = actualDrink.getStep("WaitingForTemperature");
 		Step grainMashing = actualDrink.getStep("GrainMashing");
@@ -728,7 +764,6 @@ public class DrinkFactoryMachine extends JFrame {
 		Step pooringWaterForTime = actualDrink.getStep("PooringWaterForTime");
 		Step sugarTheDrink = actualDrink.getStep("SugarTheDrink");
 		Step waitingForInfusion = actualDrink.getStep("WaitingForInfusion");
-		
 		
 		if (waterHeating != null) {
 			int coef = 5; // coefficient pour augmenter/diminuer le temps de chauffage de l'eau
@@ -759,38 +794,30 @@ public class DrinkFactoryMachine extends JFrame {
 		if (waitingForInfusion != null){
 			waitingForInfusion.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*waitingForInfusion.getTimeToMake()));
 		}
-		
-		
 	}
 
-	void doNextPreparationStep() {
+	protected void doNextPreparationStep() {
 		actualStepNumber++;
 		if(actualStepNumber > actualDrink.getStepsList().length) { // cas où il n'y a plus d'étape à faire
 			theFSM.setReadyToDeliver(true);
 			System.out.println("pret à etre livré");
-			
 		}
 		else {
 			setFSMTimers(); // met les temps des timers des taches de la FSM
-			
 			sayRdyForNextStep(); // dit à la FSM qu'on est prêt pour la prochaine étape
-			
-				
 		}
 	}
 	
-	void doPrintNextStep() {
+	protected void doPrintNextStep() {
 		String currentSteps = "";
 		for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) { //permet de savoir quelles étapes effectuer pour les afficher
 			currentSteps += step.getName() + " ";
-			
 		}
 		messagesToUser.setText("<html> Préparation étape "+ currentSteps);	
-		
 		//System.out.println("step " + actualStepNumber + " done");
 	}
 
-	private void setFSMTimers() {
+	protected void setFSMTimers() {
 		for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) {
 			switch(step.getName()) {
 			case "CupPositionning":
@@ -835,7 +862,7 @@ public class DrinkFactoryMachine extends JFrame {
 		
 	}
 	
-	private void sayRdyForNextStep() {
+	protected void sayRdyForNextStep() {
 		switch(actualDrink.getName()) {
 		case "coffee":
 			switch(actualStepNumber) {
@@ -910,7 +937,7 @@ public class DrinkFactoryMachine extends JFrame {
 		}
 	}
 
-	public void doPrepareForNextOrderRaised() {
+	protected void doPrepareForNextOrderRaised() {
 		BufferedImage myPicture = null;
 		try {
 			myPicture = ImageIO.read(new File("./picts/vide2.jpg"));
@@ -918,7 +945,7 @@ public class DrinkFactoryMachine extends JFrame {
 			ee.printStackTrace();
 		}
 		labelForPictures.setIcon(new ImageIcon(myPicture));
-		messagesToUser.setText("<html>Hello <br>you can choose <br> your drink !");
+		messagesToUser.setText("<html>Bonjour <br>veuillez choisir <br> une boisson!");
 		
 		progressBar.setValue(0);
 		millis= 0;
@@ -929,9 +956,13 @@ public class DrinkFactoryMachine extends JFrame {
 		doResetPayment();
 		doResetSliders();
 		
+		unblockTheUI();
+		disableButtonsForUndoableDrinks();
+		disableCheckBoxesForUndoableOptions();
+		updatePossibleValuesForSugarSlider();
 	}
 
-	private void resetFSMbooleans() {
+	protected void resetFSMbooleans() {
 		switch(actualDrink.getName()) {
 		case "coffee":
 			theFSM.setOkForCoffeeStep1(false);
@@ -955,35 +986,81 @@ public class DrinkFactoryMachine extends JFrame {
 		theFSM.setReadyToDeliver(false);
 	}
 
-	public void doResetDrinkSelected() {
-		actualDrink = null;
+	protected void doResetDrinkSelected() {
 		coffeeButton.setBackground(Color.DARK_GRAY);
 		expressoButton.setBackground(Color.DARK_GRAY);
 		teaButton.setBackground(Color.DARK_GRAY);
-
-
+		milkBox.setSelected(false);
+		mapleSyrupBox.setSelected(false);
+		vanillaIceCreamBox.setSelected(false);
+		milkBox.setEnabled(false);
+		mapleSyrupBox.setEnabled(false);
+		vanillaIceCreamBox.setEnabled(false);
+		actualDrink = null;
 	}
 
-	public void doResetPayment() {
+	protected void doResetPayment() {
 		coinsEntered = 0;
 		leftToPay = 0;
-		JTextNfcId.setText("");
+		nfcTextField.setText("");
 	}
 
-	public void doResetSliders() {
+	protected void doResetSliders() {
 		sugarSlider.setValue(1);
 		sizeSlider.setValue(1);
 		sizeSlider.setValue(2);
 	}
 	
+	protected void unblockTheUI() {
+		coffeeButton.setEnabled(true);
+		expressoButton.setEnabled(true);
+		teaButton.setEnabled(true);
+		sugarSlider.setEnabled(true);
+		sizeSlider.setEnabled(true);
+		temperatureSlider.setEnabled(true);
+		money50centsButton.setEnabled(true);
+		money25centsButton.setEnabled(true);
+		money10centsButton.setEnabled(true);
+		nfcBiiiipButton.setEnabled(true);
+		cancelButton.setEnabled(true);
+		nfcTextField.setEnabled(true);
+	}
 
 	
-	public static double round(double value, int places) {
+	protected static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
-
 	    BigDecimal bd = BigDecimal.valueOf(value);
 	    bd = bd.setScale(places, RoundingMode.HALF_UP);
 	    return bd.doubleValue();
+	}
+
+	protected void doResetOperation() {
+		coffeeButton.setBackground(Color.DARK_GRAY); // on réinitialise la couleur de fond du bouton selectionné
+		expressoButton.setBackground(Color.DARK_GRAY);
+		teaButton.setBackground(Color.DARK_GRAY);
+		milkBox.setSelected(false); // on réinitialise les options
+		mapleSyrupBox.setSelected(false);
+		vanillaIceCreamBox.setSelected(false);
+		milkBox.setEnabled(false); // on rend les options incochables (tant que pas de boisson selectionnée)
+		mapleSyrupBox.setEnabled(false);
+		vanillaIceCreamBox.setEnabled(false);
+		sugarSlider.setValue(1); // on réinitialise les sliders 
+		sizeSlider.setValue(1);
+		temperatureSlider.setValue(2);
+		if(coinsEntered > 0) {
+			messagesToUser.setText("<html>Abandon, <br> recuperez vos <br> " + coinsEntered + " €");
+		}
+		else {
+			messagesToUser.setText("<html>Abandon");
+		}
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		messagesToUser.setText("<html>Bonjour <br>veuillez choisir <br>une boisson !");		
+		actualDrink = null;
 	}
 	
 }

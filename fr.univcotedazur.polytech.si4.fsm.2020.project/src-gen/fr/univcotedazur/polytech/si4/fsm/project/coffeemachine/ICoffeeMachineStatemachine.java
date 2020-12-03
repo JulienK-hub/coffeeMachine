@@ -26,6 +26,8 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public boolean isRaisedDoPrepareForNextOrder();
 		
+		public boolean isRaisedDoResetOperation();
+		
 		public boolean isRaisedDoResetDrinkSelected();
 		
 		public boolean isRaisedDoResetPayment();
@@ -148,6 +150,7 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 	public interface SCInterfaceListener {
 	
 		public void onDoPrepareForNextOrderRaised();
+		public void onDoResetOperationRaised();
 		public void onDoResetDrinkSelectedRaised();
 		public void onDoResetPaymentRaised();
 		public void onDoCheckPaymentRaised();

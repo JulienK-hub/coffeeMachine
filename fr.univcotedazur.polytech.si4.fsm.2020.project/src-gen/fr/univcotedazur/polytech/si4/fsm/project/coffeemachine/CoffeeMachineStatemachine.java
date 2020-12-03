@@ -103,6 +103,24 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			}
 		}
 		
+		private boolean doResetOperation;
+		
+		
+		public boolean isRaisedDoResetOperation() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return doResetOperation;
+			}
+		}
+		
+		protected void raiseDoResetOperation() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				doResetOperation = true;
+				for (SCInterfaceListener listener : listeners) {
+					listener.onDoResetOperationRaised();
+				}
+			}
+		}
+		
 		private boolean doResetDrinkSelected;
 		
 		
@@ -610,6 +628,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		protected void clearOutEvents() {
 		
 		doPrepareForNextOrder = false;
+		doResetOperation = false;
 		doResetDrinkSelected = false;
 		doResetPayment = false;
 		doCheckPayment = false;
@@ -1082,6 +1101,10 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	public synchronized boolean isRaisedDoPrepareForNextOrder() {
 		return sCInterface.isRaisedDoPrepareForNextOrder();
+	}
+	
+	public synchronized boolean isRaisedDoResetOperation() {
+		return sCInterface.isRaisedDoResetOperation();
 	}
 	
 	public synchronized boolean isRaisedDoResetDrinkSelected() {
@@ -2923,7 +2946,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		if (try_transition) {
 			if (sCInterface.noActionFor45sec) {
 				exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected();
-				sCInterface.raiseDoResetDrinkSelected();
+				sCInterface.raiseDoResetOperation();
 				
 				enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting_default();
 			} else {

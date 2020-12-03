@@ -62,4 +62,11 @@ public class DrinkFactoryMachineInterfaceImplementation implements SCInterfaceLi
 		
 	}
 
+	@Override
+	public void onDoResetOperationRaised() {
+		theDFM.doResetOperation();
+	}
+
+
+
 }
