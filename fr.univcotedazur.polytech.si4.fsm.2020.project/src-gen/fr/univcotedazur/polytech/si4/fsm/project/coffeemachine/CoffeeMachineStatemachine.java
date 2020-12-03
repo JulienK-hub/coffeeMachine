@@ -633,7 +633,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		order_part_Rdy_for_order_NoActionDetection_ActionDetected,
 		order_part_Rdy_for_order_ss_SlidersDefault,
 		order_part_Rdy_for_order_ss_SlidersCustomed,
-		order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting,
+		order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting,
 		order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected,
 		order_part_Rdy_for_order_PaymentGestion_PaymentWaiting,
 		order_part_Rdy_for_order_PaymentGestion_PaimentNFC,
@@ -778,8 +778,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			case order_part_Rdy_for_order_ss_SlidersCustomed:
 				order_part_Rdy_for_order_ss_SlidersCustomed_react(true);
 				break;
-			case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting:
-				order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_react(true);
+			case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting:
+				order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting_react(true);
 				break;
 			case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected:
 				order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected_react(true);
@@ -933,8 +933,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			return stateVector[1] == State.order_part_Rdy_for_order_ss_SlidersDefault;
 		case order_part_Rdy_for_order_ss_SlidersCustomed:
 			return stateVector[1] == State.order_part_Rdy_for_order_ss_SlidersCustomed;
-		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting:
-			return stateVector[2] == State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting;
+		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting:
+			return stateVector[2] == State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting;
 		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected:
 			return stateVector[2] == State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected;
 		case order_part_Rdy_for_order_PaymentGestion_PaymentWaiting:
@@ -1582,10 +1582,10 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		stateVector[1] = State.order_part_Rdy_for_order_ss_SlidersCustomed;
 	}
 	
-	/* 'default' enter sequence for state DrinkSelectedWaiting */
-	private void enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_default() {
+	/* 'default' enter sequence for state DrinkSelectionWaiting */
+	private void enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting_default() {
 		nextStateIndex = 2;
-		stateVector[2] = State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting;
+		stateVector[2] = State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting;
 	}
 	
 	/* 'default' enter sequence for state DrinkSelected */
@@ -1959,8 +1959,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		stateVector[1] = State.$NullState$;
 	}
 	
-	/* Default exit sequence for state DrinkSelectedWaiting */
-	private void exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting() {
+	/* Default exit sequence for state DrinkSelectionWaiting */
+	private void exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting() {
 		nextStateIndex = 2;
 		stateVector[2] = State.$NullState$;
 	}
@@ -2297,8 +2297,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		}
 		
 		switch (stateVector[2]) {
-		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting:
-			exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting();
+		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting:
+			exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting();
 			break;
 		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected:
 			exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected();
@@ -2380,8 +2380,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	/* Default exit sequence for region DrinkSelectionGestion */
 	private void exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion() {
 		switch (stateVector[2]) {
-		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting:
-			exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting();
+		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting:
+			exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting();
 			break;
 		case order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected:
 			exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected();
@@ -2694,7 +2694,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* Default react sequence for initial entry  */
 	private void react_Order_part_Rdy_for_order_DrinkSelectionGestion__entry_Default() {
-		enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_default();
+		enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting_default();
 	}
 	
 	/* Default react sequence for initial entry  */
@@ -2903,12 +2903,12 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		return did_transition;
 	}
 	
-	private boolean order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_react(boolean try_transition) {
+	private boolean order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
 			if (sCInterface.drinkSelectionDone) {
-				exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting();
+				exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting();
 				enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected_default();
 			} else {
 				did_transition = false;
@@ -2925,7 +2925,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 				exitSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected();
 				sCInterface.raiseDoResetDrinkSelected();
 				
-				enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectedWaiting_default();
+				enterSequence_Order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting_default();
 			} else {
 				if ((isStateActive(State.order_part_Rdy_for_order_PaymentGestion_paimentChecked) && timeEvents[2])) {
 					exitSequence_Order_part_Rdy_for_order();
