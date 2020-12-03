@@ -50,6 +50,7 @@ public class DrinkFactoryMachine extends JFrame {
 	private JLabel labelForPictures;
 	private final ImageIcon imageIcon = new ImageIcon();
 	private JTextField JTextNfcId;
+	private JSlider temperatureSlider,sizeSlider,sugarSlider;
 
 	private int millis;
 	private Timer msTimer;
@@ -179,7 +180,7 @@ public class DrinkFactoryMachine extends JFrame {
 		progressBar.setBounds(12, 254, 622, 26);
 		contentPane.add(progressBar);
 
-		JSlider sugarSlider = new JSlider();
+		sugarSlider = new JSlider();
 		sugarSlider.setValue(1);
 		sugarSlider.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		sugarSlider.setBackground(Color.DARK_GRAY);
@@ -191,7 +192,7 @@ public class DrinkFactoryMachine extends JFrame {
 		sugarSlider.setBounds(301, 51, 200, 36);
 		contentPane.add(sugarSlider);
 
-		JSlider sizeSlider = new JSlider();
+		sizeSlider = new JSlider();
 		sizeSlider.setPaintTicks(true);
 		sizeSlider.setValue(1);
 		sizeSlider.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -203,7 +204,7 @@ public class DrinkFactoryMachine extends JFrame {
 		sizeSlider.setBounds(301, 125, 200, 36);
 		contentPane.add(sizeSlider);
 
-		JSlider temperatureSlider = new JSlider();
+		temperatureSlider = new JSlider();
 		temperatureSlider.setPaintLabels(true);
 		temperatureSlider.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		temperatureSlider.setValue(2);
@@ -347,7 +348,7 @@ public class DrinkFactoryMachine extends JFrame {
 					nfcData.add1(nfcId, actualDrink.getPrice());
 					System.out.println("Données nfc: "+ nfcData.toString());
 					if(nfcData.getScanNumber(nfcId) >= numberForFreeDrink && actualDrink.getPrice() <= nfcData.getAveragePurchase(nfcId)) {
-						messagesToUser.setText("<html> C'est votre 11ieme achat ! " + "<html> <br> celui-ci vous est offert ! <br> et n'oubliez pas vos pièces <br> si vous en avez rentré" );
+						messagesToUser.setText("<html> Vous avez fait plus de 10 achats ! " + "<html> <br> celui-ci vous est offert ! <br> et n'oubliez pas vos pièces <br> si vous en avez rentré" );
 						nfcData.resetCount(nfcId);
 						theFSM.setPaymentChecked(true);
 						actualDrink = actualDrink.getCopy();
@@ -491,17 +492,43 @@ public class DrinkFactoryMachine extends JFrame {
 				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> veuillez récuperer les " + leftToPay + "<html> € de trop." );	
 				theFSM.setPaymentChecked(true);
 				actualDrink = actualDrink.getCopy(); //donne une copie afin de pouvoir y modifier les données sans crainte pour les commandes suivantes
-			
+				adaptDrinkToSliders();
+				
 			} else {
 				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
 				theFSM.setPaymentChecked(true);
 				actualDrink = actualDrink.getCopy(); //donne une copie afin de pouvoir y modifier les données sans crainte pour les commandes suivantes
+				adaptDrinkToSliders();
 			}
 		} else { // si la boisson n'est pas encore choisie, mais que l'on met d'abord des pièces
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €.");
 		}
 			
 		
+		
+	}
+
+	private void adaptDrinkToSliders() {
+		
+		Step waitingForTemperature = actualDrink.getStep("WaitingForTemperature");
+		Step waterHeating = actualDrink.getStep("WaterHeating");
+		
+		if (waitingForTemperature != null) {
+			int coef = 2; // coefficient pour augmenter/diminuer le temps d'attente
+			waitingForTemperature.addTimeToMake((temperatureSlider.getValue() - 2)*coef *1000); 
+			
+			// si la valeur du slider vaut 2 c'est qu'on est au temps par défaut,
+			// si elle faut moins il faut retirer du temps, si elle vaut plus il faut en ajouter d'où le -2 dans le calcul
+		
+		}
+		if (waterHeating != null) {
+			int coef = 5; // coefficient pour augmenter/diminuer le temps de chauffage de l'eau
+			waterHeating.addTimeToMake((temperatureSlider.getValue() - 2)*coef *1000);
+		}
+		
+		// TODO sizeSlider.getValue()
+		
+		// TODO sugarSlider.getValue()
 		
 	}
 

@@ -42,6 +42,17 @@ public class Drink {
 	public void setTimeToMake(int timeToMake) {
 		this.timeToMake = timeToMake;
 	}
+	
+	public Step getStep(String stepName) {
+		for(int i =0; i < stepsList.length; i++) {
+			for (int j = 0; j < stepsList[i].length; j++) {
+				if(stepName.equals(stepsList[i][j].getName())) {
+					return stepsList[i][j];
+				}
+			}
+		}
+		return null;
+	}
 
 	public double getPrice() {
 		return price;
