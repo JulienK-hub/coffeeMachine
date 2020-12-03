@@ -36,6 +36,7 @@ import drinks.*;
 import fr.univcotedazur.polytech.si4.fsm.project.NFC.Nfc;
 import fr.univcotedazur.polytech.si4.fsm.project.coffeemachine.CoffeeMachineStatemachine;
 import preparationSteps.Step;
+import stock.IngredientsStock;
 
 public class DrinkFactoryMachine extends JFrame {
 
@@ -61,6 +62,7 @@ public class DrinkFactoryMachine extends JFrame {
 	private double leftToPay;
 	private Nfc nfcData;
 	private int numberForFreeDrink;
+	private IngredientsStock stock;
 	
 	/**
 	 * @wbp.nonvisual location=311,475
@@ -95,6 +97,7 @@ public class DrinkFactoryMachine extends JFrame {
 		Drink coffee = new Coffee();
 		Drink expresso = new Expresso();
 		Drink tea = new Tea();
+		stock = new IngredientsStock();
 		millis = 0;
 		/*secs = 0;
 		mins = 0;*/
@@ -509,10 +512,23 @@ public class DrinkFactoryMachine extends JFrame {
 	}
 
 	private void adaptDrinkToSliders() {
-		
-		Step waitingForTemperature = actualDrink.getStep("WaitingForTemperature");
 		Step waterHeating = actualDrink.getStep("WaterHeating");
+		Step waitingForTemperature = actualDrink.getStep("WaitingForTemperature");
+		Step grainMashing = actualDrink.getStep("GrainMashing");
+		Step grainTamping = actualDrink.getStep("GrainTamping");
+		Step pooringWaterForSize = actualDrink.getStep("PooringWaterForSize");
+		Step pooringWaterForTime = actualDrink.getStep("PooringWaterForTime");
+		Step sugarTheDrink = actualDrink.getStep("SugarTheDrink");
+		Step waitingForInfusion = actualDrink.getStep("WaitingForInfusion");
 		
+		
+		if (waterHeating != null) {
+			int coef = 5; // coefficient pour augmenter/diminuer le temps de chauffage de l'eau
+			waterHeating.addTimeToMake((temperatureSlider.getValue() - 2)*coef *1000);
+			waterHeating.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*waterHeating.getTimeToMake())); 
+			// si le slider size est sur 0 (= la boisson est deux fois plus petite que celle de base médium), le temps de chauffage de l'eau est aussi deux fois plus petit
+			// si le slider size est sur 2 (= la boisson est deux fois plus grande que celle de base médium), le temps de chauffage de l'eau est aussi deux fois plus grand
+		}
 		if (waitingForTemperature != null) {
 			int coef = 2; // coefficient pour augmenter/diminuer le temps d'attente
 			waitingForTemperature.addTimeToMake((temperatureSlider.getValue() - 2)*coef *1000); 
@@ -520,15 +536,25 @@ public class DrinkFactoryMachine extends JFrame {
 			// si la valeur du slider vaut 2 c'est qu'on est au temps par défaut,
 			// si elle faut moins il faut retirer du temps, si elle vaut plus il faut en ajouter d'où le -2 dans le calcul
 		
+		}if (grainMashing != null) {
+			grainMashing.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*grainMashing.getTimeToMake()));
 		}
-		if (waterHeating != null) {
-			int coef = 5; // coefficient pour augmenter/diminuer le temps de chauffage de l'eau
-			waterHeating.addTimeToMake((temperatureSlider.getValue() - 2)*coef *1000);
+		if (grainTamping != null) {
+			grainTamping.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*grainTamping.getTimeToMake()));
+		}
+		if (pooringWaterForSize != null) {
+			pooringWaterForSize.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*pooringWaterForSize.getTimeToMake()));
+		}
+		if (pooringWaterForTime != null) {
+			pooringWaterForTime.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*pooringWaterForTime.getTimeToMake()));
+		}
+		if (sugarTheDrink != null) {
+			sugarTheDrink.addTimeToMake((int) ((sugarSlider.getValue() - 1)*0.5*sugarTheDrink.getTimeToMake()));
+		}
+		if (waitingForInfusion != null){
+			waitingForInfusion.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*waitingForInfusion.getTimeToMake()));
 		}
 		
-		// TODO sizeSlider.getValue()
-		
-		// TODO sugarSlider.getValue()
 		
 	}
 
@@ -735,8 +761,9 @@ public class DrinkFactoryMachine extends JFrame {
 	}
 
 	public void doResetSliders() {
-		// TODO Auto-generated method stub
-		
+		sugarSlider.setValue(1);
+		sizeSlider.setValue(1);
+		sizeSlider.setValue(2);
 	}
 	
 
