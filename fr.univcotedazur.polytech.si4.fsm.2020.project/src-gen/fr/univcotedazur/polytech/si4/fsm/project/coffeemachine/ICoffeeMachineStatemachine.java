@@ -16,6 +16,8 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public void raiseDrinkSelectionDone();
 		
+		public void raiseOptionSelection();
+		
 		public void raiseAddCoin();
 		
 		public void raiseNotEnough();

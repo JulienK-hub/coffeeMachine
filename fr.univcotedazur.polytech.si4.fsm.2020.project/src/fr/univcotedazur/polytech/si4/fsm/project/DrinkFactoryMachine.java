@@ -567,6 +567,7 @@ public class DrinkFactoryMachine extends JFrame {
 		milkBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseOptionSelection();
 				if(milkBox.isSelected()) {
 					actualDrink.setPrice(actualDrink.getPrice() + 0.1);
 				} else {
@@ -579,6 +580,7 @@ public class DrinkFactoryMachine extends JFrame {
 		mapleSyrupBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseOptionSelection();
 				if(mapleSyrupBox.isSelected()) {
 					actualDrink.setPrice(actualDrink.getPrice() + 0.1);
 					lblSugar.setText("Maple Syrup");
@@ -594,6 +596,7 @@ public class DrinkFactoryMachine extends JFrame {
 		vanillaIceCreamBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseOptionSelection();
 				if(vanillaIceCreamBox.isSelected()) {
 					actualDrink.setPrice(actualDrink.getPrice() + 0.6);
 				} else {
@@ -1042,9 +1045,10 @@ public class DrinkFactoryMachine extends JFrame {
 	}
 
 	protected void doResetSliders() {
+		lblSugar.setText("Sugar");
 		sugarSlider.setValue(1);
 		sizeSlider.setValue(1);
-		sizeSlider.setValue(2);
+		temperatureSlider.setValue(2);
 	}
 	
 	protected void unblockTheUI() {
@@ -1081,21 +1085,15 @@ public class DrinkFactoryMachine extends JFrame {
 		mapleSyrupBox.setEnabled(false);
 		vanillaIceCreamBox.setEnabled(false);
 		doResetSliders();
-		
 		if(coinsEntered > 0) {
-			messagesToUser.setText("<html>Abandon, <br> recuperez vos <br> " + coinsEntered + " €");
+			messagesToUser.setText("<html>Abandon, <br> recuperez vos <br> " + coinsEntered + " €. <br> Veuillez choisir <br>une boisson !");
 		}
 		else {
-			messagesToUser.setText("<html>Abandon");
+			messagesToUser.setText("<html>Abandon, veuillez choisir <br>une boisson !");
 		}
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		messagesToUser.setText("<html>Bonjour <br>veuillez choisir <br>une boisson !");		
 		actualDrink = null;
+		doResetPayment();
+		doResetSliders();
 	}
 	
 }

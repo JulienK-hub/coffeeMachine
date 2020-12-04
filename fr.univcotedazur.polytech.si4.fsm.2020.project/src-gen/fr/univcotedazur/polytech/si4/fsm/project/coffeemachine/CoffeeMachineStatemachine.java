@@ -49,6 +49,15 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			}
 		}
 		
+		private boolean optionSelection;
+		
+		
+		public void raiseOptionSelection() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				optionSelection = true;
+			}
+		}
+		
 		private boolean addCoin;
 		
 		
@@ -620,6 +629,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			sliderModified = false;
 			removeCup = false;
 			drinkSelectionDone = false;
+			optionSelection = false;
 			addCoin = false;
 			notEnough = false;
 			cancel = false;
@@ -1081,6 +1091,10 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	public synchronized void raiseDrinkSelectionDone() {
 		sCInterface.raiseDrinkSelectionDone();
+	}
+	
+	public synchronized void raiseOptionSelection() {
+		sCInterface.raiseOptionSelection();
 	}
 	
 	public synchronized void raiseAddCoin() {
@@ -2865,7 +2879,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if ((sCInterface.sliderModified || (sCInterface.drinkSelectionDone || (sCInterface.nFC || (sCInterface.addCoin || sCInterface.cancel))))) {
+			if ((sCInterface.sliderModified || (sCInterface.drinkSelectionDone || (sCInterface.optionSelection || (sCInterface.nFC || (sCInterface.addCoin || sCInterface.cancel)))))) {
 				exitSequence_Order_part_Rdy_for_order_NoActionDetection_NoActionDetected();
 				enterSequence_Order_part_Rdy_for_order_NoActionDetection_ActionDetected_default();
 			} else {
@@ -2885,7 +2899,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 				
 				enterSequence_Order_part_Rdy_for_order_NoActionDetection_NoActionDetected_default();
 			} else {
-				if ((sCInterface.sliderModified || (sCInterface.drinkSelectionDone || (sCInterface.nFC || (sCInterface.addCoin || sCInterface.cancel))))) {
+				if ((sCInterface.sliderModified || (sCInterface.drinkSelectionDone || (sCInterface.optionSelection || (sCInterface.nFC || (sCInterface.addCoin || sCInterface.cancel)))))) {
 					exitSequence_Order_part_Rdy_for_order_NoActionDetection_ActionDetected();
 					enterSequence_Order_part_Rdy_for_order_NoActionDetection_ActionDetected_default();
 				} else {
