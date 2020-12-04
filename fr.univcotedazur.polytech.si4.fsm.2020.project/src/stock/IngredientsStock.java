@@ -11,6 +11,7 @@ public class IngredientsStock {
 		this.ingredients.put(Ingredient.COOFFEEPOD, 1);
 		this.ingredients.put(Ingredient.EXPRESSOGRAINDOSE, 0);
 		this.ingredients.put(Ingredient.TEASACHET, 100);
+		this.ingredients.put(Ingredient.SOUPPOD, 1);
 		this.ingredients.put(Ingredient.SUGAR, 4);
 		this.ingredients.put(Ingredient.MILKDOSE, 100);
 		this.ingredients.put(Ingredient.MAPLESYRUPDOSE, 100);
@@ -32,9 +33,6 @@ public class IngredientsStock {
 		return (this.ingredients.get(ingredient) != 0);
 	}
 
-	//public boolean enoughIngredientForSugarSlider(int sugarSliderValue) {
-	//	return(th)
-	//}
 	public void consumeIngredient(Ingredient ingredientType, int amount) {
 		if(amount >0) {
 			int numberInStock = ingredients.get(ingredientType);

@@ -608,9 +608,8 @@ public class DrinkFactoryMachine extends JFrame {
 					croutonsBox.setEnabled(true);
 					lblSugar.setText("Spices");
 					
-					calculatePrice();
 				
-					if (stock.isIngredientInStock(Ingredient.TEASACHET) && enoughIngredientForSugarSlider()) {
+					if (stock.isIngredientInStock(Ingredient.SOUPPOD) && enoughIngredientForSugarSlider()) {
 						theFSM.raiseDrinkSelectionDone();
 					}
 				}
@@ -672,10 +671,8 @@ public class DrinkFactoryMachine extends JFrame {
 				theFSM.raiseOptionSelection();
 				if(croutonsBox.isSelected()) {
 					actualDrink.setPrice(actualDrink.getPrice() + 0.3);
-					// setter l'option croutons à true de la FSM
 				} else {
 					actualDrink.setPrice(actualDrink.getPrice() - 0.3);
-					// setter l'option croutons à false de la FSM
 				}
 				doCheckPayment();
 			}
@@ -794,6 +791,7 @@ public class DrinkFactoryMachine extends JFrame {
 				actualDrink = actualDrink.getCopy(); //donne une copie afin de pouvoir y modifier les données sans crainte pour les commandes suivantes
 				adaptDrinkToSliders(); // on modifie les temps de préparation en fonction des valeurs des sliders 
 				consumeIngredientsFromStock(); // on met à jour le stock d'ingrédients
+				consumeOptionIngredientsFromStock();
 				blockTheUI(); // on rend impossible toute interaction avec la coffee machine pendant le temps de la préparation de la boisson
 			}
 		} else { // si la boisson n'est pas encore choisie, mais que l'on met d'abord des pièces
@@ -802,11 +800,15 @@ public class DrinkFactoryMachine extends JFrame {
 	}
 
 	protected boolean enoughIngredientForSugarSlider() {
-		Ingredient currentSugaryIngredient = Ingredient.SUGAR;
+		Ingredient sliderIngredient = Ingredient.SUGAR;
 		if(mapleSyrupBox.isSelected()) {
-			currentSugaryIngredient = Ingredient.MAPLESYRUPDOSE;
+			sliderIngredient = Ingredient.MAPLESYRUPDOSE;
 		}
-		return (stock.getIngredients().get(currentSugaryIngredient) >= sugarSlider.getValue());
+		if(soupButton.isSelected()) {
+			sliderIngredient = Ingredient.SPICEDOSE;
+		}
+		updatePossibleValuesForSugarSlider(sliderIngredient);
+		return (stock.getIngredients().get(sliderIngredient) >= sugarSlider.getValue());
 	}
 	
 	protected void consumeIngredientsFromStock() {
@@ -820,12 +822,16 @@ public class DrinkFactoryMachine extends JFrame {
 			case "tea":
 				stock.consumeIngredient(Ingredient.TEASACHET, 1);
 				break;
+			case "soup":
+				stock.consumeIngredient(Ingredient.SOUPPOD, 1);
+				break;
 		}
-		
 		if(mapleSyrupBox.isSelected()) {
 			stock.consumeIngredient(Ingredient.MAPLESYRUPDOSE, sugarSlider.getValue());
 		}
-		else {
+		else if(soupButton.isSelected()) {
+			stock.consumeIngredient(Ingredient.SPICEDOSE, sugarSlider.getValue());
+		} else {
 			stock.consumeIngredient(Ingredient.SUGAR, sugarSlider.getValue());
 		}
 		
@@ -838,7 +844,9 @@ public class DrinkFactoryMachine extends JFrame {
 		if(vanillaIceCreamBox.isSelected()) {
 			stock.consumeIngredient(Ingredient.VANILLAICECREAMDOSE, 1);
 		}
-		
+		if(croutonsBox.isSelected()) {
+			stock.consumeIngredient(Ingredient.CROUTONDOSE, 1);
+		}
 	}
 	
 	protected void disableButtonsForUndoableDrinks() {
@@ -848,35 +856,35 @@ public class DrinkFactoryMachine extends JFrame {
 			expressoButton.setEnabled(false);
 		if(stock.getIngredients().get(Ingredient.TEASACHET) == 0) 
 			teaButton.setEnabled(false);
+		if(stock.getIngredients().get(Ingredient.SOUPPOD) == 0) 
+			soupButton.setEnabled(false);
 	}
 	
 	protected void disableCheckBoxesForUndoableOptions() {
 		if(stock.getIngredients().get(Ingredient.MILKDOSE) == 0) 
-			coffeeButton.setEnabled(false);
+			milkBox.setEnabled(false);
 		if(stock.getIngredients().get(Ingredient.MAPLESYRUPDOSE) == 0) 
-			expressoButton.setEnabled(false);
+			mapleSyrupBox.setEnabled(false);
 		if(stock.getIngredients().get(Ingredient.VANILLAICECREAMDOSE) == 0) 
-			teaButton.setEnabled(false);
+			vanillaIceCreamBox.setEnabled(false);
+		if(stock.getIngredients().get(Ingredient.CROUTONDOSE) == 0) 
+			croutonsBox.setEnabled(false);
 	}
 	
-	protected void updatePossibleValuesForSugarSlider() {
-		switch(stock.getIngredients().get(Ingredient.SUGAR)) {
+	protected void updatePossibleValuesForSugarSlider(Ingredient ingredient) {
+		switch(stock.getIngredients().get(ingredient)) {
 			case 0 : 
 				sugarSlider.setValue(0);
 				sugarSlider.setMaximum(0);
-				lblSugar.setText("Sugar (0 left)");
 				break;
 			case 1 :
 				sugarSlider.setMaximum(1);
-				lblSugar.setText("Sugar (1 left)");
 				break;
 			case 2 :
 				sugarSlider.setMaximum(2);
-				lblSugar.setText("Sugar (2 left)");
 				break;
 			case 3: 
 				sugarSlider.setMaximum(3);
-				lblSugar.setText("Sugar (3 left)");
 				break;
 		}
 	}
@@ -890,6 +898,7 @@ public class DrinkFactoryMachine extends JFrame {
 		Step pooringWaterForSize = actualDrink.getStep("PooringWaterForSize");
 		Step sugarTheDrink = actualDrink.getStep("SugarTheDrink");
 		Step waitingForInfusion = actualDrink.getStep("WaitingForInfusion");
+		Step spicingTheDrink = actualDrink.getStep("SpicingTheDrink");
 		
 		if (waterHeating != null) {
 			waterHeating.addTimeToMake((temperatureSlider.getValue() - 2)*5 *1000);
@@ -917,10 +926,19 @@ public class DrinkFactoryMachine extends JFrame {
 				sugarTheDrink.setTimeToMake(0);
 			} else {
 				sugarTheDrink.addTimeToMake((int) ((sugarSlider.getValue() - 1)*0.5*sugarTheDrink.getTimeToMake()));
+				
 			}
 		}
 		if (waitingForInfusion != null){
 			waitingForInfusion.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*waitingForInfusion.getTimeToMake()));
+		}
+		
+		if (spicingTheDrink != null) {
+			if(sugarSlider.getValue() == 0) {
+				spicingTheDrink.setTimeToMake(0);
+			} else {
+				spicingTheDrink.addTimeToMake((int) ((sugarSlider.getValue() - 1)*0.5*sugarTheDrink.getTimeToMake()));
+			}
 		}
 	}
 
@@ -934,6 +952,9 @@ public class DrinkFactoryMachine extends JFrame {
 				messagesToUser.setText("<html>Préparation, étape : <br> glace vanille");
 			if(theFSM.getMilk() && !theFSM.getIceCream())
 				messagesToUser.setText("<html>Préparation, étape : <br> nuage de lait");
+			if(croutonsBox.isSelected())
+				messagesToUser.setText("<html>Préparation, étape : <br> croutons");
+
 			System.out.println("Pret à etre livré");
 		}
 		else {
@@ -960,10 +981,10 @@ public class DrinkFactoryMachine extends JFrame {
 			case "PodPositionning":
 				theFSM.setPpTime(step.getTimeToMake());
 				break;
-			case "PooringWaterForSize":
+			case "PouringWaterForSize":
 				theFSM.setPwfsTime(step.getTimeToMake());
 				break;
-			case "PooringWaterForTime":
+			case "PouringWaterForTime":
 				theFSM.setPwftTime(step.getTimeToMake());
 				break;
 			case "SugarTheDrink":
@@ -987,8 +1008,18 @@ public class DrinkFactoryMachine extends JFrame {
 			case "SachetPositionning":
 				theFSM.setSpTime(step.getTimeToMake());
 				break;
-			case "GrainTamping":
-				theFSM.setGtTime(step.getTimeToMake());
+			case "SoupPodPouring":
+				theFSM.setSppTime(step.getTimeToMake());
+				break;
+			case "SpicingTheDrink":
+				theFSM.setSpicingTime(step.getTimeToMake());
+				break;
+			case "AddingCroutons":
+				if (croutonsBox.isSelected()){
+					theFSM.setAcTime(step.getTimeToMake() + 3000);
+				} else {
+					theFSM.setAcTime(0);
+				}
 				break;
 			}
 
@@ -1082,6 +1113,8 @@ public class DrinkFactoryMachine extends JFrame {
 					System.out.println("ok for soup step 3");
 					break;
 			}
+			break;
+			
 		default:
 			break;
 		}
@@ -1109,7 +1142,6 @@ public class DrinkFactoryMachine extends JFrame {
 		unblockTheUI();
 		disableButtonsForUndoableDrinks();
 		disableCheckBoxesForUndoableOptions();
-		updatePossibleValuesForSugarSlider();
 	}
 
 	protected void resetFSMbooleans() {
@@ -1142,12 +1174,15 @@ public class DrinkFactoryMachine extends JFrame {
 		coffeeButton.setBackground(Color.DARK_GRAY);
 		expressoButton.setBackground(Color.DARK_GRAY);
 		teaButton.setBackground(Color.DARK_GRAY);
+		soupButton.setBackground(Color.DARK_GRAY);
 		milkBox.setSelected(false);
 		mapleSyrupBox.setSelected(false);
 		vanillaIceCreamBox.setSelected(false);
+		croutonsBox.setSelected(false);
 		milkBox.setEnabled(false);
 		mapleSyrupBox.setEnabled(false);
 		vanillaIceCreamBox.setEnabled(false);
+		croutonsBox.setEnabled(false);
 		actualDrink = null;
 	}
 
@@ -1168,7 +1203,7 @@ public class DrinkFactoryMachine extends JFrame {
 		coffeeButton.setEnabled(true);
 		expressoButton.setEnabled(true);
 		teaButton.setEnabled(true);
-		soupButton.setEnabled(false);
+		soupButton.setEnabled(true);
 		sugarSlider.setEnabled(true);
 		sizeSlider.setEnabled(true);
 		temperatureSlider.setEnabled(true);
@@ -1192,12 +1227,15 @@ public class DrinkFactoryMachine extends JFrame {
 		coffeeButton.setBackground(Color.DARK_GRAY); // on réinitialise la couleur de fond du bouton selectionné
 		expressoButton.setBackground(Color.DARK_GRAY);
 		teaButton.setBackground(Color.DARK_GRAY);
+		soupButton.setBackground(Color.DARK_GRAY);
 		milkBox.setSelected(false); // on réinitialise les options
 		mapleSyrupBox.setSelected(false);
 		vanillaIceCreamBox.setSelected(false);
+		croutonsBox.setSelected(false);
 		milkBox.setEnabled(false); // on rend les options incochables (tant que pas de boisson selectionnée)
 		mapleSyrupBox.setEnabled(false);
 		vanillaIceCreamBox.setEnabled(false);
+		croutonsBox.setEnabled(false);
 		doResetSliders();
 		if(coinsEntered > 0) {
 			messagesToUser.setText("<html>Abandon, <br> recuperez vos <br> " + coinsEntered + " €. <br> Veuillez choisir <br>une boisson !");

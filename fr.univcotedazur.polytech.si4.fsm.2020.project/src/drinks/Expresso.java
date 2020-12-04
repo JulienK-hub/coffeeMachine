@@ -10,7 +10,7 @@ public class Expresso extends Drink{
 		Step[][] steps = {
 				{new GrainMashing(), new WaterHeating()}, // 15 000 ms
 				{new CupPositionning(), new WaitingForTemperature(), new GrainTamping()}, // 10 000 ms
-				{new PooringWaterForTime(), new SugarTheDrink()} // 3 000 ms
+				{new PouringWaterForTime(), new SugarTheDrink()} // 3 000 ms
 		};
 		this.setStepsList(steps);
 	}

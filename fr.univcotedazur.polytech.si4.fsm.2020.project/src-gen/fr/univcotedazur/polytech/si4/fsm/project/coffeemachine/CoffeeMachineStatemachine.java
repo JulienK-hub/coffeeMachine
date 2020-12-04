@@ -708,6 +708,20 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			}
 		}
 		
+		private long acTime;
+		
+		public synchronized long getAcTime() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return acTime;
+			}
+		}
+		
+		public void setAcTime(long value) {
+			synchronized(CoffeeMachineStatemachine.this) {
+				this.acTime = value;
+			}
+		}
+		
 		private boolean paymentChecked;
 		
 		public synchronized boolean getPaymentChecked() {
@@ -809,10 +823,10 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		order_part_Preparation_DrinkMaking_Step3,
 		order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrink,
 		order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrinkDone,
-		order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize,
-		order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone,
-		order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime,
-		order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone,
+		order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize,
+		order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone,
+		order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime,
+		order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone,
 		order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutons,
 		order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutonsDone,
 		order_part_Preparation_DrinkMaking_Step1,
@@ -844,7 +858,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	private ITimer timer;
 	
-	private final boolean[] timeEvents = new boolean[25];
+	private final boolean[] timeEvents = new boolean[26];
 	
 	public CoffeeMachineStatemachine() {
 		sCInterface = new SCInterfaceImpl();
@@ -921,6 +935,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		sCInterface.setIcTime(4000);
 		
 		sCInterface.setMTime(2000);
+		
+		sCInterface.setAcTime(5000);
 		
 		sCInterface.setPaymentChecked(false);
 		
@@ -1014,17 +1030,17 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			case order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrinkDone:
 				order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrinkDone_react(true);
 				break;
-			case order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize:
-				order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize_react(true);
+			case order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize:
+				order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize_react(true);
 				break;
-			case order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone:
-				order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone_react(true);
+			case order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone:
+				order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone_react(true);
 				break;
-			case order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime:
-				order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime_react(true);
+			case order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime:
+				order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime_react(true);
 				break;
-			case order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone:
-				order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone_react(true);
+			case order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone:
+				order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone_react(true);
 				break;
 			case order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutons:
 				order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutons_react(true);
@@ -1187,14 +1203,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			return stateVector[0] == State.order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrink;
 		case order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrinkDone:
 			return stateVector[0] == State.order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrinkDone;
-		case order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize:
-			return stateVector[1] == State.order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize;
-		case order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone:
-			return stateVector[1] == State.order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone;
-		case order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime:
-			return stateVector[2] == State.order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime;
-		case order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone:
-			return stateVector[2] == State.order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone;
+		case order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize:
+			return stateVector[1] == State.order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize;
+		case order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone:
+			return stateVector[1] == State.order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone;
+		case order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime:
+			return stateVector[2] == State.order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime;
+		case order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone:
+			return stateVector[2] == State.order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone;
 		case order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutons:
 			return stateVector[3] == State.order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutons;
 		case order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutonsDone:
@@ -1599,6 +1615,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		sCInterface.setMTime(value);
 	}
 	
+	public synchronized long getAcTime() {
+		return sCInterface.getAcTime();
+	}
+	
+	public synchronized void setAcTime(long value) {
+		sCInterface.setAcTime(value);
+	}
+	
 	public synchronized boolean getPaymentChecked() {
 		return sCInterface.getPaymentChecked();
 	}
@@ -1679,6 +1703,8 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		
 		timer.setTimer(this, 5, 200, true);
 		
+		timer.setTimer(this, 6, 200, true);
+		
 		sCInterface.raiseDoNextPreparationStep();
 	}
 	
@@ -1689,34 +1715,34 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* Entry action for state 'WaitingForTemperature'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step2_r1_WaitingForTemperature() {
-		timer.setTimer(this, 6, sCInterface.getWftTime(), false);
+		timer.setTimer(this, 7, sCInterface.getWftTime(), false);
 		
 		sCInterface.raiseDoPrintNextStep();
 	}
 	
 	/* Entry action for state 'CupPositionning'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step2_r2_CupPositionning() {
-		timer.setTimer(this, 7, sCInterface.getCpTime(), false);
+		timer.setTimer(this, 8, sCInterface.getCpTime(), false);
 	}
 	
 	/* Entry action for state 'GrainTamping'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step2_r3_GrainTamping() {
-		timer.setTimer(this, 8, sCInterface.getGtTime(), false);
+		timer.setTimer(this, 9, sCInterface.getGtTime(), false);
 	}
 	
 	/* Entry action for state 'SoupPodPouring'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step2_r4_SoupPodPouring() {
-		timer.setTimer(this, 9, sCInterface.getSppTime(), false);
+		timer.setTimer(this, 10, sCInterface.getSppTime(), false);
 	}
 	
 	/* Entry action for state 'SpicingTheDrink'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step2_r5_SpicingTheDrink() {
-		timer.setTimer(this, 10, sCInterface.getSpicingTime(), false);
+		timer.setTimer(this, 11, sCInterface.getSpicingTime(), false);
 	}
 	
 	/* Entry action for state 'SugarTheDrink'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrink() {
-		timer.setTimer(this, 11, sCInterface.getStdTime(), false);
+		timer.setTimer(this, 12, sCInterface.getStdTime(), false);
 		
 		sCInterface.raiseDoPrintNextStep();
 	}
@@ -1726,19 +1752,24 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		sCInterface.raiseDoNextPreparationStep();
 	}
 	
-	/* Entry action for state 'PooringWaterForSize'. */
-	private void entryAction_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize() {
-		timer.setTimer(this, 12, sCInterface.getPwfsTime(), false);
+	/* Entry action for state 'PouringWaterForSize'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize() {
+		timer.setTimer(this, 13, sCInterface.getPwfsTime(), false);
 	}
 	
-	/* Entry action for state 'PooringWaterForTime'. */
-	private void entryAction_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime() {
-		timer.setTimer(this, 13, sCInterface.getPwftTime(), false);
+	/* Entry action for state 'PouringWaterForTime'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime() {
+		timer.setTimer(this, 14, sCInterface.getPwftTime(), false);
 	}
 	
 	/* Entry action for state 'AddingCroutons'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutons() {
-		timer.setTimer(this, 14, (3 * 1000), false);
+		timer.setTimer(this, 15, (3 * 1000), false);
+	}
+	
+	/* Entry action for state 'AddingCroutonsDone'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutonsDone() {
+		sCInterface.raiseDoNextPreparationStep();
 	}
 	
 	/* Entry action for state 'PodPositionningDone'. */
@@ -1748,14 +1779,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* Entry action for state 'PodPositionning'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step1_r1_PodPositionning() {
-		timer.setTimer(this, 15, sCInterface.getPpTime(), false);
+		timer.setTimer(this, 16, sCInterface.getPpTime(), false);
 		
 		sCInterface.raiseDoPrintNextStep();
 	}
 	
 	/* Entry action for state 'WaterHeating'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step1_r2_WaterHeating() {
-		timer.setTimer(this, 16, sCInterface.getWhTime(), false);
+		timer.setTimer(this, 17, sCInterface.getWhTime(), false);
 	}
 	
 	/* Entry action for state 'SachetPositionningDone'. */
@@ -1765,12 +1796,12 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* Entry action for state 'SachetPositionning'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionning() {
-		timer.setTimer(this, 17, sCInterface.getSpTime(), false);
+		timer.setTimer(this, 18, sCInterface.getSpTime(), false);
 	}
 	
 	/* Entry action for state 'GrainMashing'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step1_r4_GrainMashing() {
-		timer.setTimer(this, 18, sCInterface.getGmTime(), false);
+		timer.setTimer(this, 19, sCInterface.getGmTime(), false);
 	}
 	
 	/* Entry action for state 'GrainMashingDone'. */
@@ -1780,12 +1811,17 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* Entry action for state 'CupPositionning'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step1_r5_CupPositionning() {
-		timer.setTimer(this, 19, sCInterface.getCpTime(), false);
+		timer.setTimer(this, 20, sCInterface.getCpTime(), false);
+	}
+	
+	/* Entry action for state 'CupPositionningDone'. */
+	private void entryAction_Order_part_Preparation_DrinkMaking_Step1_r5_CupPositionningDone() {
+		sCInterface.raiseDoNextPreparationStep();
 	}
 	
 	/* Entry action for state 'WaitingForInfusion'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step4_r1_WaitingForInfusion() {
-		timer.setTimer(this, 20, sCInterface.getWfiTime(), false);
+		timer.setTimer(this, 21, sCInterface.getWfiTime(), false);
 		
 		sCInterface.raiseDoPrintNextStep();
 	}
@@ -1797,7 +1833,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* Entry action for state 'SachetWithdrawal'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Step5_r1_SachetWithdrawal() {
-		timer.setTimer(this, 21, sCInterface.getSwdTime(), false);
+		timer.setTimer(this, 22, sCInterface.getSwdTime(), false);
 		
 		sCInterface.raiseDoPrintNextStep();
 	}
@@ -1809,14 +1845,14 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* Entry action for state 'IceCream'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_IceCream() {
-		timer.setTimer(this, 22, sCInterface.getIcTime(), false);
-		
 		timer.setTimer(this, 23, sCInterface.getIcTime(), false);
+		
+		timer.setTimer(this, 24, sCInterface.getIcTime(), false);
 	}
 	
 	/* Entry action for state 'Milk'. */
 	private void entryAction_Order_part_Preparation_DrinkMaking_Milk() {
-		timer.setTimer(this, 24, sCInterface.getMTime(), false);
+		timer.setTimer(this, 25, sCInterface.getMTime(), false);
 	}
 	
 	/* Entry action for state 'waitingForRecuperation'. */
@@ -1846,98 +1882,100 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		timer.unsetTimer(this, 4);
 		
 		timer.unsetTimer(this, 5);
+		
+		timer.unsetTimer(this, 6);
 	}
 	
 	/* Exit action for state 'WaitingForTemperature'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step2_r1_WaitingForTemperature() {
-		timer.unsetTimer(this, 6);
+		timer.unsetTimer(this, 7);
 	}
 	
 	/* Exit action for state 'CupPositionning'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step2_r2_CupPositionning() {
-		timer.unsetTimer(this, 7);
+		timer.unsetTimer(this, 8);
 	}
 	
 	/* Exit action for state 'GrainTamping'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step2_r3_GrainTamping() {
-		timer.unsetTimer(this, 8);
+		timer.unsetTimer(this, 9);
 	}
 	
 	/* Exit action for state 'SoupPodPouring'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step2_r4_SoupPodPouring() {
-		timer.unsetTimer(this, 9);
+		timer.unsetTimer(this, 10);
 	}
 	
 	/* Exit action for state 'SpicingTheDrink'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step2_r5_SpicingTheDrink() {
-		timer.unsetTimer(this, 10);
+		timer.unsetTimer(this, 11);
 	}
 	
 	/* Exit action for state 'SugarTheDrink'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrink() {
-		timer.unsetTimer(this, 11);
-	}
-	
-	/* Exit action for state 'PooringWaterForSize'. */
-	private void exitAction_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize() {
 		timer.unsetTimer(this, 12);
 	}
 	
-	/* Exit action for state 'PooringWaterForTime'. */
-	private void exitAction_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime() {
+	/* Exit action for state 'PouringWaterForSize'. */
+	private void exitAction_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize() {
 		timer.unsetTimer(this, 13);
+	}
+	
+	/* Exit action for state 'PouringWaterForTime'. */
+	private void exitAction_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime() {
+		timer.unsetTimer(this, 14);
 	}
 	
 	/* Exit action for state 'AddingCroutons'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutons() {
-		timer.unsetTimer(this, 14);
+		timer.unsetTimer(this, 15);
 	}
 	
 	/* Exit action for state 'PodPositionning'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step1_r1_PodPositionning() {
-		timer.unsetTimer(this, 15);
+		timer.unsetTimer(this, 16);
 	}
 	
 	/* Exit action for state 'WaterHeating'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step1_r2_WaterHeating() {
-		timer.unsetTimer(this, 16);
+		timer.unsetTimer(this, 17);
 	}
 	
 	/* Exit action for state 'SachetPositionning'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionning() {
-		timer.unsetTimer(this, 17);
+		timer.unsetTimer(this, 18);
 	}
 	
 	/* Exit action for state 'GrainMashing'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step1_r4_GrainMashing() {
-		timer.unsetTimer(this, 18);
+		timer.unsetTimer(this, 19);
 	}
 	
 	/* Exit action for state 'CupPositionning'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step1_r5_CupPositionning() {
-		timer.unsetTimer(this, 19);
+		timer.unsetTimer(this, 20);
 	}
 	
 	/* Exit action for state 'WaitingForInfusion'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step4_r1_WaitingForInfusion() {
-		timer.unsetTimer(this, 20);
+		timer.unsetTimer(this, 21);
 	}
 	
 	/* Exit action for state 'SachetWithdrawal'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Step5_r1_SachetWithdrawal() {
-		timer.unsetTimer(this, 21);
+		timer.unsetTimer(this, 22);
 	}
 	
 	/* Exit action for state 'IceCream'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_IceCream() {
-		timer.unsetTimer(this, 22);
-		
 		timer.unsetTimer(this, 23);
+		
+		timer.unsetTimer(this, 24);
 	}
 	
 	/* Exit action for state 'Milk'. */
 	private void exitAction_Order_part_Preparation_DrinkMaking_Milk() {
-		timer.unsetTimer(this, 24);
+		timer.unsetTimer(this, 25);
 	}
 	
 	/* 'default' enter sequence for state Rdy for order */
@@ -2115,30 +2153,30 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		stateVector[0] = State.order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrinkDone;
 	}
 	
-	/* 'default' enter sequence for state PooringWaterForSize */
-	private void enterSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize_default() {
-		entryAction_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize();
+	/* 'default' enter sequence for state PouringWaterForSize */
+	private void enterSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize();
 		nextStateIndex = 1;
-		stateVector[1] = State.order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize;
+		stateVector[1] = State.order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize;
 	}
 	
-	/* 'default' enter sequence for state PooringWaterForSizeDone */
-	private void enterSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone_default() {
+	/* 'default' enter sequence for state PouringWaterForSizeDone */
+	private void enterSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone_default() {
 		nextStateIndex = 1;
-		stateVector[1] = State.order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone;
+		stateVector[1] = State.order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone;
 	}
 	
-	/* 'default' enter sequence for state PooringWaterForTime */
-	private void enterSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime_default() {
-		entryAction_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime();
+	/* 'default' enter sequence for state PouringWaterForTime */
+	private void enterSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime();
 		nextStateIndex = 2;
-		stateVector[2] = State.order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime;
+		stateVector[2] = State.order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime;
 	}
 	
-	/* 'default' enter sequence for state PooringWaterForTimeDone */
-	private void enterSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone_default() {
+	/* 'default' enter sequence for state PouringWaterForTimeDone */
+	private void enterSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone_default() {
 		nextStateIndex = 2;
-		stateVector[2] = State.order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone;
+		stateVector[2] = State.order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone;
 	}
 	
 	/* 'default' enter sequence for state AddingCroutons */
@@ -2150,6 +2188,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* 'default' enter sequence for state AddingCroutonsDone */
 	private void enterSequence_Order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutonsDone_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutonsDone();
 		nextStateIndex = 3;
 		stateVector[3] = State.order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutonsDone;
 	}
@@ -2227,6 +2266,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* 'default' enter sequence for state CupPositionningDone */
 	private void enterSequence_Order_part_Preparation_DrinkMaking_Step1_r5_CupPositionningDone_default() {
+		entryAction_Order_part_Preparation_DrinkMaking_Step1_r5_CupPositionningDone();
 		nextStateIndex = 4;
 		stateVector[4] = State.order_part_Preparation_DrinkMaking_Step1_r5_CupPositionningDone;
 	}
@@ -2582,30 +2622,30 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		stateVector[0] = State.$NullState$;
 	}
 	
-	/* Default exit sequence for state PooringWaterForSize */
-	private void exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize() {
+	/* Default exit sequence for state PouringWaterForSize */
+	private void exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize() {
 		nextStateIndex = 1;
 		stateVector[1] = State.$NullState$;
 		
-		exitAction_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize();
+		exitAction_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize();
 	}
 	
-	/* Default exit sequence for state PooringWaterForSizeDone */
-	private void exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone() {
+	/* Default exit sequence for state PouringWaterForSizeDone */
+	private void exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone() {
 		nextStateIndex = 1;
 		stateVector[1] = State.$NullState$;
 	}
 	
-	/* Default exit sequence for state PooringWaterForTime */
-	private void exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime() {
+	/* Default exit sequence for state PouringWaterForTime */
+	private void exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime() {
 		nextStateIndex = 2;
 		stateVector[2] = State.$NullState$;
 		
-		exitAction_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime();
+		exitAction_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime();
 	}
 	
-	/* Default exit sequence for state PooringWaterForTimeDone */
-	private void exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone() {
+	/* Default exit sequence for state PouringWaterForTimeDone */
+	private void exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone() {
 		nextStateIndex = 2;
 		stateVector[2] = State.$NullState$;
 	}
@@ -2831,11 +2871,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		case order_part_Preparation_DrinkMaking_Step2_r2_CupPositionning:
 			exitSequence_Order_part_Preparation_DrinkMaking_Step2_r2_CupPositionning();
 			break;
-		case order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize();
+		case order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize();
 			break;
-		case order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone();
+		case order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone();
 			break;
 		case order_part_Preparation_DrinkMaking_Step1_r2_WaterHeatingDone:
 			exitSequence_Order_part_Preparation_DrinkMaking_Step1_r2_WaterHeatingDone();
@@ -2860,11 +2900,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		case order_part_Preparation_DrinkMaking_Step2_r3_GrainTamping:
 			exitSequence_Order_part_Preparation_DrinkMaking_Step2_r3_GrainTamping();
 			break;
-		case order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime();
+		case order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime();
 			break;
-		case order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone();
+		case order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone();
 			break;
 		case order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionningDone:
 			exitSequence_Order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionningDone();
@@ -3038,11 +3078,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		case order_part_Preparation_DrinkMaking_Step2_r2_CupPositionning:
 			exitSequence_Order_part_Preparation_DrinkMaking_Step2_r2_CupPositionning();
 			break;
-		case order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize();
+		case order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize();
 			break;
-		case order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone();
+		case order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone();
 			break;
 		case order_part_Preparation_DrinkMaking_Step1_r2_WaterHeatingDone:
 			exitSequence_Order_part_Preparation_DrinkMaking_Step1_r2_WaterHeatingDone();
@@ -3061,11 +3101,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		case order_part_Preparation_DrinkMaking_Step2_r3_GrainTamping:
 			exitSequence_Order_part_Preparation_DrinkMaking_Step2_r3_GrainTamping();
 			break;
-		case order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime();
+		case order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime();
 			break;
-		case order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone();
+		case order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone();
 			break;
 		case order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionningDone:
 			exitSequence_Order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionningDone();
@@ -3205,11 +3245,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	/* Default exit sequence for region r2 */
 	private void exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2() {
 		switch (stateVector[1]) {
-		case order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize();
+		case order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize();
 			break;
-		case order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone();
+		case order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone();
 			break;
 		default:
 			break;
@@ -3219,11 +3259,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	/* Default exit sequence for region r3 */
 	private void exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3() {
 		switch (stateVector[2]) {
-		case order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime();
+		case order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime();
 			break;
-		case order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone:
-			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone();
+		case order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone:
+			exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone();
 			break;
 		default:
 			break;
@@ -3417,12 +3457,12 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* Default react sequence for initial entry  */
 	private void react_Order_part_Preparation_DrinkMaking_Step3_r2__entry_Default() {
-		enterSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize_default();
+		enterSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize_default();
 	}
 	
 	/* Default react sequence for initial entry  */
 	private void react_Order_part_Preparation_DrinkMaking_Step3_r3__entry_Default() {
-		enterSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime_default();
+		enterSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime_default();
 	}
 	
 	/* Default react sequence for initial entry  */
@@ -3523,6 +3563,11 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	/* The reactions of state null. */
 	private void react_Order_part_Preparation_DrinkMaking__sync10() {
 		enterSequence_Order_part_Preparation_DrinkMaking_Step3_default();
+	}
+	
+	/* The reactions of state null. */
+	private void react_Order_part_Preparation_DrinkMaking__sync11() {
+		react_Order_part_Preparation_DrinkMaking__exit_Default();
 	}
 	
 	/* The reactions of state null. */
@@ -3768,7 +3813,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 						enterSequence_Order_part_Preparation_DrinkMaking_Step1_default();
 						order_part_Preparation_react(false);
 					} else {
-						if (sCInterface.getOkForSoupStep1()) {
+						if (((timeEvents[6]) && (sCInterface.getOkForSoupStep1()))) {
 							exitSequence_Order_part_Preparation_DrinkMaking_Initialization();
 							enterSequence_Order_part_Preparation_DrinkMaking_Step1_default();
 							order_part_Preparation_react(false);
@@ -3830,7 +3875,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[6]) && (((sCInterface.getOkForCoffeeStep2() || sCInterface.getOkForTeaStep2()) || sCInterface.getOkForExpressoStep2())))) {
+			if (((timeEvents[7]) && ((((sCInterface.getOkForCoffeeStep2() || sCInterface.getOkForTeaStep2()) || sCInterface.getOkForExpressoStep2()) || sCInterface.getOkForSoupStep2())))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step2_r1_WaitingForTemperature();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step2_r1_WaitingForTemperatureDone_default();
 			} else {
@@ -3868,7 +3913,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[7]) && (((sCInterface.getOkForCoffeeStep2() || sCInterface.getOkForTeaStep2()) || sCInterface.getOkForExpressoStep2())))) {
+			if (((timeEvents[8]) && (((sCInterface.getOkForCoffeeStep2() || sCInterface.getOkForTeaStep2()) || sCInterface.getOkForExpressoStep2())))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step2_r2_CupPositionning();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step2_r2_CupPositionningDone_default();
 			} else {
@@ -3896,7 +3941,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[8]) && (sCInterface.getOkForExpressoStep2()))) {
+			if (((timeEvents[9]) && (sCInterface.getOkForExpressoStep2()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step2_r3_GrainTamping();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step2_r3_GrainTampingDone_default();
 			} else {
@@ -3910,7 +3955,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[9]) && (sCInterface.getOkForSoupStep2()))) {
+			if (((timeEvents[10]) && (sCInterface.getOkForSoupStep2()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step2_r4_SoupPodPouring();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step2_r4_SoupPodPouringDone_default();
 			} else {
@@ -3938,7 +3983,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[10]) && (sCInterface.getOkForSoupStep3()))) {
+			if (((timeEvents[11]) && (sCInterface.getOkForSoupStep2()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step2_r5_SpicingTheDrink();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step2_r5_SpicingTheDrinkDone_default();
 				order_part_Preparation_DrinkMaking_Step2_react(false);
@@ -3985,7 +4030,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[11]) && (((sCInterface.getOkForCoffeeStep3() || sCInterface.getOkForTeaStep3()) || sCInterface.getOkForExpressoStep3())))) {
+			if (((timeEvents[12]) && (((sCInterface.getOkForCoffeeStep3() || sCInterface.getOkForTeaStep3()) || sCInterface.getOkForExpressoStep3())))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrink();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step3_r1_SugarTheDrinkDone_default();
 			} else {
@@ -3999,15 +4044,15 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if ((sCInterface.getReadyToDeliver() && isStateActive(State.order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone))) {
+			if ((sCInterface.getReadyToDeliver() && isStateActive(State.order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step3();
 				react_Order_part_Preparation_DrinkMaking__sync1();
 			} else {
-				if ((sCInterface.getReadyToDeliver() && isStateActive(State.order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone))) {
+				if ((sCInterface.getReadyToDeliver() && isStateActive(State.order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone))) {
 					exitSequence_Order_part_Preparation_DrinkMaking_Step3();
 					react_Order_part_Preparation_DrinkMaking__sync7();
 				} else {
-					if ((sCInterface.getOkForTeaStep4() && isStateActive(State.order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone))) {
+					if ((sCInterface.getOkForTeaStep4() && isStateActive(State.order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone))) {
 						exitSequence_Order_part_Preparation_DrinkMaking_Step3();
 						react_Order_part_Preparation_DrinkMaking__sync8();
 					} else {
@@ -4019,13 +4064,13 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		return did_transition;
 	}
 	
-	private boolean order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize_react(boolean try_transition) {
+	private boolean order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[12]) && ((sCInterface.getOkForCoffeeStep3() || sCInterface.getOkForTeaStep3())))) {
-				exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSize();
-				enterSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone_default();
+			if (((timeEvents[13]) && (((sCInterface.getOkForCoffeeStep3() || sCInterface.getOkForTeaStep3()) || sCInterface.getOkForSoupStep3())))) {
+				exitSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSize();
+				enterSequence_Order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone_default();
 			} else {
 				did_transition = false;
 			}
@@ -4033,7 +4078,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		return did_transition;
 	}
 	
-	private boolean order_part_Preparation_DrinkMaking_Step3_r2_PooringWaterForSizeDone_react(boolean try_transition) {
+	private boolean order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
@@ -4045,20 +4090,25 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 					exitSequence_Order_part_Preparation_DrinkMaking_Step3();
 					react_Order_part_Preparation_DrinkMaking__sync8();
 				} else {
-					did_transition = false;
+					if ((isStateActive(State.order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutonsDone) && sCInterface.getReadyToDeliver())) {
+						exitSequence_Order_part_Preparation_DrinkMaking_Step3();
+						react_Order_part_Preparation_DrinkMaking__sync11();
+					} else {
+						did_transition = false;
+					}
 				}
 			}
 		}
 		return did_transition;
 	}
 	
-	private boolean order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime_react(boolean try_transition) {
+	private boolean order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[13]) && (sCInterface.getOkForExpressoStep3()))) {
-				exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTime();
-				enterSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone_default();
+			if (((timeEvents[14]) && (sCInterface.getOkForExpressoStep3()))) {
+				exitSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTime();
+				enterSequence_Order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone_default();
 			} else {
 				did_transition = false;
 			}
@@ -4066,7 +4116,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		return did_transition;
 	}
 	
-	private boolean order_part_Preparation_DrinkMaking_Step3_r3_PooringWaterForTimeDone_react(boolean try_transition) {
+	private boolean order_part_Preparation_DrinkMaking_Step3_r3_PouringWaterForTimeDone_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
@@ -4084,7 +4134,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[14]) && (sCInterface.getOkForSoupStep3()))) {
+			if (((timeEvents[15]) && (sCInterface.getOkForSoupStep3()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutons();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step3_Option_AddingCroutonsDone_default();
 				order_part_Preparation_DrinkMaking_Step3_react(false);
@@ -4102,7 +4152,12 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			did_transition = false;
+			if ((sCInterface.getReadyToDeliver() && isStateActive(State.order_part_Preparation_DrinkMaking_Step3_r2_PouringWaterForSizeDone))) {
+				exitSequence_Order_part_Preparation_DrinkMaking_Step3();
+				react_Order_part_Preparation_DrinkMaking__sync11();
+			} else {
+				did_transition = false;
+			}
 		}
 		if (did_transition==false) {
 			did_transition = order_part_Preparation_DrinkMaking_Step3_react(try_transition);
@@ -4140,7 +4195,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[15]) && (sCInterface.getOkForCoffeeStep1()))) {
+			if (((timeEvents[16]) && (sCInterface.getOkForCoffeeStep1()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step1_r1_PodPositionning();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step1_r1_PodPositionningDone_default();
 			} else {
@@ -4183,7 +4238,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[16]) && (((sCInterface.getOkForCoffeeStep1() || sCInterface.getOkForTeaStep1()) || sCInterface.getOkForExpressoStep1())))) {
+			if (((timeEvents[17]) && ((((sCInterface.getOkForCoffeeStep1() || sCInterface.getOkForTeaStep1()) || sCInterface.getOkForExpressoStep1()) || sCInterface.getOkForSoupStep1())))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step1_r2_WaterHeating();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step1_r2_WaterHeatingDone_default();
 			} else {
@@ -4211,7 +4266,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[17]) && (sCInterface.getOkForTeaStep1()))) {
+			if (((timeEvents[18]) && (sCInterface.getOkForTeaStep1()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionning();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step1_r3_SachetPositionningDone_default();
 			} else {
@@ -4225,7 +4280,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[18]) && (sCInterface.getOkForExpressoStep1()))) {
+			if (((timeEvents[19]) && (sCInterface.getOkForExpressoStep1()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step1_r4_GrainMashing();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step1_r4_GrainMashingDone_default();
 			} else {
@@ -4253,7 +4308,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[19]) && (sCInterface.getOkForSoupStep1()))) {
+			if (((timeEvents[20]) && (sCInterface.getOkForSoupStep1()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step1_r5_CupPositionning();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step1_r5_CupPositionningDone_default();
 				order_part_Preparation_DrinkMaking_Step1_react(false);
@@ -4300,7 +4355,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[20]) && (sCInterface.getOkForTeaStep4()))) {
+			if (((timeEvents[21]) && (sCInterface.getOkForTeaStep4()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step4_r1_WaitingForInfusion();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step4_r1_WaitingForInfusionDone_default();
 				order_part_Preparation_DrinkMaking_Step4_react(false);
@@ -4348,7 +4403,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[21]) && (sCInterface.getOkForTeaStep5()))) {
+			if (((timeEvents[22]) && (sCInterface.getOkForTeaStep5()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step5_r1_SachetWithdrawal();
 				enterSequence_Order_part_Preparation_DrinkMaking_Step5_r1_SachetWithdrawalDone_default();
 				order_part_Preparation_DrinkMaking_Step5_react(false);
@@ -4389,12 +4444,12 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((timeEvents[22]) && (sCInterface.getMilk()))) {
+			if (((timeEvents[23]) && (sCInterface.getMilk()))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_IceCream();
 				enterSequence_Order_part_Preparation_DrinkMaking_Milk_default();
 				order_part_Preparation_react(false);
 			} else {
-				if (((timeEvents[23]) && (!sCInterface.getMilk()))) {
+				if (((timeEvents[24]) && (!sCInterface.getMilk()))) {
 					exitSequence_Order_part_Preparation_DrinkMaking_IceCream();
 					react_Order_part_Preparation_DrinkMaking__exit_Default();
 				} else {
@@ -4412,7 +4467,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (timeEvents[24]) {
+			if (timeEvents[25]) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Milk();
 				react_Order_part_Preparation_DrinkMaking__exit_Default();
 			} else {

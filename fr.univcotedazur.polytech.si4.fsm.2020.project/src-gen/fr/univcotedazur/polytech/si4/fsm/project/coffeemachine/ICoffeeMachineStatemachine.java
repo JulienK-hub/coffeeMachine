@@ -170,6 +170,10 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public void setMTime(long value);
 		
+		public long getAcTime();
+		
+		public void setAcTime(long value);
+		
 		public boolean getPaymentChecked();
 		
 		public void setPaymentChecked(boolean value);

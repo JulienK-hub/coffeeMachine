@@ -1,7 +1,8 @@
 package drinks;
 
+import preparationSteps.AddingCroutons;
 import preparationSteps.PodPositionning;
-import preparationSteps.PooringWaterForSize;
+import preparationSteps.PouringWaterForSize;
 import preparationSteps.SoupPodPooring;
 import preparationSteps.SpicingTheDrink;
 import preparationSteps.Step;
@@ -14,7 +15,7 @@ public class Soup extends Drink {
 		Step[][] steps = {
 				{new PodPositionning(), new WaterHeating()}, // 15 000 ms
 				{new SoupPodPooring(), new WaitingForTemperature(), new SpicingTheDrink()}, // 10 000 ms
-				{new PooringWaterForSize()} // 5 000 ms
+				{new PouringWaterForSize(), new AddingCroutons()} // 5 000 ms
 		};
 		this.setStepsList(steps);
 	}
