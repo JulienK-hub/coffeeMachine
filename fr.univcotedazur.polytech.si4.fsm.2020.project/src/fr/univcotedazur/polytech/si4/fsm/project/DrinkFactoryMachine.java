@@ -411,9 +411,9 @@ public class DrinkFactoryMachine extends JFrame {
 		// listeners 
 		
 		
-		addCupButton.addMouseListener(new MouseAdapter() {
+		addCupButton.addActionListener(new ActionListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				theFSM.raiseAddCup();
 				if(addCupButton.getText().equals("Add cup")) {
 					try {
@@ -1281,6 +1281,7 @@ public class DrinkFactoryMachine extends JFrame {
 		nfcBiiiipButton.setEnabled(true);
 		cancelButton.setEnabled(true);
 		nfcTextField.setEnabled(true);
+		addCupButton.setEnabled(true);
 	}
 
 	
