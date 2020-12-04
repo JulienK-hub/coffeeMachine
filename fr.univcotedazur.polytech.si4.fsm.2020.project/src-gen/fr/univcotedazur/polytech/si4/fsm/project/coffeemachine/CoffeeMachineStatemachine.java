@@ -85,6 +85,15 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			}
 		}
 		
+		private boolean addCup;
+		
+		
+		public void raiseAddCup() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				addCup = true;
+			}
+		}
+		
 		private boolean nFC;
 		
 		
@@ -773,6 +782,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			addCoin = false;
 			notEnough = false;
 			cancel = false;
+			addCup = false;
 			nFC = false;
 		}
 		protected void clearOutEvents() {
@@ -1323,6 +1333,10 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		sCInterface.raiseCancel();
 	}
 	
+	public synchronized void raiseAddCup() {
+		sCInterface.raiseAddCup();
+	}
+	
 	public synchronized void raiseNFC() {
 		sCInterface.raiseNFC();
 	}
@@ -1675,7 +1689,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	/* Entry action for state 'ActionDetected'. */
 	private void entryAction_Order_part_Rdy_for_order_NoActionDetection_ActionDetected() {
-		timer.setTimer(this, 0, 10000, false);
+		timer.setTimer(this, 0, 45000, false);
 	}
 	
 	/* Entry action for state 'DrinkSelected'. */
@@ -3595,7 +3609,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if ((sCInterface.sliderModified || (sCInterface.drinkSelectionDone || (sCInterface.optionSelection || (sCInterface.nFC || (sCInterface.addCoin || sCInterface.cancel)))))) {
+			if ((sCInterface.sliderModified || (sCInterface.drinkSelectionDone || (sCInterface.optionSelection || (sCInterface.nFC || (sCInterface.addCoin || (sCInterface.cancel || sCInterface.addCup))))))) {
 				exitSequence_Order_part_Rdy_for_order_NoActionDetection_NoActionDetected();
 				enterSequence_Order_part_Rdy_for_order_NoActionDetection_ActionDetected_default();
 			} else {
@@ -3615,7 +3629,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 				
 				enterSequence_Order_part_Rdy_for_order_NoActionDetection_NoActionDetected_default();
 			} else {
-				if ((sCInterface.sliderModified || (sCInterface.drinkSelectionDone || (sCInterface.optionSelection || (sCInterface.nFC || (sCInterface.addCoin || sCInterface.cancel)))))) {
+				if ((sCInterface.sliderModified || (sCInterface.drinkSelectionDone || (sCInterface.optionSelection || (sCInterface.nFC || (sCInterface.addCoin || (sCInterface.cancel || sCInterface.addCup))))))) {
 					exitSequence_Order_part_Rdy_for_order_NoActionDetection_ActionDetected();
 					enterSequence_Order_part_Rdy_for_order_NoActionDetection_ActionDetected_default();
 				} else {

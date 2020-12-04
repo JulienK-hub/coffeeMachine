@@ -2,6 +2,6 @@ package preparationSteps;
 
 public class SpicingTheDrink extends Step{
 	public SpicingTheDrink() {
-		super("SpicingTheDrink,",500);
+		super("SpicingTheDrink",500);
 	}
 }

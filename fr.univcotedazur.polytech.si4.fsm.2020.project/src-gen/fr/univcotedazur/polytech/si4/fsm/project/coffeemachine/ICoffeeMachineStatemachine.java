@@ -24,6 +24,8 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public void raiseCancel();
 		
+		public void raiseAddCup();
+		
 		public void raiseNFC();
 		
 		public boolean isRaisedDoPrepareForNextOrder();
