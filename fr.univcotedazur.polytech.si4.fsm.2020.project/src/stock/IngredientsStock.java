@@ -8,15 +8,15 @@ public class IngredientsStock {
 	private Map<Ingredient, Integer> ingredients = new EnumMap<>(Ingredient.class);
 	
 	public IngredientsStock(){
-		this.ingredients.put(Ingredient.COOFFEEPOD, 1);
-		this.ingredients.put(Ingredient.EXPRESSOGRAINDOSE, 0);
+		this.ingredients.put(Ingredient.COOFFEEPOD, 100);
+		this.ingredients.put(Ingredient.EXPRESSOGRAINDOSE, 1);
 		this.ingredients.put(Ingredient.TEASACHET, 100);
-		this.ingredients.put(Ingredient.SOUPPOD, 1);
-		this.ingredients.put(Ingredient.SUGAR, 4);
+		this.ingredients.put(Ingredient.SOUPPOD, 100);
+		this.ingredients.put(Ingredient.SUGAR, 100);
 		this.ingredients.put(Ingredient.MILKDOSE, 100);
 		this.ingredients.put(Ingredient.MAPLESYRUPDOSE, 100);
 		this.ingredients.put(Ingredient.VANILLAICECREAMDOSE, 100);
-		this.ingredients.put(Ingredient.SPICEDOSE, 4);
+		this.ingredients.put(Ingredient.SPICEDOSE, 100);
 		this.ingredients.put(Ingredient.CROUTONDOSE, 100);
 
 	}

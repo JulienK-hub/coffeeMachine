@@ -1189,9 +1189,6 @@ public class DrinkFactoryMachine extends JFrame {
 		
 	}
 	
-	protected void doWaitForRecuparation() {
-		
-	}
 
 	protected void doPrepareForNextOrderRaised() {
 		messagesToUser.setText("<html>Bonjour <br>veuillez choisir <br> une boisson!");
