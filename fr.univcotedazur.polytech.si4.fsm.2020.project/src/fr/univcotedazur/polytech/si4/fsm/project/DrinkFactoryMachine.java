@@ -805,15 +805,13 @@ public class DrinkFactoryMachine extends JFrame {
 		Step waitingForInfusion = actualDrink.getStep("WaitingForInfusion");
 		
 		if (waterHeating != null) {
-			int coef = 5; // coefficient pour augmenter/diminuer le temps de chauffage de l'eau
-			waterHeating.addTimeToMake((temperatureSlider.getValue() - 2)*coef *1000);
+			waterHeating.addTimeToMake((temperatureSlider.getValue() - 2)*5 *1000);
 			waterHeating.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*waterHeating.getTimeToMake())); 
 			// si le slider size est sur 0 (= la boisson est deux fois plus petite que celle de base médium), le temps de chauffage de l'eau est aussi deux fois plus petit
 			// si le slider size est sur 2 (= la boisson est deux fois plus grande que celle de base médium), le temps de chauffage de l'eau est aussi deux fois plus grand
 		}
 		if (waitingForTemperature != null) {
-			int coef = 2; // coefficient pour augmenter/diminuer le temps d'attente
-			waitingForTemperature.addTimeToMake((temperatureSlider.getValue() - 2)*coef *1000); 
+			waitingForTemperature.addTimeToMake((temperatureSlider.getValue() - 2)*2 *1000); 
 			
 			// si la valeur du slider vaut 2 c'est qu'on est au temps par défaut,
 			// si elle faut moins il faut retirer du temps, si elle vaut plus il faut en ajouter d'où le -2 dans le calcul

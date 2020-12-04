@@ -665,7 +665,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelectionWaiting,
 		order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected,
 		order_part_Rdy_for_order_PaymentGestion_PaymentWaiting,
-		order_part_Rdy_for_order_PaymentGestion_PaimentNFC,
 		order_part_Rdy_for_order_PaymentGestion_CheckPayment,
 		order_part_Rdy_for_order_PaymentGestion_paimentChecked,
 		order_part_Preparation,
@@ -816,9 +815,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			case order_part_Rdy_for_order_PaymentGestion_PaymentWaiting:
 				order_part_Rdy_for_order_PaymentGestion_PaymentWaiting_react(true);
 				break;
-			case order_part_Rdy_for_order_PaymentGestion_PaimentNFC:
-				order_part_Rdy_for_order_PaymentGestion_PaimentNFC_react(true);
-				break;
 			case order_part_Rdy_for_order_PaymentGestion_CheckPayment:
 				order_part_Rdy_for_order_PaymentGestion_CheckPayment_react(true);
 				break;
@@ -968,8 +964,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			return stateVector[2] == State.order_part_Rdy_for_order_DrinkSelectionGestion_DrinkSelected;
 		case order_part_Rdy_for_order_PaymentGestion_PaymentWaiting:
 			return stateVector[3] == State.order_part_Rdy_for_order_PaymentGestion_PaymentWaiting;
-		case order_part_Rdy_for_order_PaymentGestion_PaimentNFC:
-			return stateVector[3] == State.order_part_Rdy_for_order_PaymentGestion_PaimentNFC;
 		case order_part_Rdy_for_order_PaymentGestion_CheckPayment:
 			return stateVector[3] == State.order_part_Rdy_for_order_PaymentGestion_CheckPayment;
 		case order_part_Rdy_for_order_PaymentGestion_paimentChecked:
@@ -1638,12 +1632,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		stateVector[3] = State.order_part_Rdy_for_order_PaymentGestion_PaymentWaiting;
 	}
 	
-	/* 'default' enter sequence for state PaimentNFC */
-	private void enterSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC_default() {
-		nextStateIndex = 3;
-		stateVector[3] = State.order_part_Rdy_for_order_PaymentGestion_PaimentNFC;
-	}
-	
 	/* 'default' enter sequence for state CheckPayment */
 	private void enterSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment_default() {
 		entryAction_Order_part_Rdy_for_order_PaymentGestion_CheckPayment();
@@ -2014,12 +2002,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		stateVector[3] = State.$NullState$;
 	}
 	
-	/* Default exit sequence for state PaimentNFC */
-	private void exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC() {
-		nextStateIndex = 3;
-		stateVector[3] = State.$NullState$;
-	}
-	
 	/* Default exit sequence for state CheckPayment */
 	private void exitSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment() {
 		nextStateIndex = 3;
@@ -2366,9 +2348,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		case order_part_Rdy_for_order_PaymentGestion_PaymentWaiting:
 			exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting();
 			break;
-		case order_part_Rdy_for_order_PaymentGestion_PaimentNFC:
-			exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC();
-			break;
 		case order_part_Rdy_for_order_PaymentGestion_CheckPayment:
 			exitSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment();
 			break;
@@ -2433,9 +2412,6 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		switch (stateVector[3]) {
 		case order_part_Rdy_for_order_PaymentGestion_PaymentWaiting:
 			exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting();
-			break;
-		case order_part_Rdy_for_order_PaymentGestion_PaimentNFC:
-			exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC();
 			break;
 		case order_part_Rdy_for_order_PaymentGestion_CheckPayment:
 			exitSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment();
@@ -2989,33 +2965,19 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.nFC) {
+			if (sCInterface.addCoin) {
 				exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting();
-				enterSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC_default();
+				enterSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment_default();
 				order_part_Rdy_for_order_react(false);
 			} else {
-				if (sCInterface.addCoin) {
+				if (sCInterface.nFC) {
 					exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaymentWaiting();
-					enterSequence_Order_part_Rdy_for_order_PaymentGestion_CheckPayment_default();
+					enterSequence_Order_part_Rdy_for_order_PaymentGestion_paimentChecked_default();
 					order_part_Rdy_for_order_react(false);
 				} else {
 					did_transition = false;
 				}
 			}
-		}
-		if (did_transition==false) {
-			did_transition = order_part_Rdy_for_order_react(try_transition);
-		}
-		return did_transition;
-	}
-	
-	private boolean order_part_Rdy_for_order_PaymentGestion_PaimentNFC_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			exitSequence_Order_part_Rdy_for_order_PaymentGestion_PaimentNFC();
-			enterSequence_Order_part_Rdy_for_order_PaymentGestion_paimentChecked_default();
-			order_part_Rdy_for_order_react(false);
 		}
 		if (did_transition==false) {
 			did_transition = order_part_Rdy_for_order_react(try_transition);
