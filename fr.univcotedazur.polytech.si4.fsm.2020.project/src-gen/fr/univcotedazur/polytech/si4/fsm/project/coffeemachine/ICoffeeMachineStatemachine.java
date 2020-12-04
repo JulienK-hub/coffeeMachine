@@ -78,6 +78,10 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public void setOkForTeaStep5(boolean value);
 		
+		public boolean getOkForSoupeStep3();
+		
+		public void setOkForSoupeStep3(boolean value);
+		
 		public boolean getOkForCoffeeStep1();
 		
 		public void setOkForCoffeeStep1(boolean value);
@@ -142,9 +146,25 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public void setSwdTime(long value);
 		
+		public long getIcTime();
+		
+		public void setIcTime(long value);
+		
+		public long getMTime();
+		
+		public void setMTime(long value);
+		
 		public boolean getPaymentChecked();
 		
 		public void setPaymentChecked(boolean value);
+		
+		public boolean getMilk();
+		
+		public void setMilk(boolean value);
+		
+		public boolean getIceCream();
+		
+		public void setIceCream(boolean value);
 		
 	public List<SCInterfaceListener> getListeners();
 	}
