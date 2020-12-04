@@ -57,10 +57,12 @@ public class DrinkFactoryMachine extends JFrame {
 	private final ImageIcon imageIcon = new ImageIcon();
 	private JTextField nfcTextField;
 	private JSlider temperatureSlider,sizeSlider,sugarSlider;
-	private ArrayList<JButton> drinkButtons;
+	private ArrayList<JButton> buttons;
 	private ArrayList<JCheckBox> optionCheckBoxes;
-	JButton coffeeButton, expressoButton, teaButton,soupButton, icedTeaButton,  money50centsButton, money25centsButton, money10centsButton, cancelButton, nfcBiiiipButton, addCupButton;
-	JCheckBox milkBox, mapleSyrupBox, vanillaIceCreamBox;
+	private ArrayList<JSlider> sliders;
+
+	JButton coffeeButton, expressoButton, teaButton,soupButton, money50centsButton, money25centsButton, money10centsButton, cancelButton, nfcBiiiipButton, addCupButton;
+	JCheckBox milkBox, mapleSyrupBox, vanillaIceCreamBox, croutonsBox;
 	
 
 	private int millis;
@@ -73,6 +75,7 @@ public class DrinkFactoryMachine extends JFrame {
 	private Nfc nfcData;
 	private int numberForFreeDrink;
 	private IngredientsStock stock;
+	private String previousChoice;
 
 	
 	/**
@@ -109,6 +112,7 @@ public class DrinkFactoryMachine extends JFrame {
 		Drink expresso = new Expresso();
 		Drink tea = new Tea();
 		Drink soup = new Soup();
+		previousChoice = "";
 		stock = new IngredientsStock();
 		millis = 0;
 		/*secs = 0;
@@ -250,14 +254,9 @@ public class DrinkFactoryMachine extends JFrame {
 			l.setForeground(Color.WHITE);
 		}
 		temperatureSlider.setLabelTable(temperatureTable);
-
 		contentPane.add(temperatureSlider);
 
-		icedTeaButton = new JButton("Iced Tea");
-		icedTeaButton.setForeground(Color.WHITE);
-		icedTeaButton.setBackground(Color.DARK_GRAY);
-		icedTeaButton.setBounds(12, 182, 96, 25);
-		contentPane.add(icedTeaButton);
+		
 		
 		milkBox = new JCheckBox("Milk");
 		milkBox.setForeground(Color.WHITE);
@@ -279,6 +278,13 @@ public class DrinkFactoryMachine extends JFrame {
 		vanillaIceCreamBox.setBounds(126, 195, 150, 25);
 		vanillaIceCreamBox.setEnabled(false);
 		contentPane.add(vanillaIceCreamBox);
+		
+		croutonsBox = new JCheckBox("Croutons");
+		croutonsBox.setForeground(Color.WHITE);
+		croutonsBox.setBackground(Color.DARK_GRAY);
+		croutonsBox.setBounds(126, 220, 150, 25);
+		croutonsBox.setEnabled(false);
+		contentPane.add(croutonsBox);
 		
 
 		lblSugar = new JLabel("Sugar");
@@ -373,15 +379,28 @@ public class DrinkFactoryMachine extends JFrame {
 		panel_2.add(cancelButton);
 		
 		
-		drinkButtons = new ArrayList<>();
-		drinkButtons.add(coffeeButton);
-		drinkButtons.add(expressoButton);
-		drinkButtons.add(teaButton);
+		buttons = new ArrayList<>();
+		buttons.add(coffeeButton);
+		buttons.add(expressoButton);
+		buttons.add(teaButton);
+		buttons.add(money10centsButton);
+		buttons.add(money25centsButton);
+		buttons.add(money50centsButton);
+		buttons.add(nfcBiiiipButton);
+		buttons.add(cancelButton);
+		buttons.add(addCupButton);
+		
 		
 		optionCheckBoxes = new ArrayList<>();
 		optionCheckBoxes.add(milkBox);
 		optionCheckBoxes.add(mapleSyrupBox);
 		optionCheckBoxes.add(vanillaIceCreamBox);
+		
+		sliders = new ArrayList<>();
+		sliders.add(sugarSlider);
+		sliders.add(sizeSlider);
+		sliders.add(temperatureSlider);
+		
 
 
 		
@@ -500,13 +519,17 @@ public class DrinkFactoryMachine extends JFrame {
 
 				if (actualDrink != coffee) { 
 					actualDrink = coffee; 
-					coffeeButton.setBackground(Color.GRAY);   //
-					teaButton.setBackground(Color.DARK_GRAY); // juste pour clairement voir le dernier choix
-					expressoButton.setBackground(Color.DARK_GRAY); //
+					updateDrinkButtonscolor();
+					coffeeButton.setBackground(Color.GRAY);
+					previousChoice = "coffee";
 					
+					croutonsBox.setSelected(false);
 					milkBox.setEnabled(true);
 					mapleSyrupBox.setEnabled(true);            // actualiser les options disponibles pour cette boisson
 					vanillaIceCreamBox.setEnabled(true);
+					croutonsBox.setEnabled(false);
+					lblSugar.setText("Sugar");
+
 
 					calculatePrice();                        // pour recalculer le prix de cette boisson avec les potentielles options choisies lors de la derniere sélection
 					// Exemple : on avait selectionné un café avec l'option glace vanille, puis on clique sur expresso, il faut penser à actualiser le prix total de la boisson avec cette option toujours selectionné
@@ -522,13 +545,16 @@ public class DrinkFactoryMachine extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (actualDrink != expresso) { 
 					actualDrink = expresso;
+					updateDrinkButtonscolor();
 					expressoButton.setBackground(Color.GRAY);
-					coffeeButton.setBackground(Color.DARK_GRAY);
-					teaButton.setBackground(Color.DARK_GRAY);
-
+					previousChoice = "expresso";
+					
+					croutonsBox.setSelected(false);
 					milkBox.setEnabled(true);
 					mapleSyrupBox.setEnabled(true); 
 					vanillaIceCreamBox.setEnabled(true);
+					croutonsBox.setEnabled(false);
+					lblSugar.setText("Sugar");
 
 					calculatePrice();
 
@@ -544,15 +570,18 @@ public class DrinkFactoryMachine extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (actualDrink != tea) { 
 					actualDrink = tea;
+					updateDrinkButtonscolor();
 					teaButton.setBackground(Color.GRAY);
-					expressoButton.setBackground(Color.DARK_GRAY);
-					coffeeButton.setBackground(Color.DARK_GRAY);
+					previousChoice = "tea";
 
+					vanillaIceCreamBox.setSelected(false);
+					croutonsBox.setSelected(false);
 					milkBox.setEnabled(true);
 					mapleSyrupBox.setEnabled(true);
-					vanillaIceCreamBox.setSelected(false);
 					vanillaIceCreamBox.setEnabled(false);
-					
+					croutonsBox.setEnabled(false);
+					lblSugar.setText("Sugar");
+
 					calculatePrice();
 				
 					if (stock.isIngredientInStock(Ingredient.TEASACHET) && enoughIngredientForSugarSlider()) {
@@ -565,15 +594,19 @@ public class DrinkFactoryMachine extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (actualDrink != soup) { 
-					actualDrink = tea;
-					teaButton.setBackground(Color.GRAY);
-					expressoButton.setBackground(Color.DARK_GRAY);
-					coffeeButton.setBackground(Color.DARK_GRAY);
-
-					milkBox.setEnabled(true);
-					mapleSyrupBox.setEnabled(true);
+					actualDrink = soup;
+					updateDrinkButtonscolor();
+					soupButton.setBackground(Color.GRAY);
+					previousChoice = "soup";
+					
+					milkBox.setSelected(false);
+					mapleSyrupBox.setSelected(false);
 					vanillaIceCreamBox.setSelected(false);
+					milkBox.setEnabled(false);
+					mapleSyrupBox.setEnabled(false);
 					vanillaIceCreamBox.setEnabled(false);
+					croutonsBox.setEnabled(true);
+					lblSugar.setText("Spices");
 					
 					calculatePrice();
 				
@@ -613,7 +646,6 @@ public class DrinkFactoryMachine extends JFrame {
 				} else {
 					actualDrink.setPrice(actualDrink.getPrice() - 0.1);
 					lblSugar.setText("Sugar");
-
 				}
 				doCheckPayment();
 			}
@@ -629,7 +661,21 @@ public class DrinkFactoryMachine extends JFrame {
 				} else {
 					actualDrink.setPrice(actualDrink.getPrice() - 0.6);
 					theFSM.setIceCream(false);
-
+				}
+				doCheckPayment();
+			}
+		});
+		
+		croutonsBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				theFSM.raiseOptionSelection();
+				if(croutonsBox.isSelected()) {
+					actualDrink.setPrice(actualDrink.getPrice() + 0.3);
+					// setter l'option croutons à true de la FSM
+				} else {
+					actualDrink.setPrice(actualDrink.getPrice() - 0.3);
+					// setter l'option croutons à false de la FSM
 				}
 				doCheckPayment();
 			}
@@ -668,23 +714,36 @@ public class DrinkFactoryMachine extends JFrame {
 		addCupButton.setEnabled(true);
 	}
 	
+	protected void updateDrinkButtonscolor() {
+		switch(previousChoice) {
+		case "coffee":
+			coffeeButton.setBackground(Color.DARK_GRAY);
+			break;
+		case "expresso":
+			expressoButton.setBackground(Color.DARK_GRAY); 
+			break;
+		case "tea":
+			teaButton.setBackground(Color.DARK_GRAY); 
+			break; 
+		case "soup":
+			soupButton.setBackground(Color.DARK_GRAY);  
+			break;
+		case "":
+			break;
+		}
+	}
+	
 	protected void blockTheUI() {
-		coffeeButton.setEnabled(false);
-		expressoButton.setEnabled(false);
-		teaButton.setEnabled(false);
-		milkBox.setEnabled(false);
-		mapleSyrupBox.setEnabled(false);
-		vanillaIceCreamBox.setEnabled(false);
-		sugarSlider.setEnabled(false);
-		sizeSlider.setEnabled(false);
-		temperatureSlider.setEnabled(false);
-		money50centsButton.setEnabled(false);
-		money25centsButton.setEnabled(false);
-		money10centsButton.setEnabled(false);
-		nfcBiiiipButton.setEnabled(false);
-		cancelButton.setEnabled(false);
+		for(JButton button : buttons) {
+			button.setEnabled(false);
+		}
+		for(JCheckBox optionBox : optionCheckBoxes) {
+			optionBox.setEnabled(false);
+		}
+		for(JSlider slider : sliders) {
+			slider.setEnabled(false);
+		}
 		nfcTextField.setEnabled(false);
-		addCupButton.setEnabled(false);
 	}
 	
 
@@ -1007,6 +1066,22 @@ public class DrinkFactoryMachine extends JFrame {
 			}
 			break;
 			
+		case "soup":
+			switch(actualStepNumber) {
+				case 1:
+					msTimer.start();
+					theFSM.setOkForSoupStep1(true);
+					System.out.println("ok for soup step 1");
+					break;
+				case 2:
+					theFSM.setOkForSoupStep2(true);
+					System.out.println("ok for soup step 2");
+					break;
+				case 3:
+					theFSM.setOkForSoupStep3(true);
+					System.out.println("ok for soup step 3");
+					break;
+			}
 		default:
 			break;
 		}
@@ -1093,6 +1168,7 @@ public class DrinkFactoryMachine extends JFrame {
 		coffeeButton.setEnabled(true);
 		expressoButton.setEnabled(true);
 		teaButton.setEnabled(true);
+		soupButton.setEnabled(false);
 		sugarSlider.setEnabled(true);
 		sizeSlider.setEnabled(true);
 		temperatureSlider.setEnabled(true);

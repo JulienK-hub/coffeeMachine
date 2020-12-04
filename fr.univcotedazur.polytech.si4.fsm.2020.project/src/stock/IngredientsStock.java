@@ -15,6 +15,9 @@ public class IngredientsStock {
 		this.ingredients.put(Ingredient.MILKDOSE, 100);
 		this.ingredients.put(Ingredient.MAPLESYRUPDOSE, 100);
 		this.ingredients.put(Ingredient.VANILLAICECREAMDOSE, 100);
+		this.ingredients.put(Ingredient.SPICEDOSE, 4);
+		this.ingredients.put(Ingredient.CROUTONDOSE, 100);
+
 	}
 	
 	public Map<Ingredient, Integer> getIngredients() {
