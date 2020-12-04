@@ -34,6 +34,8 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import drinks.*;
 import fr.univcotedazur.polytech.si4.fsm.project.NFC.Nfc;
@@ -382,15 +384,45 @@ public class DrinkFactoryMachine extends JFrame {
 
 
 		
+	
+		// listeners 
 		
-
-		// listeners
+		
 		addCupButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				theFSM.raiseRemoveCup();
 			}
 		});
+		
+		// sliders listeners 
+		
+		sugarSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				theFSM.raiseSliderModified();
+				
+			}
+		});
+		
+		sizeSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				theFSM.raiseSliderModified();
+				
+			}
+		});
+		
+		sugarSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				theFSM.raiseSliderModified();
+				
+			}
+		});
+		
+		
+		// NFC button listener
 		
 		nfcBiiiipButton.addActionListener(new ActionListener() {
 			@Override
@@ -424,6 +456,8 @@ public class DrinkFactoryMachine extends JFrame {
 			}
 		});
 		
+		// Cancel button listener
+		
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -455,7 +489,7 @@ public class DrinkFactoryMachine extends JFrame {
 			}
 		});
 		
-		// Drinks buttons
+		// Drink buttons listeners
 		
 		coffeeButton.addActionListener(new ActionListener() {
 			@Override
@@ -528,7 +562,7 @@ public class DrinkFactoryMachine extends JFrame {
 		});
 		
 		
-		// Options checkboxes
+		// Option checkboxes listeners
 		
 		milkBox.addActionListener(new ActionListener() {
 			@Override
@@ -656,9 +690,9 @@ public class DrinkFactoryMachine extends JFrame {
 	protected void doCheckPayment() { // methode appelée dès que l'on met des pieces ou selectionne une boisson
 		if(actualDrink != null) { // si on a choisi la boisson et que l'on met des pieces
 			leftToPay = round(actualDrink.getPrice()-coinsEntered, 2);
-			if(leftToPay > 0) {
+			if(leftToPay > 0) { // le paiement n'est pas validé
 				messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> il manque " + leftToPay + "<html> €." );	
-			} else {
+			} else { // la transaction est validée, la préparation commence
 				if (leftToPay < 0 ) {
 					leftToPay=-leftToPay;
 					messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> veuillez récuperer les " + leftToPay + "<html> € de trop." );	
@@ -667,9 +701,9 @@ public class DrinkFactoryMachine extends JFrame {
 				}
 				theFSM.setPaymentChecked(true);
 				actualDrink = actualDrink.getCopy(); //donne une copie afin de pouvoir y modifier les données sans crainte pour les commandes suivantes
-				adaptDrinkToSliders();
-				consumeIngredientsFromStock();
-				blockTheUI();
+				adaptDrinkToSliders(); // on modifie les temps de préparation en fonction des valeurs des sliders 
+				consumeIngredientsFromStock(); // on met à jour le stock d'ingrédients
+				blockTheUI(); // on rend impossible toute interaction avec la coffee machine pendant le temps de la préparation de la boisson
 			}
 		} else { // si la boisson n'est pas encore choisie, mais que l'on met d'abord des pièces
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €.");
@@ -1046,9 +1080,8 @@ public class DrinkFactoryMachine extends JFrame {
 		milkBox.setEnabled(false); // on rend les options incochables (tant que pas de boisson selectionnée)
 		mapleSyrupBox.setEnabled(false);
 		vanillaIceCreamBox.setEnabled(false);
-		sugarSlider.setValue(1); // on réinitialise les sliders 
-		sizeSlider.setValue(1);
-		temperatureSlider.setValue(2);
+		doResetSliders();
+		
 		if(coinsEntered > 0) {
 			messagesToUser.setText("<html>Abandon, <br> recuperez vos <br> " + coinsEntered + " €");
 		}
