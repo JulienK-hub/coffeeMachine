@@ -515,7 +515,7 @@ public class DrinkFactoryMachine extends JFrame {
 		
 		if (waitingForTemperature != null) {
 			int coef = 2; // coefficient pour augmenter/diminuer le temps d'attente
-			waitingForTemperature.addTimeToMake((temperatureSlider.getValue() - 2)*coef *1000); 
+			waitingForTemperature.addTimeToMake((temperatureSlider.getValue() - 2)*coef *1000);
 			
 			// si la valeur du slider vaut 2 c'est qu'on est au temps par défaut,
 			// si elle faut moins il faut retirer du temps, si elle vaut plus il faut en ajouter d'où le -2 dans le calcul
