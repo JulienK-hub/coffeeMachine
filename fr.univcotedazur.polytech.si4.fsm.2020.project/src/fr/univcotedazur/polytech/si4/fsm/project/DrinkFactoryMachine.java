@@ -1031,7 +1031,9 @@ public class DrinkFactoryMachine extends JFrame {
 		switch(actualDrink.getName()) {
 		case "coffee":
 			switch(actualStepNumber) {
-				case 1:
+				case 1:					
+					actualDrink.updateTotalTimeTomake();
+					checkOptions();
 					msTimer.start();
 					theFSM.setOkForCoffeeStep1(true);
 					System.out.println("ok for coffee step 1");
@@ -1052,6 +1054,8 @@ public class DrinkFactoryMachine extends JFrame {
 		case "expresso":
 			switch(actualStepNumber) {
 				case 1:
+					actualDrink.updateTotalTimeTomake();
+					checkOptions();
 					msTimer.start();
 					theFSM.setOkForExpressoStep1(true);
 					System.out.println("ok for expresso step 1");
@@ -1072,6 +1076,8 @@ public class DrinkFactoryMachine extends JFrame {
 		case "tea":
 			switch(actualStepNumber) {
 				case 1:
+					actualDrink.updateTotalTimeTomake();
+					checkOptions();
 					msTimer.start();
 					theFSM.setOkForTeaStep1(true);
 					System.out.println("ok for tea step 1");
@@ -1100,6 +1106,10 @@ public class DrinkFactoryMachine extends JFrame {
 		case "soup":
 			switch(actualStepNumber) {
 				case 1:
+					actualDrink.updateTotalTimeTomake();
+					if(croutonsBox.isSelected()) {
+						actualDrink.addTimeToMake(3000);
+					}
 					msTimer.start();
 					theFSM.setOkForSoupStep1(true);
 					System.out.println("ok for soup step 1");
@@ -1118,6 +1128,16 @@ public class DrinkFactoryMachine extends JFrame {
 		default:
 			break;
 		}
+	}
+
+	private void checkOptions() {
+		if(milkBox.isSelected()) {
+			actualDrink.addTimeToMake(2000);
+		}
+		if(vanillaIceCreamBox.isSelected()) {
+			actualDrink.addTimeToMake(4000);
+		}
+		
 	}
 
 	protected void doPrepareForNextOrderRaised() {

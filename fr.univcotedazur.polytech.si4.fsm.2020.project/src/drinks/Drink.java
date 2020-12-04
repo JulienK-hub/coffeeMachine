@@ -65,4 +65,19 @@ public class Drink {
 	public Drink getCopy() {
 		return new Drink(name,timeToMake,price,stepsList);
 	}
+
+	public void addTimeToMake(int i) {
+		timeToMake+= i;
+		
+	}
+
+	public void updateTotalTimeTomake() {
+		int timeToMake =0;
+		for(int i =0; i < stepsList.length; i++) {
+			for (int j = 0; j < stepsList[i].length; j++) {
+				timeToMake += stepsList[i][j].getTimeToMake();
+			}
+		}
+		this.timeToMake =timeToMake;
+	}
 }

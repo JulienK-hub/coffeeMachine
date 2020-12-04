@@ -930,7 +930,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		
 		sCInterface.setSppTime(2000);
 		
-		sCInterface.setSpicingTime(2000);
+		sCInterface.setSpicingTime(500);
 		
 		sCInterface.setIcTime(4000);
 		
