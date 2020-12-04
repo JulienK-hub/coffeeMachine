@@ -1,0 +1,12 @@
+DrinkSelectedWaiting = (drinkSelectionDone ->DrinkSelected ),
+DrinkSelected = ( noActionFor45sec -> DrinkSelectedWaiting | drinkSelectionDone ->DrinkSelected).
+
+PaymentGestion = (nfc -> PaimentChecked 
+| addCoin -> CheckPaiment),
+CheckPaiment = (noActionFor45sec ->PaymentGestion | paymentChecked -> PaimentChecked | addCoin -> CheckPaiment),
+PaimentChecked = (noActionFor45sec -> PaymentGestion).
+
+Mutex = (drinkSelectionDone -> noActionFor45sec ->Mutex | {addCoin,nfc} -> paymentChecked -> noActionFor45sec -> Mutex ).
+
+assert Prop1 = [] (drinkSelectionDone -> (<> paymentChecked ))
+assert Prop2 = [] (paymentChecked -> (<> drinkSelectionDone ))

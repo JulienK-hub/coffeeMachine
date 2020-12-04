@@ -792,6 +792,9 @@ public class DrinkFactoryMachine extends JFrame {
 					messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €, <br> Le compte est bon." );	
 				}
 				theFSM.setPaymentChecked(true);
+				if(addcup) {
+					actualDrink.getStep("CupPositioning").setTimeToMake(0);
+				}
 				actualDrink = actualDrink.getCopy(); //donne une copie afin de pouvoir y modifier les données sans crainte pour les commandes suivantes
 				adaptDrinkToSliders(); // on modifie les temps de préparation en fonction des valeurs des sliders 
 				consumeIngredientsFromStock(); // on met à jour le stock d'ingrédients
