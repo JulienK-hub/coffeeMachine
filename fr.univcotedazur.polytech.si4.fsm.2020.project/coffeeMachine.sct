@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_bVrh0AoMEeuFz9C3JgGwmA" specification="@CycleBased(200)&#xA;// Use the event driven execution model.&#xA;// Runs a run-to-completion step&#xA;// each time an event is raised.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'&#xA;// instead.&#xA;&#xA;@ChildFirstExecution&#xA;// In composite states, execute&#xA;// child states first.&#xA;// @ParentFirstExecution does the opposite.&#xA;interface:&#xA;// Define events&#xA;// and variables here. &#xA;// Use CTRL + Space for content assist.&#xA;&#xA;in event orderDelivered&#xA;in event sliderModified&#xA;in event removeCup&#xA;in event drinkSelectionDone&#xA;in event optionSelection&#xA;in event addCoin&#xA;in event notEnough&#xA;in event cancel&#xA;in event NFC&#xA;&#xA;var okForExpressoStep1 : boolean&#xA;var okForExpressoStep2 : boolean&#xA;var okForExpressoStep3 : boolean&#xA;var okForTeaStep1 : boolean&#xA;var okForTeaStep2 : boolean&#xA;var okForTeaStep3 : boolean&#xA;var okForTeaStep4 : boolean&#xA;var okForTeaStep5 : boolean&#xA;var okForSoupeStep3: boolean&#xA;var okForCoffeeStep1: boolean&#xA;var okForCoffeeStep2:boolean&#xA;var okForCoffeeStep3: boolean&#xA;var readyToDeliver: boolean&#xA;var wftTime: integer = 10000&#xA;var cpTime:integer = 1000&#xA;var stdTime: integer = 500&#xA;var pwfsTime: integer = 5000&#xA;var pwftTime: integer = 3000&#xA;var ppTime:integer = 1000&#xA;var whTime: integer = 15000&#xA;var gmTime: integer = 6000&#xA;var spTime: integer =1000&#xA;var gtTime: integer =4000&#xA;var wfiTime: integer = 15000&#xA;var swdTime: integer = 2000&#xA;var icTime: integer = 4000&#xA;var mTime: integer = 2000&#xA;&#xA;out event doPrepareForNextOrder&#xA;out event doResetOperation&#xA;out event doResetDrinkSelected&#xA;out event doResetPayment&#xA;out event doCheckPayment&#xA;out event doResetSliders&#xA;out event doWaitForRecuperation&#xA;out event noActionFor45sec&#xA;out event doNextPreparationStep&#xA;out event doPrintNextStep&#xA;&#xA;var paymentChecked: boolean&#xA;var milk: boolean&#xA;var iceCream: boolean&#xA;" name="coffeeMachine">
+  <sgraph:Statechart xmi:id="_bVrh0AoMEeuFz9C3JgGwmA" specification="@CycleBased(200)&#xA;// Use the event driven execution model.&#xA;// Runs a run-to-completion step&#xA;// each time an event is raised.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'&#xA;// instead.&#xA;&#xA;@ChildFirstExecution&#xA;// In composite states, execute&#xA;// child states first.&#xA;// @ParentFirstExecution does the opposite.&#xA;interface:&#xA;// Define events&#xA;// and variables here. &#xA;// Use CTRL + Space for content assist.&#xA;&#xA;in event orderDelivered&#xA;in event sliderModified&#xA;in event removeCup&#xA;in event drinkSelectionDone&#xA;in event optionSelection&#xA;in event addCoin&#xA;in event notEnough&#xA;in event cancel&#xA;in event NFC&#xA;&#xA;var okForExpressoStep1 : boolean&#xA;var okForExpressoStep2 : boolean&#xA;var okForExpressoStep3 : boolean&#xA;var okForTeaStep1 : boolean&#xA;var okForTeaStep2 : boolean&#xA;var okForTeaStep3 : boolean&#xA;var okForTeaStep4 : boolean&#xA;var okForTeaStep5 : boolean&#xA;var okForSoupeStep3: boolean&#xA;var okForCoffeeStep1: boolean&#xA;var okForCoffeeStep2:boolean&#xA;var okForCoffeeStep3: boolean&#xA;var okForSoupStep1:boolean&#xA;var okForSoupStep2:boolean&#xA;var okForSoupStep3:boolean&#xA;var readyToDeliver: boolean&#xA;var wftTime: integer = 10000&#xA;var cpTime:integer = 1000&#xA;var stdTime: integer = 500&#xA;var pwfsTime: integer = 5000&#xA;var pwftTime: integer = 3000&#xA;var ppTime:integer = 1000&#xA;var whTime: integer = 15000&#xA;var gmTime: integer = 6000&#xA;var spTime: integer =1000&#xA;var gtTime: integer =4000&#xA;var wfiTime: integer = 15000&#xA;var swdTime: integer = 2000&#xA;var icTime: integer = 4000&#xA;var mTime: integer = 2000&#xA;&#xA;out event doPrepareForNextOrder&#xA;out event doResetOperation&#xA;out event doResetDrinkSelected&#xA;out event doResetPayment&#xA;out event doCheckPayment&#xA;out event doResetSliders&#xA;out event doWaitForRecuperation&#xA;out event noActionFor45sec&#xA;out event doNextPreparationStep&#xA;out event doPrintNextStep&#xA;&#xA;var paymentChecked: boolean&#xA;var milk: boolean&#xA;var iceCream: boolean&#xA;" name="coffeeMachine">
     <regions xmi:id="_bWbIsAoMEeuFz9C3JgGwmA" name="Order part">
       <vertices xsi:type="sgraph:Entry" xmi:id="_bYI_8AoMEeuFz9C3JgGwmA">
         <outgoingTransitions xmi:id="_a9OzUAoREeuFz9C3JgGwmA" specification="" target="_aT2xEAoPEeuFz9C3JgGwmA"/>
@@ -169,7 +169,7 @@
           <vertices xsi:type="sgraph:State" xmi:id="_-XQwQCUeEeu0H5VBgYy2Qg" name="Step1" incomingTransitions="_asiWUBUREeuaFKOqZcYjIg _6uKN0BUTEeuaFKOqZcYjIg _tgwu4CZrEeunGa3z34V7Vg">
             <regions xmi:id="_-XRXUCUeEeu0H5VBgYy2Qg" name="r1">
               <vertices xsi:type="sgraph:State" xmi:id="_o_VsQDY8EeuoCcJrKcWfsA" specification="entry/raise doNextPreparationStep&#x9;" name="PodPositionningDone" incomingTransitions="_o_VFMDY8EeuoCcJrKcWfsA">
-                <outgoingTransitions xmi:id="_o_WTUDY8EeuoCcJrKcWfsA" specification="" target="_rrGhMyUgEeu0H5VBgYy2Qg"/>
+                <outgoingTransitions xmi:id="_o_WTUDY8EeuoCcJrKcWfsA" specification="[okForCoffeeStep2]" target="_rrGhMyUgEeu0H5VBgYy2Qg"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_VG4GXCUgEeu0H5VBgYy2Qg" specification="entry/raise doPrintNextStep" name="PodPositionning" incomingTransitions="_kEi_gCUgEeu0H5VBgYy2Qg">
                 <outgoingTransitions xmi:id="_o_VFMDY8EeuoCcJrKcWfsA" specification="after ppTime ms [okForCoffeeStep1]" target="_o_VsQDY8EeuoCcJrKcWfsA"/>
@@ -274,7 +274,6 @@
             <outgoingTransitions xmi:id="_QSBlUDY5EeuoCcJrKcWfsA" specification="[milk &amp;&amp; !iceCream]" target="_dwXPPDY4EeuoCcJrKcWfsA"/>
             <outgoingTransitions xmi:id="_YZro8DY5EeuoCcJrKcWfsA" specification="" target="_JlZSYBUVEeuaFKOqZcYjIg"/>
           </vertices>
-          <vertices xsi:type="sgraph:Synchronization" xmi:id="_GnsRMDY9EeuoCcJrKcWfsA"/>
         </regions>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_OnAyoAoTEeuFz9C3JgGwmA" specification="entry/ raise doWaitForRecuperation" name="waitingForRecuperation" incomingTransitions="_P3DeMAoTEeuFz9C3JgGwmA">
@@ -1495,9 +1494,6 @@
                 <children xsi:type="notation:Shape" xmi:id="_KyaiADY5EeuoCcJrKcWfsA" type="Choice" element="_KyZ68DY5EeuoCcJrKcWfsA" fontName="Verdana" lineColor="4210752">
                   <layoutConstraint xsi:type="notation:Bounds" xmi:id="_KyaiATY5EeuoCcJrKcWfsA" x="472" y="1216" width="85" height="84"/>
                 </children>
-                <children xsi:type="notation:Shape" xmi:id="_GnvUgDY9EeuoCcJrKcWfsA" type="Synchronization" element="_GnsRMDY9EeuoCcJrKcWfsA" fontName="Verdana" lineColor="4210752">
-                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_GnvUgTY9EeuoCcJrKcWfsA" x="1160" y="1168" width="97" height="8"/>
-                </children>
                 <layoutConstraint xsi:type="notation:Bounds" xmi:id="_jXa-xDY4EeuoCcJrKcWfsA"/>
               </children>
               <styles xsi:type="notation:ShapeStyle" xmi:id="_jXa-xTY4EeuoCcJrKcWfsA" fontName="Verdana" fillColor="16448250" lineColor="12632256"/>
@@ -2493,7 +2489,7 @@
     <edges xmi:id="_cwxlADY5EeuoCcJrKcWfsA" type="Transition" element="_cww98DY5EeuoCcJrKcWfsA" source="_jXa-rDY4EeuoCcJrKcWfsA" target="_jXa-uDY4EeuoCcJrKcWfsA">
       <children xsi:type="notation:DecorationNode" xmi:id="_cwxlBDY5EeuoCcJrKcWfsA" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_cwxlBTY5EeuoCcJrKcWfsA"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_cwxlBjY5EeuoCcJrKcWfsA" x="10" y="-20"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_cwxlBjY5EeuoCcJrKcWfsA" x="59" y="-33"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_cwxlATY5EeuoCcJrKcWfsA" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_cwxlAzY5EeuoCcJrKcWfsA" fontName="Verdana"/>

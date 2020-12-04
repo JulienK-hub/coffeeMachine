@@ -108,6 +108,7 @@ public class DrinkFactoryMachine extends JFrame {
 		Drink coffee = new Coffee();
 		Drink expresso = new Expresso();
 		Drink tea = new Tea();
+		Drink soup = new Soup();
 		stock = new IngredientsStock();
 		millis = 0;
 		/*secs = 0;
@@ -560,6 +561,28 @@ public class DrinkFactoryMachine extends JFrame {
 				}
 			}
 		});
+		soupButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (actualDrink != soup) { 
+					actualDrink = tea;
+					teaButton.setBackground(Color.GRAY);
+					expressoButton.setBackground(Color.DARK_GRAY);
+					coffeeButton.setBackground(Color.DARK_GRAY);
+
+					milkBox.setEnabled(true);
+					mapleSyrupBox.setEnabled(true);
+					vanillaIceCreamBox.setSelected(false);
+					vanillaIceCreamBox.setEnabled(false);
+					
+					calculatePrice();
+				
+					if (stock.isIngredientInStock(Ingredient.TEASACHET) && enoughIngredientForSugarSlider()) {
+						theFSM.raiseDrinkSelectionDone();
+					}
+				}
+			}
+		});
 		
 		
 		// Option checkboxes listeners
@@ -568,10 +591,13 @@ public class DrinkFactoryMachine extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				theFSM.raiseOptionSelection();
+				
 				if(milkBox.isSelected()) {
 					actualDrink.setPrice(actualDrink.getPrice() + 0.1);
+					theFSM.setMilk(true);
 				} else {
 					actualDrink.setPrice(actualDrink.getPrice() - 0.1);
+					theFSM.setMilk(false);
 				}
 				doCheckPayment();
 			}
@@ -599,8 +625,11 @@ public class DrinkFactoryMachine extends JFrame {
 				theFSM.raiseOptionSelection();
 				if(vanillaIceCreamBox.isSelected()) {
 					actualDrink.setPrice(actualDrink.getPrice() + 0.6);
+					theFSM.setIceCream(true);
 				} else {
 					actualDrink.setPrice(actualDrink.getPrice() - 0.6);
+					theFSM.setIceCream(false);
+
 				}
 				doCheckPayment();
 			}
@@ -800,7 +829,6 @@ public class DrinkFactoryMachine extends JFrame {
 		Step grainMashing = actualDrink.getStep("GrainMashing");
 		Step grainTamping = actualDrink.getStep("GrainTamping");
 		Step pooringWaterForSize = actualDrink.getStep("PooringWaterForSize");
-		Step pooringWaterForTime = actualDrink.getStep("PooringWaterForTime");
 		Step sugarTheDrink = actualDrink.getStep("SugarTheDrink");
 		Step waitingForInfusion = actualDrink.getStep("WaitingForInfusion");
 		
@@ -841,7 +869,13 @@ public class DrinkFactoryMachine extends JFrame {
 		actualStepNumber++;
 		if(actualStepNumber > actualDrink.getStepsList().length) { // cas où il n'y a plus d'étape à faire
 			theFSM.setReadyToDeliver(true);
-			System.out.println("pret à etre livré");
+			if(theFSM.getIceCream() && theFSM.getMilk())				
+				messagesToUser.setText("<html>Préparation, étape : <br> glace vanille <br> nuage de lait");
+			if(theFSM.getIceCream() && !theFSM.getMilk())
+				messagesToUser.setText("<html>Préparation, étape : <br> glace vanille");
+			if(theFSM.getMilk() && !theFSM.getIceCream())
+				messagesToUser.setText("<html>Préparation, étape : <br> nuage de lait");
+			System.out.println("Pret à etre livré");
 		}
 		else {
 			setFSMTimers(); // met les temps des timers des taches de la FSM
@@ -854,7 +888,7 @@ public class DrinkFactoryMachine extends JFrame {
 		for(Step step :actualDrink.getStepsList()[actualStepNumber-1]) { //permet de savoir quelles étapes effectuer pour les afficher
 			currentSteps += step.getName() + " ";
 		}
-		messagesToUser.setText("<html> Préparation étape "+ currentSteps);	
+		messagesToUser.setText("<html>Préparation, étapes : "+ currentSteps);	
 		//System.out.println("step " + actualStepNumber + " done");
 	}
 
@@ -1025,6 +1059,8 @@ public class DrinkFactoryMachine extends JFrame {
 		}
 		theFSM.setPaymentChecked(false);
 		theFSM.setReadyToDeliver(false);
+		theFSM.setMilk(false);
+		theFSM.setIceCream(false);
 	}
 
 	protected void doResetDrinkSelected() {

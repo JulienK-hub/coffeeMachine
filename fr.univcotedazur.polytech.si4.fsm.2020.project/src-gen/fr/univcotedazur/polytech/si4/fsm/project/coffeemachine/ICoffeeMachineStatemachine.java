@@ -94,6 +94,18 @@ public interface ICoffeeMachineStatemachine extends ITimerCallback,IStatemachine
 		
 		public void setOkForCoffeeStep3(boolean value);
 		
+		public boolean getOkForSoupStep1();
+		
+		public void setOkForSoupStep1(boolean value);
+		
+		public boolean getOkForSoupStep2();
+		
+		public void setOkForSoupStep2(boolean value);
+		
+		public boolean getOkForSoupStep3();
+		
+		public void setOkForSoupStep3(boolean value);
+		
 		public boolean getReadyToDeliver();
 		
 		public void setReadyToDeliver(boolean value);

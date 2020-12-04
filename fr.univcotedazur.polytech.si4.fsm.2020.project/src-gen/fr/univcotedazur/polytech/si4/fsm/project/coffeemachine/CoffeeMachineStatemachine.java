@@ -442,6 +442,48 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 			}
 		}
 		
+		private boolean okForSoupStep1;
+		
+		public synchronized boolean getOkForSoupStep1() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return okForSoupStep1;
+			}
+		}
+		
+		public void setOkForSoupStep1(boolean value) {
+			synchronized(CoffeeMachineStatemachine.this) {
+				this.okForSoupStep1 = value;
+			}
+		}
+		
+		private boolean okForSoupStep2;
+		
+		public synchronized boolean getOkForSoupStep2() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return okForSoupStep2;
+			}
+		}
+		
+		public void setOkForSoupStep2(boolean value) {
+			synchronized(CoffeeMachineStatemachine.this) {
+				this.okForSoupStep2 = value;
+			}
+		}
+		
+		private boolean okForSoupStep3;
+		
+		public synchronized boolean getOkForSoupStep3() {
+			synchronized(CoffeeMachineStatemachine.this) {
+				return okForSoupStep3;
+			}
+		}
+		
+		public void setOkForSoupStep3(boolean value) {
+			synchronized(CoffeeMachineStatemachine.this) {
+				this.okForSoupStep3 = value;
+			}
+		}
+		
 		private boolean readyToDeliver;
 		
 		public synchronized boolean getReadyToDeliver() {
@@ -821,6 +863,12 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		sCInterface.setOkForCoffeeStep2(false);
 		
 		sCInterface.setOkForCoffeeStep3(false);
+		
+		sCInterface.setOkForSoupStep1(false);
+		
+		sCInterface.setOkForSoupStep2(false);
+		
+		sCInterface.setOkForSoupStep3(false);
 		
 		sCInterface.setReadyToDeliver(false);
 		
@@ -1345,6 +1393,30 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 	
 	public synchronized void setOkForCoffeeStep3(boolean value) {
 		sCInterface.setOkForCoffeeStep3(value);
+	}
+	
+	public synchronized boolean getOkForSoupStep1() {
+		return sCInterface.getOkForSoupStep1();
+	}
+	
+	public synchronized void setOkForSoupStep1(boolean value) {
+		sCInterface.setOkForSoupStep1(value);
+	}
+	
+	public synchronized boolean getOkForSoupStep2() {
+		return sCInterface.getOkForSoupStep2();
+	}
+	
+	public synchronized void setOkForSoupStep2(boolean value) {
+		sCInterface.setOkForSoupStep2(value);
+	}
+	
+	public synchronized boolean getOkForSoupStep3() {
+		return sCInterface.getOkForSoupStep3();
+	}
+	
+	public synchronized void setOkForSoupStep3(boolean value) {
+		sCInterface.setOkForSoupStep3(value);
 	}
 	
 	public synchronized boolean getReadyToDeliver() {
@@ -3682,7 +3754,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (isStateActive(State.order_part_Preparation_DrinkMaking_Step1_r2_WaterHeatingDone)) {
+			if ((sCInterface.getOkForCoffeeStep2() && isStateActive(State.order_part_Preparation_DrinkMaking_Step1_r2_WaterHeatingDone))) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step1();
 				react_Order_part_Preparation_DrinkMaking__sync2();
 			} else {
@@ -3710,7 +3782,7 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (isStateActive(State.order_part_Preparation_DrinkMaking_Step1_r1_PodPositionningDone)) {
+			if ((isStateActive(State.order_part_Preparation_DrinkMaking_Step1_r1_PodPositionningDone) && sCInterface.getOkForCoffeeStep2())) {
 				exitSequence_Order_part_Preparation_DrinkMaking_Step1();
 				react_Order_part_Preparation_DrinkMaking__sync2();
 			} else {
