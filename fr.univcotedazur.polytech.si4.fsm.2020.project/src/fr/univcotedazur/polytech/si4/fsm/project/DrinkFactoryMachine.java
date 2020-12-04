@@ -482,6 +482,10 @@ public class DrinkFactoryMachine extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				theFSM.raiseCancel();
+				messagesToUser.setText("<html> Paiment annulé, reprennez vos <br> "+ coinsEntered + "€");
+				doResetPayment();
+				
+				
 			}
 		});
 		
