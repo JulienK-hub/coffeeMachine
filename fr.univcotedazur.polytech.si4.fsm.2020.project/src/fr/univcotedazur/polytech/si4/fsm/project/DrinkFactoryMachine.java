@@ -826,7 +826,11 @@ public class DrinkFactoryMachine extends JFrame {
 			pooringWaterForSize.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*pooringWaterForSize.getTimeToMake()));
 		}
 		if (sugarTheDrink != null) {
-			sugarTheDrink.addTimeToMake((int) ((sugarSlider.getValue() - 1)*0.5*sugarTheDrink.getTimeToMake()));
+			if(sugarSlider.getValue() == 0) {
+				sugarTheDrink.setTimeToMake(0);
+			} else {
+				sugarTheDrink.addTimeToMake((int) ((sugarSlider.getValue() - 1)*0.5*sugarTheDrink.getTimeToMake()));
+			}
 		}
 		if (waitingForInfusion != null){
 			waitingForInfusion.addTimeToMake((int) ((sizeSlider.getValue() - 1)*0.5*waitingForInfusion.getTimeToMake()));
