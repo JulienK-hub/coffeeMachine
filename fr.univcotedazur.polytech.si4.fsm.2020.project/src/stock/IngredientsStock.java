@@ -8,7 +8,7 @@ public class IngredientsStock {
 	private Map<Ingredient, Integer> ingredients = new EnumMap<>(Ingredient.class);
 	
 	public IngredientsStock(){
-		this.ingredients.put(Ingredient.COOFFEEPOD, 1) ;
+		this.ingredients.put(Ingredient.COOFFEEPOD, 1);
 		this.ingredients.put(Ingredient.EXPRESSOGRAINDOSE, 0);
 		this.ingredients.put(Ingredient.TEASACHET, 100);
 		this.ingredients.put(Ingredient.SUGAR, 4);
@@ -24,7 +24,14 @@ public class IngredientsStock {
 	public void setIngredients(Map<Ingredient, Integer> ingredients) {
 		this.ingredients = ingredients;
 	}
+	
+	public boolean isIngredientInStock(Ingredient ingredient) {
+		return (this.ingredients.get(ingredient) != 0);
+	}
 
+	//public boolean enoughIngredientForSugarSlider(int sugarSliderValue) {
+	//	return(th)
+	//}
 	public void consumeIngredient(Ingredient ingredientType, int amount) {
 		if(amount >0) {
 			int numberInStock = ingredients.get(ingredientType);

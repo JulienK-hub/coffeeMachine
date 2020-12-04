@@ -2920,7 +2920,12 @@ public class CoffeeMachineStatemachine implements ICoffeeMachineStatemachine {
 				
 				enterSequence_Order_part_Rdy_for_order_ss_SlidersDefault_default();
 			} else {
-				did_transition = false;
+				if (sCInterface.sliderModified) {
+					exitSequence_Order_part_Rdy_for_order_ss_SlidersCustomed();
+					enterSequence_Order_part_Rdy_for_order_ss_SlidersCustomed_default();
+				} else {
+					did_transition = false;
+				}
 			}
 		}
 		return did_transition;

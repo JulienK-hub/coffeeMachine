@@ -461,7 +461,7 @@ public class DrinkFactoryMachine extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// on ne veut pas redefinir l'objet actualDrink si on vient de cliquer sur le bouton coffee, 
-				//autrement on a un nouvel objet avec un prix de base alors qu'on a possiblement selectionné une option 
+				//autrement on a un nouvel objet avec un prix de base alors qu'on a possiblement selectionné une ou plusieurs options
 
 				if (actualDrink != coffee) { 
 					actualDrink = coffee; 
@@ -470,12 +470,13 @@ public class DrinkFactoryMachine extends JFrame {
 					expressoButton.setBackground(Color.DARK_GRAY); //
 					
 					milkBox.setEnabled(true);
-					mapleSyrupBox.setEnabled(true);
+					mapleSyrupBox.setEnabled(true);            // actualiser les options disponibles pour cette boisson
 					vanillaIceCreamBox.setEnabled(true);
 
-					calculatePrice();
+					calculatePrice();                        // pour recalculer le prix de cette boisson avec les potentielles options choisies lors de la derniere sélection
+					// Exemple : on avait selectionné un café avec l'option glace vanille, puis on clique sur expresso, il faut penser à actualiser le prix total de la boisson avec cette option toujours selectionné
 					
-					if (coffeePodLeft() && enoughSugar()) {
+					if (stock.isIngredientInStock(Ingredient.COOFFEEPOD) && enoughIngredientForSugarSlider()) {
 						theFSM.raiseDrinkSelectionDone();
 					}
 				}
@@ -491,13 +492,12 @@ public class DrinkFactoryMachine extends JFrame {
 					teaButton.setBackground(Color.DARK_GRAY);
 
 					milkBox.setEnabled(true);
-					mapleSyrupBox.setEnabled(true);
+					mapleSyrupBox.setEnabled(true); 
 					vanillaIceCreamBox.setEnabled(true);
 
 					calculatePrice();
 
-
-					if (expressoGrainDoseLeft() && enoughSugar()) {
+					if (stock.isIngredientInStock(Ingredient.EXPRESSOGRAINDOSE) && enoughIngredientForSugarSlider()) {
 						theFSM.raiseDrinkSelectionDone();
 					}
 				
@@ -520,7 +520,7 @@ public class DrinkFactoryMachine extends JFrame {
 					
 					calculatePrice();
 				
-					if (teaSachetLeft() && enoughSugar()) {
+					if (stock.isIngredientInStock(Ingredient.TEASACHET) && enoughIngredientForSugarSlider()) {
 						theFSM.raiseDrinkSelectionDone();
 					}
 				}
@@ -547,8 +547,11 @@ public class DrinkFactoryMachine extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(mapleSyrupBox.isSelected()) {
 					actualDrink.setPrice(actualDrink.getPrice() + 0.1);
+					lblSugar.setText("Maple Syrup");
 				} else {
 					actualDrink.setPrice(actualDrink.getPrice() - 0.1);
+					lblSugar.setText("Sugar");
+
 				}
 				doCheckPayment();
 			}
@@ -672,46 +675,45 @@ public class DrinkFactoryMachine extends JFrame {
 			messagesToUser.setText("<html> Vous avez mis un total de : "+ coinsEntered + "<html> €.");
 		}
 	}
-	
-	protected boolean coffeePodLeft() {
-		if(stock.getIngredients().get(Ingredient.COOFFEEPOD) == 0) {
-			return false;
+
+	protected boolean enoughIngredientForSugarSlider() {
+		Ingredient currentSugaryIngredient = Ingredient.SUGAR;
+		if(mapleSyrupBox.isSelected()) {
+			currentSugaryIngredient = Ingredient.MAPLESYRUPDOSE;
 		}
-		return true;
+		return (stock.getIngredients().get(currentSugaryIngredient) >= sugarSlider.getValue());
 	}
-	
-	protected boolean expressoGrainDoseLeft() {
-		if(stock.getIngredients().get(Ingredient.EXPRESSOGRAINDOSE) == 0) {
-			return false;
-		}
-		return true;
-	}
-	
-	protected boolean teaSachetLeft() {
-		if(stock.getIngredients().get(Ingredient.TEASACHET) == 0) {
-			return false;
-		}
-		return true;
-	}
-	
-	protected boolean enoughSugar() {
-		if(stock.getIngredients().get(Ingredient.SUGAR) >= sugarSlider.getValue()) {
-			return true;
-		}
-		return false;
-	}
-	
 	
 	protected void consumeIngredientsFromStock() {
 		switch(actualDrink.getName()) {
 			case "coffee": 
 				stock.consumeIngredient(Ingredient.COOFFEEPOD, 1);
+				break;
 			case "expresso":
 				stock.consumeIngredient(Ingredient.EXPRESSOGRAINDOSE, 1);
+				break;
 			case "tea":
 				stock.consumeIngredient(Ingredient.TEASACHET, 1);
+				break;
 		}
-		stock.consumeIngredient(Ingredient.SUGAR, sugarSlider.getValue());
+		
+		if(mapleSyrupBox.isSelected()) {
+			stock.consumeIngredient(Ingredient.MAPLESYRUPDOSE, sugarSlider.getValue());
+		}
+		else {
+			stock.consumeIngredient(Ingredient.SUGAR, sugarSlider.getValue());
+		}
+		
+	}
+	
+	protected void consumeOptionIngredientsFromStock() {
+		if(milkBox.isSelected()) {
+			stock.consumeIngredient(Ingredient.MILKDOSE, 1);
+		}
+		if(vanillaIceCreamBox.isSelected()) {
+			stock.consumeIngredient(Ingredient.VANILLAICECREAMDOSE, 1);
+		}
+		
 	}
 	
 	protected void disableButtonsForUndoableDrinks() {
